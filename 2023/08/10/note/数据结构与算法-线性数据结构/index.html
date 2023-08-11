@@ -6,16 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://13114987559.github.io">
-  <title>Category: TechNotes | KongXinQing~</title>
+  <title>数据结构与算法-线性数据结构 | KongXinQing~</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="KongXinQing~">
-<meta property="og:url" content="https://13114987559.github.io/categories/TechNotes/index.html">
+  <meta name="description" content="线性的数据结构线性结构是指元素只有一个前趋和后继 线性的数据结构分为物理线性结构和逻辑线性结构 物理线性是元素在内存中的地址是连续的；逻辑线性在内存中的地址不一定是连续的，在逻辑上存在前趋和后继 常用的线性数据结构包括数组、链表、栈、队列 数组数组是最常用的线性数据结构，一般使用时可以在内存中申请一块固定大小的空间用于存储各类型元素 优点：    支持随机存取，读写都是O(1)复杂度，只需要知道下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构与算法-线性数据结构">
+<meta property="og:url" content="https://13114987559.github.io/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
 <meta property="og:site_name" content="KongXinQing~">
+<meta property="og:description" content="线性的数据结构线性结构是指元素只有一个前趋和后继 线性的数据结构分为物理线性结构和逻辑线性结构 物理线性是元素在内存中的地址是连续的；逻辑线性在内存中的地址不一定是连续的，在逻辑上存在前趋和后继 常用的线性数据结构包括数组、链表、栈、队列 数组数组是最常用的线性数据结构，一般使用时可以在内存中申请一块固定大小的空间用于存储各类型元素 优点：    支持随机存取，读写都是O(1)复杂度，只需要知道下">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-10T04:53:28.000Z">
+<meta property="article:modified_time" content="2023-08-10T14:42:49.947Z">
 <meta property="article:author" content="KongXinQing">
+<meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="KongXinQing~" type="application/atom+xml">
@@ -190,41 +196,169 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-note/数据结构与算法-线性数据结构" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2023" class="archive-year">2023</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="archive-article-date">
-        <time datetime="2023-08-10T04:53:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-10</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" target="_blank">数据结构与算法-线性数据结构</a>
   
+    <h1 class="article-title" itemprop="name">
+      数据结构与算法-线性数据结构
     </h1>
   
 
 
-        <div class="article-info info-on-right">
+  
+  
+<a href="/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="archive-article-date">
+        <time datetime="2023-08-10T04:53:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-10</time>
+</a>
+
+  
+  
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">1.9k字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">7分</span>
+    </span>
+  </span>
+</div>
+
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="线性的数据结构"><a href="#线性的数据结构" class="headerlink" title="线性的数据结构"></a><strong>线性的数据结构</strong></h1><p>线性结构是指元素只有一个<em>前趋</em>和<em>后继</em></p>
+<p>线性的数据结构分为<em>物理线性结构</em>和<em>逻辑线性结构</em></p>
+<p>物理线性是元素在内存中的<em>地址是连续的</em>；逻辑线性在内存中的地址不一定是连续的，在逻辑上存在前趋和后继</p>
+<p>常用的线性数据结构包括<em>数组、链表、栈、队列</em></p>
+<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a><strong>数组</strong></h2><p>数组是最常用的线性数据结构，一般使用时可以在内存中申请一块固定大小的空间用于存储各类型元素</p>
+<p><em>优点：</em><br>    支持随机存取，读写都是O(1)复杂度，只需要知道下标即可</p>
+<p><em>缺点：</em><br>    1.大小一般都是固定的，如果扩容则需要申请一块新的内存将原有数据迁移过去<br>    2.插入和删除操作困难，</p>
+<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a><strong>链表</strong></h2><p>前面说到数组的插入和删除效率不高，可以通过链表来解决这一问题</p>
+<p><em>链表的基本结构</em></p>
+<p>最简单的链表包括一个数据域和一个指针域，其中数据域用于存放数据，指针域用于存放下个节点的地址</p>
+<p>代码表示如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node* Next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种结构可以实现更高效的插入和删除操作，但作为代价，它不支持随机存取，变成一种顺序存取的结构</p>
+<p>链表不止这一种形式，还有双向链表和循环链表</p>
+<p>双向链表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node* Pre;</span><br><span class="line">    struct Node* Last;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>循环链表：只需将最后一个元素的后继指向第一个元素即可，如果时双向链表则还需将头节点的前趋指向最后一个元素</p>
+<p><em>插入和删除操作</em></p>
+<p>以简单链表为例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">删除操作</span><br><span class="line">&#123;</span><br><span class="line">    Node* Temp=DeleteNode;</span><br><span class="line">    Node* Pre=PreNode;</span><br><span class="line">    Pre-&gt;Next=Temp-&gt;Next;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">插入操作</span><br><span class="line">&#123;</span><br><span class="line">    InsertNode-&gt;Next=ThisNode-&gt;Next;</span><br><span class="line">    ThisNode-&gt;Next=InsertNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a><strong>栈</strong></h2><p><em>什么是栈</em></p>
+<p>栈(stack),是一种先进后出(或后进先出)的结构，后进的元素为栈顶(top),最先进的为栈底</p>
+<p>一个常用的例子是浏览器的网页：当我们浏览网页时我们可以通过一些操作进行回退到上一次浏览的内容</p>
+<p>或者玩的玩具枪的弹夹也是一个栈，我们把子弹装入弹夹看作压栈，每次扣动扳机可以看作一次出栈</p>
+<p>栈的主要功能包括进栈、出栈、获取栈顶元素</p>
+<p>栈的实现方式有两种，分别是<em>顺序栈</em>和<em>链栈</em></p>
+<p><em>顺序栈的实现</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct stack</span><br><span class="line">&#123;</span><br><span class="line">    int *Data;</span><br><span class="line">    int top;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>栈的进栈、出栈、获取栈顶元素实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">进栈  </span><br><span class="line">void Push(stack* S,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    S-&gt;top++;</span><br><span class="line">    Data[top]=Value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">出栈</span><br><span class="line">void Pop(stack *S)</span><br><span class="line">&#123;</span><br><span class="line">    S-&gt;top--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">获取栈顶元素  </span><br><span class="line">int Top(stack* S)</span><br><span class="line">&#123;</span><br><span class="line">    return S-&gt;Data[top]; </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><em>链栈的实现</em></p>
+<p>链栈的实现基础是链表，使用头插法，把访问限制在链表的第一个元素，就可以实现对栈的访问</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct ListStack</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct ListStack* Next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ListStack* S;</span><br></pre></td></tr></table></figure>
+
+<p>栈的操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">入栈  </span><br><span class="line">void Push(ListStack* S,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    ListStack* Temp=new ListStack;</span><br><span class="line">    Temp-&gt;Data=Value;</span><br><span class="line">    Temp-&gt;Next=S-&gt;Next;</span><br><span class="line">    S-&gt;Next=Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">出栈</span><br><span class="line">void Pop(ListStack* S)</span><br><span class="line">&#123;</span><br><span class="line">    ListStack* Temp=S;</span><br><span class="line">    S=S-&gt;Next;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">获取栈顶元素  </span><br><span class="line">int Top(ListStack* S)</span><br><span class="line">&#123;</span><br><span class="line">    return S-&gt;Data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><em><strong>注意：以上操作是假设均不为空的情况，实际实现时要进行判空操作</strong></em></p>
+<h2 id="队列"><a href="#队列" class="headerlink" title="队列"></a><strong>队列</strong></h2><p><em>什么是队列</em></p>
+<p>队列是一种先进先出(后进后出)的数据结构，它只能在队尾添加元素，在队头弹出元素</p>
+<p>一个常见的例子是排队(无论是去银行取钱或者在超市买东西都会排队)，当我们排队时总是会自觉地站到队尾</p>
+<p>而非插队，当位于队首的人离开时我们会向前走一步直到我们走到队首接受相应的服务(弹出队列)</p>
+<p>上面的对垒是一种<em>单端队列</em>，当然还有一种队列是<em>双端队列</em>，双端队列与单端队列的区别是双端队列的</p>
+<p>队尾和队首都可以进行插入和弹出操作</p>
+<p><em>队列的实现</em></p>
+<p>队列有多种实现方式，我们可以使用循环数组来实现，通过声明front、rear指针来实现对队首和队尾的操作</p>
+<p>当然也可以使用链表来实现单端队列和双端队列</p>
+<p><em>单端队列</em></p>
+<p>使用循环数组实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#define MaxSize 20</span><br><span class="line">struct queue</span><br><span class="line">&#123;</span><br><span class="line">    int Data[MaxSize];</span><br><span class="line">    int front=0;</span><br><span class="line">    int rear=0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>队列功能的实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">入队操作  </span><br><span class="line">void Push(queue* Q,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    if(Q-&gt;rear+1%MaxSize == Q-&gt;front)&#123;</span><br><span class="line">        return;</span><br><span class="line">        进行判满操作</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Q-&gt;Data[Q-&gt;rear]=Value;</span><br><span class="line">    Q-&gt;rear=(Q-&gt;rear+1)%MaxSize;   完成循环操作</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">出队操作</span><br><span class="line">void Pop(queue* Q)</span><br><span class="line">&#123;</span><br><span class="line">    if(Q-&gt;front==Q-&gt;rear)&#123;</span><br><span class="line">        return;</span><br><span class="line">        进行判满操作</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    Q-&gt;front=(Q-&gt;front+1)%MaxSize;  完成循环操作</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>因为可以对队首和队尾访问，可以进行一层封装以获取队首和队尾的元素</p>
+<p>使用链表的实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct queue</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct queue* Next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct ListQueue</span><br><span class="line">&#123;</span><br><span class="line">    queue* front;</span><br><span class="line">    queue* rear;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>队列功能的实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">入队</span><br><span class="line">void Push(ListQueue* LQ,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    queue* Temp=new queue;</span><br><span class="line">    Temp-&gt;Data=Value;</span><br><span class="line">    LQ-&gt;rear-&gt;Next=Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">出队</span><br><span class="line">void Pop(ListQueue* LQ)</span><br><span class="line">&#123;</span><br><span class="line">    queue* Temp=LQ-&gt;front;</span><br><span class="line">    LQ-&gt;fornt=LQ-&gt;front-&gt;Next;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">同样要进行判空操作</span><br></pre></td></tr></table></figure>
+
+<p><em>双端队列</em></p>
+<p>使用循环数组方式实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#define MaxSize 10</span><br><span class="line">struct deque</span><br><span class="line">&#123;</span><br><span class="line">    int Data[Maxsize];</span><br><span class="line">    int front=0;</span><br><span class="line">    int rear=0;</span><br><span class="line">    int size=0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>双端队列功能实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">头插</span><br><span class="line">void PushFront(deque* D,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    if(D-&gt;size==MaxSize)&#123;</span><br><span class="line">        return;</span><br><span class="line">        满了，无法插入</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    front--;</span><br><span class="line">    front=(front+MaxSize)%MaxSize;</span><br><span class="line">    D-&gt;Data[front]=Value;</span><br><span class="line">    D-&gt;size++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">头删</span><br><span class="line">void PopFront(deque* D)</span><br><span class="line">&#123;</span><br><span class="line">    if(D-&gt;size==0)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    D-&gt;front++;</span><br><span class="line">    D-&gt;front=(D-&gt;front+MaxSize)%MaxSize;</span><br><span class="line">    D-&gt;size--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">尾插</span><br><span class="line">void PushBack(deque* D,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    if(D-&gt;size==MaxSize)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    D-&gt;rear++;</span><br><span class="line">    D-&gt;rear=(D-&gt;rear+MaxSize)%MaxSize;</span><br><span class="line">    D-&gt;Data[D-&gt;rear]=Value;</span><br><span class="line">    D-&gt;size++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">尾删</span><br><span class="line">void PopBack(deque* D)</span><br><span class="line">&#123;</span><br><span class="line">    if(D-&gt;size==0)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    D-&gt;rear--;</span><br><span class="line">    D-&gt;rear=(D-&gt;rear+MaxSize)%MaxSize;</span><br><span class="line">    D-&gt;size--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用链表来实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">struct ListDequeNode</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    ListDequeNode* Pre;</span><br><span class="line">    ListDequeNode* Next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">struct ListDeque</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* front;</span><br><span class="line">    ListDequeNode* rear;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实现链表队列的功能</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">头插</span><br><span class="line">void PushFront(ListDeque* LD,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* Temp=new ListDequeNode;</span><br><span class="line">    Temp-&gt;Data=Value;</span><br><span class="line"></span><br><span class="line">    ListDequeNode* TempFront=LD-&gt;front;</span><br><span class="line"></span><br><span class="line">    Temp-&gt;Next=LD-&gt;front;</span><br><span class="line">    LD-&gt;front=TempFront;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">头删</span><br><span class="line">void PopFront(ListDeque* LD)</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* Temp=LD-&gt;front;</span><br><span class="line">    LD-&gt;front=LD-&gt;front-&gt;Next;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">尾插</span><br><span class="line">void PushBack(ListDeque* LD,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* Temp=new ListDequeNode;</span><br><span class="line">    Temp-&gt;Data=Value;</span><br><span class="line"></span><br><span class="line">    ListDequeNode* TempRear=LD-&gt;rear;</span><br><span class="line">    LD-&gt;rear-&gt;Next=Temp;</span><br><span class="line"></span><br><span class="line">    LD-&gt;rear=LD-&gt;rear-&gt;Next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">尾删</span><br><span class="line">void PopBack(ListDeque* LD)</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* Temp=LD-&gt;rear;</span><br><span class="line">    LD-&gt;rear=LD-&gt;rear-&gt;Pre;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里双端队列在插入删除时需要同时设置Pre和Next和判空操作</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h1><p>介绍了4种常见的线性表并简单实现了一些主要功能，在实际开发中需要对线性表的结构进行完善，</p>
+<p>可以使用面向对象来设计数据结构以满足需求</p>
+<p><em><strong>在实际操作中还要注意数据的边界条件和对元素是否合法进行判断(例如判断是否为空指针，是否为脏数据等)</strong></em></p>
+
+    
+
+    
+
+    
+    <div class="declare"> 
+      <ul class="post-copyright">
+        <li>
+          <strong>本文作者：</strong>
+          KongXinQing
+        </li>
+        <li>
+          <strong>本文链接：</strong>
+          <a href="https://13114987559.github.io/2023/08/10/note/数据结构与算法-线性数据结构/" title="数据结构与算法-线性数据结构" target="_blank">https://13114987559.github.io/2023/08/10/note/数据结构与算法-线性数据结构/</a>
+        </li>
+        
+        <li>
+          <strong>版权声明： </strong>
           
+          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
+        </li>
+        
+      </ul>
+    </div>
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -240,7 +374,7 @@
 		</ul>
 	</div>
 
-          
+    
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -253,191 +387,127 @@
 	</div>
 
 
+    
+
+    
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+
+    
+    <div class="clearfix"></div>
+  </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/08/09/note/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" class="archive-article-date">
-        <time datetime="2023-08-09T11:58:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-09</time>
-</a>
 
+
+<nav id="article-nav">
+  
+    <a href="/2023/08/11/essay/%E4%B8%AA%E4%BA%BA%E5%88%B6%E4%BD%9C%E6%B8%B8%E6%88%8F%E7%9A%84%E6%B5%81%E7%A8%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          游戏的制作流程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/09/note/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">虚幻-角色的运动功能</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/08/09/note/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" target="_blank">虚幻-角色的运动功能</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E6%80%A7%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">线性的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-number">1.1.</span> <span class="toc-text">数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%93%BE%E8%A1%A8"><span class="toc-number">1.2.</span> <span class="toc-text">链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88"><span class="toc-number">1.3.</span> <span class="toc-text">栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%9F%E5%88%97"><span class="toc-number">1.4.</span> <span class="toc-text">队列</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">2.</span> <span class="toc-text">总结</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/08/09/note/thesconednote/" class="archive-article-date">
-        <time datetime="2023-08-09T08:22:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-09</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/08/09/note/thesconednote/" target="_blank">thesconednote</a>
-  
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/08/09/note/TestNode/" class="archive-article-date">
-        <time datetime="2023-08-09T08:05:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-09</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/08/09/note/TestNode/" target="_blank">TestNote</a>
-  
-    </h1>
-  
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
+
+
+
 
 
           </div>
@@ -466,10 +536,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
