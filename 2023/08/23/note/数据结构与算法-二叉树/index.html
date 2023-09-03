@@ -6,19 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://13114987559.github.io">
-  <title>thesconednote | KongXinQing~</title>
+  <title>数据结构与算法-二叉树 | KongXinQing~</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="article">
-<meta property="og:title" content="thesconednote">
-<meta property="og:url" content="https://13114987559.github.io/2023/08/09/note/thesconednote/index.html">
+  <meta name="description" content="树树的定义树是n(n&gt;&#x3D;0)个结点的有限集合，当n&#x3D;0时，称为空树。在任意一棵非空树中：  有且仅有一个特定的称为根的结点。 当n&gt;1时，其余结点可分为m(m&gt;0)个互不相交的有限集，每个集合本身又是一棵树，称为原树的子树。  树的相关概念 节点的度：节点拥有的子树个数称为节点的度。  节点的深度：从根开始往下，逐层累加，根的深度为0。 森林：由m(m&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构与算法-二叉树">
+<meta property="og:url" content="https://13114987559.github.io/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/index.html">
 <meta property="og:site_name" content="KongXinQing~">
+<meta property="og:description" content="树树的定义树是n(n&gt;&#x3D;0)个结点的有限集合，当n&#x3D;0时，称为空树。在任意一棵非空树中：  有且仅有一个特定的称为根的结点。 当n&gt;1时，其余结点可分为m(m&gt;0)个互不相交的有限集，每个集合本身又是一棵树，称为原树的子树。  树的相关概念 节点的度：节点拥有的子树个数称为节点的度。  节点的深度：从根开始往下，逐层累加，根的深度为0。 森林：由m(m&gt;">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-08-09T08:22:04.000Z">
-<meta property="article:modified_time" content="2023-08-09T12:00:47.225Z">
+<meta property="article:published_time" content="2023-08-23T11:40:05.000Z">
+<meta property="article:modified_time" content="2023-09-03T10:31:06.209Z">
 <meta property="article:author" content="KongXinQing">
-<meta property="article:tag" content="UE">
+<meta property="article:tag" content="数据结构">
 <meta property="article:tag" content="Cpp">
 <meta name="twitter:card" content="summary">
   
@@ -194,22 +196,22 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-note/thesconednote" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-note/数据结构与算法-二叉树" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
   
   
     <h1 class="article-title" itemprop="name">
-      thesconednote
+      数据结构与算法-二叉树
     </h1>
   
 
 
   
   
-<a href="/2023/08/09/note/thesconednote/" class="archive-article-date">
-        <time datetime="2023-08-09T08:22:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-09</time>
+<a href="/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/" class="archive-article-date">
+        <time datetime="2023-08-23T11:40:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-23</time>
 </a>
 
   
@@ -222,7 +224,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">0字</span>
+      <span class="post-count">1.3k字</span>
     </span>
   </span>
 
@@ -231,7 +233,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">5分</span>
     </span>
   </span>
 </div>
@@ -242,7 +244,75 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    
+    <h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><h2 id="树的定义"><a href="#树的定义" class="headerlink" title="树的定义"></a>树的定义</h2><p>树是n(n&gt;&#x3D;0)个结点的有限集合，当n&#x3D;0时，称为空树。在任意一棵非空树中：</p>
+<ol>
+<li>有且仅有一个特定的称为根的结点。</li>
+<li>当n&gt;1时，其余结点可分为m(m&gt;0)个互不相交的有限集，每个集合本身又是一棵树，称为原树的子树。</li>
+</ol>
+<h2 id="树的相关概念"><a href="#树的相关概念" class="headerlink" title="树的相关概念"></a>树的相关概念</h2><ol>
+<li>节点的度：节点拥有的子树个数称为节点的度。 </li>
+<li>节点的深度：从根开始往下，逐层累加，根的深度为0。</li>
+<li>森林：由m(m&gt;&#x3D;0)棵不相交的树的集合称为森林。</li>
+</ol>
+<h2 id="树的存储结构"><a href="#树的存储结构" class="headerlink" title="树的存储结构"></a>树的存储结构</h2><h3 id="双亲表示法"><a href="#双亲表示法" class="headerlink" title="双亲表示法"></a>双亲表示法</h3><p>用一组连续空间存储树中的节点，同时在每个节点中，附设一个指示器指示其双亲结点在数组中的位置。</p>
+<p>节点定义如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    int Parent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="孩子表示法"><a href="#孩子表示法" class="headerlink" title="孩子表示法"></a>孩子表示法</h3><p>孩子表示法是将每个节点的孩子结点排列起来，形成一个线性结构，然后用链表建立节点与孩子结点之间的关联关系。</p>
+<p>孩子链表的定义如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *FirstChild;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="孩子兄弟表示法"><a href="#孩子兄弟表示法" class="headerlink" title="孩子兄弟表示法"></a>孩子兄弟表示法</h3><p>孩子兄弟表示法是将每个节点的孩子结点排列起来，形成一个线性结构，然后用指针来建立节点与孩子结点之间的关联关系。</p>
+<p>节点定义如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *FirstChild;</span><br><span class="line">    struct Node *NextSibling;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><ol>
+<li>每个节点最多有两个孩子结点，分别称为左孩子和右孩子。</li>
+<li>每个节点最多有一个双亲结点。</li>
+<li>除根结点外，其余每个结点又包含一个零或两个以上的子树。</li>
+</ol>
+<h2 id="特殊的二叉树"><a href="#特殊的二叉树" class="headerlink" title="特殊的二叉树"></a>特殊的二叉树</h2><ol>
+<li>斜树：所有节点均为左子树或右子树的二叉树。</li>
+<li>满二叉树：除叶子节点外所有节点均有左右子树且所有叶子节点均在同一层上。</li>
+<li>完全二叉树：除最后一层外，每一层节点数均达到最大值，且最后一层节点均连续集中在最左边</li>
+</ol>
+<h2 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h2><ol>
+<li>在二叉树的第i层上<em>至多</em>有2i-1个节点（i&gt;&#x3D;1）。</li>
+<li>深度为k的二叉树<em>至多</em>有2k-1个节点（k&gt;&#x3D;1）。</li>
+<li>对于任意一棵二叉树T，如果叶子节点数为n0，度为2的节点数为n2，则n0&#x3D;n2+1。</li>
+<li>具有n个节点的完全二叉树的深度为[log2n]+1。</li>
+</ol>
+<h2 id="二叉树存储结构"><a href="#二叉树存储结构" class="headerlink" title="二叉树存储结构"></a>二叉树存储结构</h2><h3 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h3><p>用一组连续空间存储二叉树中的节点，用二叉树中结点在数组中的下标表示结点在二叉树中的位置。</p>
+<p>节点定义如下，Data表示数据域，LeftChild表示左孩子下标，RightChild表示右孩子下标</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    int LeftChild;</span><br><span class="line">    int RightChild;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="链式存储结构"><a href="#链式存储结构" class="headerlink" title="链式存储结构"></a>链式存储结构</h3><p>链式存储结构采用二叉链表存储结构，每个节点包括数据域和左右孩子指针。</p>
+<p>节点定义如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *LeftChild;</span><br><span class="line">    struct Node *RightChild;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h2><h3 id="先序遍历"><a href="#先序遍历" class="headerlink" title="先序遍历"></a>先序遍历</h3><p>递归遍历</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void PreOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Tree)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; Tree-&gt;Data &lt;&lt; endl;</span><br><span class="line">        PreOrder(Tree-&gt;LeftChild);</span><br><span class="line">        PreOrder(Tree-&gt;RightChild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>迭代遍历</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void PreOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    stack&lt;Node *&gt; s;</span><br><span class="line">    struct Node *p;</span><br><span class="line">    s.push(Root);</span><br><span class="line">    while(!s.empty())&#123;</span><br><span class="line">        p=s.top();</span><br><span class="line">        cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        s.pop();</span><br><span class="line">        if(p-&gt;Right)&#123;</span><br><span class="line">            s.push(p-&gt;Right);</span><br><span class="line">        &#125;</span><br><span class="line">        if(p-&gt;Left)&#123;</span><br><span class="line">            s.push(p-&gt;Left);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h3><p>递归遍历</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void InOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Tree)</span><br><span class="line">    &#123;</span><br><span class="line">        InOrder(Tree-&gt;LeftChild);</span><br><span class="line">        cout &lt;&lt; Tree-&gt;Data &lt;&lt; endl;</span><br><span class="line">        InOrder(Tree-&gt;RightChild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>迭代遍历</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void InOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stack&lt;Node *&gt; s;</span><br><span class="line">    struct Node *p;</span><br><span class="line">    while(!s.empty() || Root!=NULL)&#123;</span><br><span class="line">        if(Root)&#123;</span><br><span class="line">            s.push(Root);</span><br><span class="line">            Root=Root-&gt;Left;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            p=s.top();</span><br><span class="line">            cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">            Root=p-&gt;Right;</span><br><span class="line">            s.pop();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="后续遍历"><a href="#后续遍历" class="headerlink" title="后续遍历"></a>后续遍历</h3><p>递归遍历</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void PostOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Tree)</span><br><span class="line">    &#123;</span><br><span class="line">        PostOrder(Tree-&gt;LeftChild);</span><br><span class="line">        PostOrder(Tree-&gt;RightChild);</span><br><span class="line">        cout &lt;&lt; Tree-&gt;Data &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>迭代遍历（单栈）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">void PostOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stack&lt;Node *&gt; s;</span><br><span class="line">    struct Node *p=Root;</span><br><span class="line">    struct Node* Temp;</span><br><span class="line">    while(!s.empty() || p!=NULL)&#123;</span><br><span class="line">        if(p)&#123;</span><br><span class="line">            s.push(p);</span><br><span class="line">            p=p-&gt;Left;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            p=s.top();</span><br><span class="line">            if(p-&gt;Right &amp;&amp; Temp!=p-&gt;Right)&#123;</span><br><span class="line">                p=p-&gt;Right;</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">                Temp=p;</span><br><span class="line">                s.pop();</span><br><span class="line">                p=NULL;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>迭代遍历（双栈）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">void PostOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stack&lt;Node *&gt; s1,s2;</span><br><span class="line">    struct Node *p;</span><br><span class="line">    s1.push(Root);</span><br><span class="line">    while(!s1.empty())&#123;</span><br><span class="line">        p=s1.top();</span><br><span class="line">        s1.pop();</span><br><span class="line">        s2.push(p);</span><br><span class="line">        if(p-&gt;Left)&#123;</span><br><span class="line">            s1.push(p-&gt;Left);</span><br><span class="line">        &#125;</span><br><span class="line">        if (p-&gt;Right)&#123;</span><br><span class="line">            s1.push(p-&gt;Right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    while(!s2.empty())&#123;</span><br><span class="line">        cout &lt;&lt; s2.top()-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        s2.pop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="层序遍历"><a href="#层序遍历" class="headerlink" title="层序遍历"></a>层序遍历</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void LevelOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    queue&lt;struct Node *&gt; q;</span><br><span class="line">    q.push(Tree);</span><br><span class="line">    while(!q.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        struct Node *p = q.front();</span><br><span class="line">        q.pop();</span><br><span class="line">        cout &lt;&lt; p-&gt;Data &lt;&lt; endl;</span><br><span class="line">        if(p-&gt;LeftChild)&#123;</span><br><span class="line">            q.push(p-&gt;LeftChild);</span><br><span class="line">        &#125;</span><br><span class="line">        if(p-&gt;RightChild)&#123;</span><br><span class="line">            q.push(p-&gt;RightChild);             </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
     
 
     
@@ -256,7 +326,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://13114987559.github.io/2023/08/09/note/thesconednote/" title="thesconednote" target="_blank">https://13114987559.github.io/2023/08/09/note/thesconednote/</a>
+          <a href="https://13114987559.github.io/2023/08/23/note/数据结构与算法-二叉树/" title="数据结构与算法-二叉树" target="_blank">https://13114987559.github.io/2023/08/23/note/数据结构与算法-二叉树/</a>
         </li>
         
         <li>
@@ -278,7 +348,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -349,7 +419,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/08/09/note/thesconednote/" alt="微信分享二维码"> -->
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/" alt="微信分享二维码"> -->
     </div>
 </div>
 
@@ -364,18 +434,9 @@
 
 <nav id="article-nav">
   
-    <a href="/2023/08/09/note/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          虚幻-角色的运动功能
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/08/09/essay/TestEssay/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">TestEssay</div>
+    <a href="/2023/08/23/essay/%E5%AF%B9%E6%B8%B8%E6%88%8F%E8%B5%84%E6%BA%90%E8%BF%9B%E8%A1%8C%E6%8B%86%E5%8C%85/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">对手游资源进行拆包</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -402,7 +463,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%91"><span class="toc-number">1.</span> <span class="toc-text">树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">树的定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E7%9A%84%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.</span> <span class="toc-text">树的相关概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E7%9A%84%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.</span> <span class="toc-text">树的存储结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%8C%E4%BA%B2%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="toc-number">1.3.1.</span> <span class="toc-text">双亲表示法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A9%E5%AD%90%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="toc-number">1.3.2.</span> <span class="toc-text">孩子表示法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%A9%E5%AD%90%E5%85%84%E5%BC%9F%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="toc-number">1.3.3.</span> <span class="toc-text">孩子兄弟表示法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">2.</span> <span class="toc-text">二叉树</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">2.2.</span> <span class="toc-text">特殊的二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="toc-number">2.3.</span> <span class="toc-text">二叉树的性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">2.4.</span> <span class="toc-text">二叉树存储结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">2.4.1.</span> <span class="toc-text">顺序存储结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E5%BC%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">2.4.2.</span> <span class="toc-text">链式存储结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86"><span class="toc-number">2.5.</span> <span class="toc-text">二叉树的遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="toc-number">2.5.1.</span> <span class="toc-text">先序遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="toc-number">2.5.2.</span> <span class="toc-text">中序遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD%E9%81%8D%E5%8E%86"><span class="toc-number">2.5.3.</span> <span class="toc-text">后续遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%82%E5%BA%8F%E9%81%8D%E5%8E%86"><span class="toc-number">2.5.4.</span> <span class="toc-text">层序遍历</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -538,11 +599,15 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">UE</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -550,7 +615,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+                <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
             
             <div class="clearfix"></div>
