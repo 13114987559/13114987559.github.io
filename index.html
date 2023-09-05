@@ -256,7 +256,7 @@
 <h2 id="特殊的二叉树"><a href="#特殊的二叉树" class="headerlink" title="特殊的二叉树"></a>特殊的二叉树</h2><ol>
 <li>斜树：所有节点均为左子树或右子树的二叉树。</li>
 <li>满二叉树：除叶子节点外所有节点均有左右子树且所有叶子节点均在同一层上。</li>
-<li>完全二叉树：除最后一层外，每一层节点数均达到最大值，且最后一层节点均连续集中在最左边</li>
+<li>完全二叉树：除最后一层外，每一层节点数均达到最大值，且最后一层节点均连续集中在最左边。</li>
 </ol>
 <h2 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h2><ol>
 <li>在二叉树的第i层上<em>至多</em>有2i-1个节点（i&gt;&#x3D;1）。</li>
@@ -294,6 +294,102 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">void PostOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stack&lt;Node *&gt; s1,s2;</span><br><span class="line">    struct Node *p;</span><br><span class="line">    s1.push(Root);</span><br><span class="line">    while(!s1.empty())&#123;</span><br><span class="line">        p=s1.top();</span><br><span class="line">        s1.pop();</span><br><span class="line">        s2.push(p);</span><br><span class="line">        if(p-&gt;Left)&#123;</span><br><span class="line">            s1.push(p-&gt;Left);</span><br><span class="line">        &#125;</span><br><span class="line">        if (p-&gt;Right)&#123;</span><br><span class="line">            s1.push(p-&gt;Right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    while(!s2.empty())&#123;</span><br><span class="line">        cout &lt;&lt; s2.top()-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        s2.pop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="层序遍历"><a href="#层序遍历" class="headerlink" title="层序遍历"></a>层序遍历</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void LevelOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    queue&lt;struct Node *&gt; q;</span><br><span class="line">    q.push(Tree);</span><br><span class="line">    while(!q.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        struct Node *p = q.front();</span><br><span class="line">        q.pop();</span><br><span class="line">        cout &lt;&lt; p-&gt;Data &lt;&lt; endl;</span><br><span class="line">        if(p-&gt;LeftChild)&#123;</span><br><span class="line">            q.push(p-&gt;LeftChild);</span><br><span class="line">        &#125;</span><br><span class="line">        if(p-&gt;RightChild)&#123;</span><br><span class="line">            q.push(p-&gt;RightChild);             </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="线索二叉树"><a href="#线索二叉树" class="headerlink" title="线索二叉树"></a>线索二叉树</h1><h2 id="线索二叉树的定义"><a href="#线索二叉树的定义" class="headerlink" title="线索二叉树的定义"></a>线索二叉树的定义</h2><p>线索二叉树中有的节点指向左右孩子，有的节点指向前驱和后继，这种二叉树称为线索二叉树。</p>
+<h2 id="线索二叉树的实现"><a href="#线索二叉树的实现" class="headerlink" title="线索二叉树的实现"></a>线索二叉树的实现</h2><p>因为叶子节点没有左右孩子，所以对叶子节点进行特殊处理，将左指针指向后继，右指针指向前驱。<br>并且由于有的节点有左右孩子，所以在线索化是还要增加一个标志以表示当前节点指向左右孩子还是前驱后继。</p>
+<p>代码实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *LeftChild,*RightChild;</span><br><span class="line">    int LTag,RTag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上是对节点的定义，LTag和RTag分别表示当前节点是左孩子还是右孩子且默认为0，如果Tag&#x3D;0表示指向的是左孩子，如果Tag&#x3D;1表示指向的是右孩子。</p>
+<h2 id="如何线索化"><a href="#如何线索化" class="headerlink" title="如何线索化"></a>如何线索化</h2><p>我们对二叉树进行某种遍历使其便为线索二叉树的过程称为线索化。</p>
+<p>以中序遍历为例，线索化的过程如下：</p>
+<ol>
+<li>如果当前节点没有左孩子，则左指针指向中序遍历的前驱，并且左指针的LTag置为1，表示指向前驱。</li>
+<li>如果当前节点有左孩子，则左指针指向左孩子，并且左指针的LTag置为0，表示指向左孩子。</li>
+<li>如果当前节点没有右孩子，则右指针指向中序遍历的后继，并且右指针的RTag置为1，表示指向后继。</li>
+<li>如果当前节点有右孩子，则右指针指向右孩子，并且右指针的RTag置为0，表示指向右孩子。</li>
+<li>如果没有前驱，则指向为NULL，如果没有后继，则指向为NULL。</li>
+</ol>
+<p>代码实现（采用递归中序遍历）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Node *Pre;</span><br><span class="line">void InThreading(Node *p)</span><br><span class="line">&#123;</span><br><span class="line">    if(!p)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    InThreading(p-&gt;LeftChild);</span><br><span class="line"></span><br><span class="line">    if(!p-&gt;LeftChild)&#123;</span><br><span class="line">        p-&gt;LeftChild = Pre;</span><br><span class="line">        p-&gt;LTag = 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if(!p-&gt;RightChild)&#123;</span><br><span class="line">        p-&gt;RightChild = Pre;</span><br><span class="line">        p-&gt;RTag = 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Pre = p;</span><br><span class="line"></span><br><span class="line">    InThreading(p-&gt;RightChild);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<h2 id="如何通过线索二叉树进行遍历"><a href="#如何通过线索二叉树进行遍历" class="headerlink" title="如何通过线索二叉树进行遍历"></a>如何通过线索二叉树进行遍历</h2><p>通过线索二叉树进行遍历的过程和二叉链表类似，但是由于线索二叉树中有的节点有左右孩子，有的节点有前驱和后继，所以遍历的过程需要对有左右孩子的节点和没有左右孩子的节点进行特殊处理。</p>
+<p>代码实现（中序遍历）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void InOrder(Node *Root)</span><br><span class="line">&#123;</span><br><span class="line">    Node *p=Root;</span><br><span class="line">    while(p)&#123;</span><br><span class="line">        while(p-&gt;LTag==0)&#123;</span><br><span class="line">            p = p-&gt;LeftChild;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line"></span><br><span class="line">        while(p-&gt;RTag==1 &amp;&amp; p-&gt;RightChild!=NULL)&#123;</span><br><span class="line">            p = p-&gt;RightChild;</span><br><span class="line">            cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        p = p-&gt;RightChild;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="赫夫曼树"><a href="#赫夫曼树" class="headerlink" title="赫夫曼树"></a>赫夫曼树</h1><h2 id="什么是赫夫曼树"><a href="#什么是赫夫曼树" class="headerlink" title="什么是赫夫曼树"></a>什么是赫夫曼树</h2><p>赫夫曼树是带权路径长度最短的二叉树，也叫最优二叉树。</p>
+<p>路径和路径长度：在一棵树中，从一个结点往下可以达到的孩子或孙子结点之间的通路，称为路径。通路中分支的数目称为路径长度。若规定根结点的层数为1，则从根结点到第L层结点的路径长度为L-1。</p>
+<p>结点的权：给树中结点赋予一个数值，称为这个结点的权。权是表示结点重要程度的量。</p>
+<p>结点的带权路径长度：从根结点到该结点之间的路径长度与该结点的权的乘积。</p>
+<p>树的带权路径长度：所有叶子结点的带权路径长度之和。</p>
+<h2 id="构建赫夫曼树"><a href="#构建赫夫曼树" class="headerlink" title="构建赫夫曼树"></a>构建赫夫曼树</h2><ol>
+<li>从带权值的叶子节点小到大进行排序。</li>
+<li>选择权值最小的两个节点，将这两个节点合并，较小的节点在左边，生成新的节点，并将新节点的权值设为这两个节点的权值之和。</li>
+<li>重复步骤2，直到只剩下一个节点。</li>
+</ol>
+<h2 id="赫夫曼编码"><a href="#赫夫曼编码" class="headerlink" title="赫夫曼编码"></a>赫夫曼编码</h2><p>赫夫曼编码是一种<em>前缀编码（不能是另一字符串的前缀）</em>，赫夫曼编码的实现过程如下：</p>
+<ol>
+<li>统计字符出现的次数，得到每个字符的权值。</li>
+<li>按照权值从小到大的顺序，将所有的字符和权值形成一个数组。</li>
+<li>初始化一个二叉树，将权值数组中的元素按照从左到右的顺序依次放入到二叉树中</li>
+</ol>
+<p>假如有一段文本”ABDCADFEED“，使用二进制传输：</p>
+<table>
+<thead>
+<tr>
+<th>字母</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>二进制</td>
+<td>000</td>
+<td>001</td>
+<td>010</td>
+<td>011</td>
+<td>100</td>
+<td>101</td>
+</tr>
+</tbody></table>
+<p>得到的二进制串为：00000100110100111001000001111</p>
+<p>如果采用赫夫曼编码：<br>统计字母出现的频率，得到如下表格</p>
+<table>
+<thead>
+<tr>
+<th>字母</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>频率</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>赫夫曼编码</td>
+<td>011</td>
+<td>100</td>
+<td>101</td>
+<td>11</td>
+<td>00</td>
+<td>010</td>
+</tr>
+</tbody></table>
+<p><img src="/Pic/Huffman-f.jpg" alt="频率表示"><br>转为编码后<br><img src="/Pic/Huffman-code.jpg" alt="编码表示"></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>主要关于树、二叉树、线索二叉树、赫夫曼树的概念和实现，后续更新B树和红黑树。</p>
 
     
 
@@ -1124,14 +1220,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
@@ -1141,6 +1229,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">UE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
             
             <div class="clearfix"></div>
