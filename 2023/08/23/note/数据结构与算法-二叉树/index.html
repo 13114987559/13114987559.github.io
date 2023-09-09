@@ -6,26 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://13114987559.github.io">
-  <title>数据结构与算法-二叉树 | KongXinQing~</title>
+  <title>数据结构与算法：二叉树 | KongXinQing~</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   <meta name="description" content="树树的定义树是n(n&gt;&#x3D;0)个结点的有限集合，当n&#x3D;0时，称为空树。在任意一棵非空树中：  有且仅有一个特定的称为根的结点。 当n&gt;1时，其余结点可分为m(m&gt;0)个互不相交的有限集，每个集合本身又是一棵树，称为原树的子树。  树的相关概念 节点的度：节点拥有的子树个数称为节点的度。  节点的深度：从根开始往下，逐层累加，根的深度为0。 森林：由m(m&gt;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据结构与算法-二叉树">
+<meta property="og:title" content="数据结构与算法：二叉树">
 <meta property="og:url" content="https://13114987559.github.io/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/index.html">
 <meta property="og:site_name" content="KongXinQing~">
 <meta property="og:description" content="树树的定义树是n(n&gt;&#x3D;0)个结点的有限集合，当n&#x3D;0时，称为空树。在任意一棵非空树中：  有且仅有一个特定的称为根的结点。 当n&gt;1时，其余结点可分为m(m&gt;0)个互不相交的有限集，每个集合本身又是一棵树，称为原树的子树。  树的相关概念 节点的度：节点拥有的子树个数称为节点的度。  节点的深度：从根开始往下，逐层累加，根的深度为0。 森林：由m(m&gt;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://13114987559.github.io/Pic/Huffman-f.jpg">
-<meta property="og:image" content="https://13114987559.github.io/Pic/Huffman-code.jpg">
+<meta property="og:image" content="https://13114987559.github.io/Pic/Huffman/Huffman-f.jpg">
+<meta property="og:image" content="https://13114987559.github.io/Pic/Huffman/Huffman-code.jpg">
 <meta property="article:published_time" content="2023-08-23T11:40:05.000Z">
-<meta property="article:modified_time" content="2023-09-05T06:38:01.739Z">
+<meta property="article:modified_time" content="2023-09-09T08:42:46.638Z">
 <meta property="article:author" content="KongXinQing">
-<meta property="article:tag" content="数据结构">
 <meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://13114987559.github.io/Pic/Huffman-f.jpg">
+<meta name="twitter:image" content="https://13114987559.github.io/Pic/Huffman/Huffman-f.jpg">
   
     <link rel="alternative" href="/atom.xml" title="KongXinQing~" type="application/atom+xml">
   
@@ -206,7 +206,7 @@
   
   
     <h1 class="article-title" itemprop="name">
-      数据结构与算法-二叉树
+      数据结构与算法：二叉树
     </h1>
   
 
@@ -287,11 +287,11 @@
 </ol>
 <h2 id="二叉树存储结构"><a href="#二叉树存储结构" class="headerlink" title="二叉树存储结构"></a>二叉树存储结构</h2><h3 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h3><p>用一组连续空间存储二叉树中的节点，用二叉树中结点在数组中的下标表示结点在二叉树中的位置。</p>
 <p>节点定义如下，Data表示数据域，LeftChild表示左孩子下标，RightChild表示右孩子下标</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    int LeftChild;</span><br><span class="line">    int RightChild;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    int LeftChild;</span><br><span class="line">    int RightChild;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h3 id="链式存储结构"><a href="#链式存储结构" class="headerlink" title="链式存储结构"></a>链式存储结构</h3><p>链式存储结构采用二叉链表存储结构，每个节点包括数据域和左右孩子指针。</p>
 <p>节点定义如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *LeftChild;</span><br><span class="line">    struct Node *RightChild;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *LeftChild;</span><br><span class="line">    struct Node *RightChild;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <h2 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h2><h3 id="先序遍历"><a href="#先序遍历" class="headerlink" title="先序遍历"></a>先序遍历</h3><p>递归遍历</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void PreOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Tree)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; Tree-&gt;Data &lt;&lt; endl;</span><br><span class="line">        PreOrder(Tree-&gt;LeftChild);</span><br><span class="line">        PreOrder(Tree-&gt;RightChild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -319,7 +319,7 @@
 <h1 id="线索二叉树"><a href="#线索二叉树" class="headerlink" title="线索二叉树"></a>线索二叉树</h1><h2 id="线索二叉树的定义"><a href="#线索二叉树的定义" class="headerlink" title="线索二叉树的定义"></a>线索二叉树的定义</h2><p>线索二叉树中有的节点指向左右孩子，有的节点指向前驱和后继，这种二叉树称为线索二叉树。</p>
 <h2 id="线索二叉树的实现"><a href="#线索二叉树的实现" class="headerlink" title="线索二叉树的实现"></a>线索二叉树的实现</h2><p>因为叶子节点没有左右孩子，所以对叶子节点进行特殊处理，将左指针指向后继，右指针指向前驱。<br>并且由于有的节点有左右孩子，所以在线索化是还要增加一个标志以表示当前节点指向左右孩子还是前驱后继。</p>
 <p>代码实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *LeftChild,*RightChild;</span><br><span class="line">    int LTag,RTag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *LeftChild,*RightChild;</span><br><span class="line">    int LTag,RTag;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>以上是对节点的定义，LTag和RTag分别表示当前节点是左孩子还是右孩子且默认为0，如果Tag&#x3D;0表示指向的是左孩子，如果Tag&#x3D;1表示指向的是右孩子。</p>
 <h2 id="如何线索化"><a href="#如何线索化" class="headerlink" title="如何线索化"></a>如何线索化</h2><p>我们对二叉树进行某种遍历使其便为线索二叉树的过程称为线索化。</p>
 <p>以中序遍历为例，线索化的过程如下：</p>
@@ -376,7 +376,7 @@
 <td>101</td>
 </tr>
 </tbody></table>
-<p>得到的二进制串为：00000100110100111001000001111</p>
+<p>得到的二进制串为：000001011001000010101100100010</p>
 <p>如果采用赫夫曼编码：<br>统计字母出现的频率，得到如下表格</p>
 <table>
 <thead>
@@ -409,7 +409,7 @@
 <td>010</td>
 </tr>
 </tbody></table>
-<p><img src="/Pic/Huffman-f.jpg" alt="频率表示"><br>转为编码后<br><img src="/Pic/Huffman-code.jpg" alt="编码表示"></p>
+<p><img src="/Pic/Huffman/Huffman-f.jpg" alt="频率表示"><br>转为编码后<br><img src="/Pic/Huffman/Huffman-code.jpg" alt="编码表示"></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>主要关于树、二叉树、线索二叉树、赫夫曼树的概念和实现，后续更新B树和红黑树。</p>
 
     
@@ -425,7 +425,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://13114987559.github.io/2023/08/23/note/数据结构与算法-二叉树/" title="数据结构与算法-二叉树" target="_blank">https://13114987559.github.io/2023/08/23/note/数据结构与算法-二叉树/</a>
+          <a href="https://13114987559.github.io/2023/08/23/note/数据结构与算法-二叉树/" title="数据结构与算法：二叉树" target="_blank">https://13114987559.github.io/2023/08/23/note/数据结构与算法-二叉树/</a>
         </li>
         
         <li>
@@ -447,11 +447,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
         		</li>
       		
 		</ul>
@@ -532,6 +532,15 @@
 
 
 <nav id="article-nav">
+  
+    <a href="/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          数据结构与算法：图
+        
+      </div>
+    </a>
   
   
     <a href="/2023/08/23/essay/%E5%AF%B9%E6%B8%B8%E6%88%8F%E8%B5%84%E6%BA%90%E8%BF%9B%E8%A1%8C%E6%8B%86%E5%8C%85/" id="article-nav-older" class="article-nav-link-wrap">
@@ -698,7 +707,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -706,15 +719,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">UE</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
             
             <div class="clearfix"></div>

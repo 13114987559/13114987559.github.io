@@ -6,21 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://13114987559.github.io">
-  <title>Hello World | KongXinQing~</title>
+  <title>数据结构与算法：图 | KongXinQing~</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+  <meta name="description" content="图的概念图（Graph）是由一组顶点(V)和一组能够将两个顶点相连的边(e)的非空有限集组成的。 例如： 定义一个图G&#x3D;(V,E)，V&#x3D;{V1,V2,V3,V4},E&#x3D;{E1,E2,E3,E4,E5,E6}E1&#x3D;&lt;V1,V2&gt; E2&#x3D;&lt;V1,V3&gt; E3&#x3D;&lt;V1,V4&gt; E4&#x3D;&lt;V2,V">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://13114987559.github.io/2023/08/06/hello-world/index.html">
+<meta property="og:title" content="数据结构与算法：图">
+<meta property="og:url" content="https://13114987559.github.io/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/index.html">
 <meta property="og:site_name" content="KongXinQing~">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="图的概念图（Graph）是由一组顶点(V)和一组能够将两个顶点相连的边(e)的非空有限集组成的。 例如： 定义一个图G&#x3D;(V,E)，V&#x3D;{V1,V2,V3,V4},E&#x3D;{E1,E2,E3,E4,E5,E6}E1&#x3D;&lt;V1,V2&gt; E2&#x3D;&lt;V1,V3&gt; E3&#x3D;&lt;V1,V4&gt; E4&#x3D;&lt;V2,V">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-08-06T12:20:06.535Z">
-<meta property="article:modified_time" content="1985-10-26T08:15:00.000Z">
+<meta property="og:image" content="https://13114987559.github.io/Pic/Graph/%E5%9B%BE%E4%BE%8B.jpg">
+<meta property="og:image" content="https://13114987559.github.io/Pic/Graph/%E6%97%A0%E5%90%91%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg">
+<meta property="og:image" content="https://13114987559.github.io/Pic/Graph/%E6%9C%89%E5%90%91%E5%BC%A7%E5%A4%B4%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg">
+<meta property="og:image" content="https://13114987559.github.io/Pic/Graph/%E6%9C%89%E5%90%91%E5%B8%A6%E6%9D%83%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg">
+<meta property="article:published_time" content="2023-09-06T09:35:32.000Z">
+<meta property="article:modified_time" content="2023-09-09T13:15:39.493Z">
 <meta property="article:author" content="KongXinQing">
+<meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://13114987559.github.io/Pic/Graph/%E5%9B%BE%E4%BE%8B.jpg">
   
     <link rel="alternative" href="/atom.xml" title="KongXinQing~" type="application/atom+xml">
   
@@ -194,22 +201,22 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hello-world" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-note/数据结构与算法-图" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
   
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      数据结构与算法：图
     </h1>
   
 
 
   
   
-<a href="/2023/08/06/hello-world/" class="archive-article-date">
-        <time datetime="2023-08-06T12:20:06.535Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-06</time>
+<a href="/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/" class="archive-article-date">
+        <time datetime="2023-09-06T09:35:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-06</time>
 </a>
 
   
@@ -222,7 +229,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">75字</span>
+      <span class="post-count">1.8k字</span>
     </span>
   </span>
 
@@ -231,7 +238,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">7分</span>
     </span>
   </span>
 </div>
@@ -242,19 +249,125 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+    <h1 id="图的概念"><a href="#图的概念" class="headerlink" title="图的概念"></a>图的概念</h1><p>图（Graph）是由一组顶点(V)和一组能够将两个顶点相连的边(e)的非空有限集组成的。</p>
+<p>例如：</p>
+<p>定义一个图G&#x3D;(V,E)，V&#x3D;{V1,V2,V3,V4},E&#x3D;{E1,E2,E3,E4,E5,E6}<br>E1&#x3D;&lt;V1,V2&gt; E2&#x3D;&lt;V1,V3&gt; E3&#x3D;&lt;V1,V4&gt; E4&#x3D;&lt;V2,V3&gt; E5&#x3D;&lt;V3,V2&gt; E6&#x3D;&lt;V3,V3&gt;<br><img src="/Pic/Graph/%E5%9B%BE%E4%BE%8B.jpg"></p>
+<h2 id="一些定义"><a href="#一些定义" class="headerlink" title="一些定义"></a>一些定义</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ol>
+<li>有向边：一条边所代表的顶点是有序的，则为有向边，也称弧，例如&lt; V1,V2 &gt;和&lt; V2,V1 &gt;是不同的两个边或弧。</li>
+<li>无向边：一条边所带表的顶点是无序的，则为无向边，例如(V1,V2)和(V2,V1)是同一个边。</li>
+<li>弧的头尾：一条边从V1指向V2，则V1为弧尾，V2为弧头。</li>
+<li>度：一个顶点的度是指与它相连的边的数目，入度指入边数，出度指出边数。</li>
+<li>路径：从顶点V1到V2的路径是指从V1到V2的边所表示的顶点序列。</li>
+<li>权值：与图的边相关的数称为权值，带权值的图称为网。</li>
+<li>连通：若两个顶点之间存在路径，则称这两个顶点是连通的。</li>
+</ol>
+<h3 id="图的分类"><a href="#图的分类" class="headerlink" title="图的分类"></a>图的分类</h3><ol>
+<li>简单图：不存在顶点到自身的边且一条边不重复出现，这样的图称为简单图。</li>
+<li>无向图：图中任意一条边代表的顶点是无序的，则为无向图。</li>
+<li>有向图：图中任意一条边代表的顶点是有序的，则为有向图。 </li>
+<li>完全图：图中任意两个顶点之间都存在边，则为完全图。</li>
+<li>连通图：图中任意两个顶点之间都存在路径，则为连通图，否则为非连通图。</li>
+</ol>
+<h1 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h1><h2 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h2><p>使用一个一维数组存储顶点信息，使用一个二维数组存储边信息。</p>
+<p>结构如下：</p>
+<table>
+<thead>
+<tr>
+<th>顶点数组</th>
+<th>V0</th>
+<th>V1</th>
+<th>V2</th>
+<th>V3</th>
+</tr>
+</thead>
+</table>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>V0</th>
+<th>V1</th>
+<th>V2</th>
+<th>V3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>V1</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>V2</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>V3</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="无向图"><a href="#无向图" class="headerlink" title="无向图"></a>无向图</h3><p>对于无向图，若V1、V2之间存在边，则表中第一行第二列和第二行第一列的值为1，若不存在则为0.</p>
+<p>特点：</p>
+<ol>
+<li>表是对称矩阵。</li>
+<li>某个顶点的度就是顶i行（或第i列）所有元素之和。</li>
+</ol>
+<h3 id="有向图"><a href="#有向图" class="headerlink" title="有向图"></a>有向图</h3><p>对于有向图，若V1、V2之间存在边，则表中第一行第二列的值为1，若不存在则为0。</p>
+<p>特点：</p>
+<ol>
+<li>表不对称，即第一行和第二行所代表的边不同。</li>
+<li>要考虑出度和入度，顶点的出度是顶i行所有元素之和，顶点的入度是顶i列所有元素之和。</li>
+</ol>
+<h3 id="带权图"><a href="#带权图" class="headerlink" title="带权图"></a>带权图</h3><p>权值可以是任意值，所以对于带权图，若两点之间不存在边，则赋值为无穷大，否则赋值为权值。<br>假设权值是int类型，则使用INT_MAX表示边不存在。</p>
+<h2 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h2><p>使用邻接矩阵的空间浪费较大，因此可以使用邻接表来存储图。</p>
+<p>结构：使用一维数组或链表存储顶点信息，使用链表存储边信息。</p>
+<h3 id="无向图-1"><a href="#无向图-1" class="headerlink" title="无向图"></a>无向图</h3><p>假设有无向图G&#x3D;(V,E)<br>V&#x3D;(V0,V1,V2,V3)<br>E&#x3D;(V0,V1),(V0,V2),(V0,V3),(V1,V2),(V2,V3)<br>其表示如下：<br><img src="/Pic/Graph/%E6%97%A0%E5%90%91%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg"></p>
+<h3 id="有向图-1"><a href="#有向图-1" class="headerlink" title="有向图"></a>有向图</h3><p>假设有有向图G&#x3D;(V,E)<br>V&#x3D;(V0,V1,V2,V3)<br>E&#x3D;{&lt;V0,V1&gt;,&lt;V0,V3&gt;,&lt;V1,V0&gt;,&lt;V1,V2&gt;,&lt;V2,V0&gt;,&lt;V2,V3&gt;}<br>以边表为弧头，就有以下结构：<br><img src="/Pic/Graph/%E6%9C%89%E5%90%91%E5%BC%A7%E5%A4%B4%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg"></p>
+<p>使用边表作为弧头容易统计出度，但不容易统计入度；使用边表作为弧尾，则容易统计入度，但不容易统计出度。</p>
+<h3 id="带权图-1"><a href="#带权图-1" class="headerlink" title="带权图"></a>带权图</h3><p>假设有有向图G&#x3D;(V,E)<br>V&#x3D;(V0,V1,V2,V3)<br>E&#x3D;{&lt;V0,V1&gt;&#x3D;4,&lt;V0,V3&gt;&#x3D;6,&lt;V1,V0&gt;&#x3D;3,&lt;V1,V2&gt;&#x3D;2,&lt;V2,V0&gt;&#x3D;5,&lt;V2,V3&gt;&#x3D;8</p>
+<p>同样以边表为弧头，则有：<br><img src="/Pic/Graph/%E6%9C%89%E5%90%91%E5%B8%A6%E6%9D%83%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg">} </p>
+<h2 id="十字链表"><a href="#十字链表" class="headerlink" title="十字链表"></a>十字链表</h2><h2 id="邻接多重表"><a href="#邻接多重表" class="headerlink" title="邻接多重表"></a>邻接多重表</h2><h2 id="边集数组"><a href="#边集数组" class="headerlink" title="边集数组"></a>边集数组</h2><p>由两个一维数组组成，其中一个储存顶点信息，另一个数组存储边信息，边信息包括边的起点和终点以及权值（如果有的话）。</p>
+<p>结构定义如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int Vertex[MaxVertexNum];</span><br><span class="line">struct Edge</span><br><span class="line">&#123;</span><br><span class="line">    int start;</span><br><span class="line">    int end;</span><br><span class="line">    int weight;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Edge EdgeArray[MaxVertexNum];</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<h1 id="图的遍历"><a href="#图的遍历" class="headerlink" title="图的遍历"></a>图的遍历</h1><h2 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h2><p>深度优先遍历，简称DFS，是从初始结点出发，沿着一条路一直走到底，再回溯，再走下一条路，直到走完所有路。<br>简单来说就是从开始一条路走到底，没有路时回溯一步继续走下一条路。<br>从定义可以看出深度优先遍历与树的前序遍历相似，所以可以使用栈实现DFS。</p>
+<p>思路：</p>
+<ol>
+<li>从顶点开始，走过的路写上记号。</li>
+<li>走向离自己最近的未走过的节点。</li>
+<li>当这条路没有路时（即没有可以访问的节点），回溯一步，访问还未走过的节点。</li>
+<li>重复2、3，直到所有节点都访问过。</li>
+</ol>
+<p>代码实现(使用邻接表)：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">定义结构</span><br><span class="line">struct Vertex</span><br><span class="line">&#123;</span><br><span class="line">    int Vertex;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct Graph</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    Vertex* V;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Graph G[MaxVertexNum];</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">递归实现</span><br><span class="line">bool Vistied[MaxVertexNum]=&#123;0&#125;;</span><br><span class="line">//顶点是否访问，1为访问，0为未访问</span><br><span class="line"></span><br><span class="line">void DFS(Graph&amp; G, int v)</span><br><span class="line">&#123;</span><br><span class="line">    //V为当前顶点下标，G为图</span><br><span class="line">    if(Vistied[v]==true)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; G[v].Data &lt;&lt; &quot; &quot;;</span><br><span class="line">    Vistied[v]=true;</span><br><span class="line"></span><br><span class="line">    for(int i=0;i&lt;MaxVertexNum;i++)&#123;</span><br><span class="line">        if(G[v].V[i].Vertex!=-1 &amp;&amp; Visited[G[v].V[i].Vertex]==false)&#123; </span><br><span class="line">            DFS(G,G[v].V[i].Vertex);</span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">栈实现</span><br><span class="line">void DFS(Graph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">    stack&lt;int&gt; s;</span><br><span class="line">    int v=0;</span><br><span class="line">    s.push(v)；</span><br><span class="line">    while(!s.empty())&#123;</span><br><span class="line">        int v=s.top();</span><br><span class="line">        if(Visited[v]==false)&#123;</span><br><span class="line">           Visited[v]=true;</span><br><span class="line">           cout &lt;&lt; G[v].Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for(int i=0;i&lt;G[v].size();i++)&#123;</span><br><span class="line">            if(Visited[G[v].V[i].Vertex]==false)&#123;</span><br><span class="line">                s.push(G[v].V[i].Vertex);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">            if(i==G[v].size()-1)&#123;</span><br><span class="line">                s.pop();</span><br><span class="line">                //此时G[v].V[i].Vertex已经全部访问过，进行回溯</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;          </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<h2 id="广度优先遍历"><a href="#广度优先遍历" class="headerlink" title="广度优先遍历"></a>广度优先遍历</h2><p>广度优先遍历，简称BFS，从初顶点出发，首先访问该顶点所有相连的顶点，然后依次访问这些顶点相连的顶点。<br>遍历顺序与树的层序遍历类似，可以使用队列实现。</p>
+<p>思路：</p>
+<ol>
+<li>将初始顶点入队。</li>
+<li>访问队首顶点，并将其所有与它相连的顶点入队，并弹出该顶点。</li>
+<li>重复步骤2，知道队列为空。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void BFS(Graph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">    queue&lt;int&gt; q;</span><br><span class="line">    q.push(0);</span><br><span class="line">    while(!q.empty())&#123;</span><br><span class="line">        int v=q.front();</span><br><span class="line">        q.pop();</span><br><span class="line"></span><br><span class="line">        if(Visited[v]==false)&#123;</span><br><span class="line">            cout &lt;&lt; G[v].Data &lt;&lt; &quot; &quot;;</span><br><span class="line">            Visited[v]=true;</span><br><span class="line">        &#125;</span><br><span class="line">          </span><br><span class="line">        for(int i=0;i&lt;G[v].size();i++)&#123;</span><br><span class="line">            if(Visited[G[v].V[i].Vertex]==false)&#123;</span><br><span class="line">                q.push(G[v].V[i].Vertex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>第一部为图的一些基本概念和定义。<br>第二部分为图的存储结构。<br>第三部分为图的遍历。</p>
+<p>关于图的另一些算法，如最小生成树、最短路径、关键路径、拓扑排序等，会在后续文章中介绍。</p>
 
     
 
@@ -269,7 +382,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://13114987559.github.io/2023/08/06/hello-world/" title="Hello World" target="_blank">https://13114987559.github.io/2023/08/06/hello-world/</a>
+          <a href="https://13114987559.github.io/2023/09/06/note/数据结构与算法-图/" title="数据结构与算法：图" target="_blank">https://13114987559.github.io/2023/09/06/note/数据结构与算法-图/</a>
         </li>
         
         <li>
@@ -286,7 +399,33 @@
   <div class="article-info article-info-index">
     
     
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
     
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
 
     
 
@@ -336,7 +475,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/08/06/hello-world/" alt="微信分享二维码"> -->
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/" alt="微信分享二维码"> -->
     </div>
 </div>
 
@@ -351,15 +490,20 @@
 
 <nav id="article-nav">
   
-    <a href="/2023/08/09/note/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          虚幻-角色的运动功能
+          数据结构与算法：最小生成树
         
       </div>
     </a>
   
+  
+    <a href="/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数据结构与算法：二叉树</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -384,7 +528,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">图的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">一些定义</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BE%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">图的分类</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E7%9A%84%E5%AD%98%E5%82%A8"><span class="toc-number">2.</span> <span class="toc-text">图的存储</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5"><span class="toc-number">2.1.</span> <span class="toc-text">邻接矩阵</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E5%90%91%E5%9B%BE"><span class="toc-number">2.1.1.</span> <span class="toc-text">无向图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%90%91%E5%9B%BE"><span class="toc-number">2.1.2.</span> <span class="toc-text">有向图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%A6%E6%9D%83%E5%9B%BE"><span class="toc-number">2.1.3.</span> <span class="toc-text">带权图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%BB%E6%8E%A5%E8%A1%A8"><span class="toc-number">2.2.</span> <span class="toc-text">邻接表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E5%90%91%E5%9B%BE-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">无向图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%89%E5%90%91%E5%9B%BE-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">有向图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%A6%E6%9D%83%E5%9B%BE-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">带权图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E5%AD%97%E9%93%BE%E8%A1%A8"><span class="toc-number">2.3.</span> <span class="toc-text">十字链表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%82%BB%E6%8E%A5%E5%A4%9A%E9%87%8D%E8%A1%A8"><span class="toc-number">2.4.</span> <span class="toc-text">邻接多重表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%B9%E9%9B%86%E6%95%B0%E7%BB%84"><span class="toc-number">2.5.</span> <span class="toc-text">边集数组</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E7%9A%84%E9%81%8D%E5%8E%86"><span class="toc-number">3.</span> <span class="toc-text">图的遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86"><span class="toc-number">3.1.</span> <span class="toc-text">深度优先遍历</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86"><span class="toc-number">3.2.</span> <span class="toc-text">广度优先遍历</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
                     </div>
                 </span>
             </div>
