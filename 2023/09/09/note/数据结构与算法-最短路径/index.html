@@ -10,13 +10,15 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="article">
+  <meta name="description" content="关于最短路径的一些概念源点：路径起始的第一个顶点。终点：路径终止的最后一个顶点。最短路径：对于无权图来说，就是从源点到终点经过的边数最少的路径；对于带权图来说，就是路径上权值之和最少的路径。 常用的最短路径算法有：SPFA算法、Dijkstra算法、Bellman-Ford算法、SPT算法、Floyd算法，将介绍Dijkstra算法和Floyd算法。 Dijkstra算法迪杰斯特拉算法是一个单源点">
+<meta property="og:type" content="article">
 <meta property="og:title" content="数据结构与算法：最短路径">
 <meta property="og:url" content="https://13114987559.github.io/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/index.html">
 <meta property="og:site_name" content="KongXinQing~">
+<meta property="og:description" content="关于最短路径的一些概念源点：路径起始的第一个顶点。终点：路径终止的最后一个顶点。最短路径：对于无权图来说，就是从源点到终点经过的边数最少的路径；对于带权图来说，就是路径上权值之和最少的路径。 常用的最短路径算法有：SPFA算法、Dijkstra算法、Bellman-Ford算法、SPT算法、Floyd算法，将介绍Dijkstra算法和Floyd算法。 Dijkstra算法迪杰斯特拉算法是一个单源点">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-09T09:22:32.000Z">
-<meta property="article:modified_time" content="2023-09-09T09:23:55.685Z">
+<meta property="article:modified_time" content="2023-09-20T09:09:13.693Z">
 <meta property="article:author" content="KongXinQing">
 <meta property="article:tag" content="Cpp">
 <meta property="article:tag" content="算法">
@@ -222,7 +224,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">0字</span>
+      <span class="post-count">697字</span>
     </span>
   </span>
 
@@ -231,7 +233,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">2分</span>
     </span>
   </span>
 </div>
@@ -242,7 +244,29 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    
+    <h1 id="关于最短路径的一些概念"><a href="#关于最短路径的一些概念" class="headerlink" title="关于最短路径的一些概念"></a>关于最短路径的一些概念</h1><p>源点：路径起始的第一个顶点。<br>终点：路径终止的最后一个顶点。<br>最短路径：对于无权图来说，就是从源点到终点经过的边数最少的路径；对于带权图来说，就是路径上权值之和最少的路径。</p>
+<p>常用的最短路径算法有：SPFA算法、Dijkstra算法、Bellman-Ford算法、SPT算法、Floyd算法，将介绍Dijkstra算法和Floyd算法。</p>
+<h1 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h1><p>迪杰斯特拉算法是一个单源点的最短路径算法，其时间复杂度为O(n^2)。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>使用边集数组或者邻接表来存图，并自定义一个辅助数组，分别记录原点到顶点的最短路径和，顶点的来源（该顶点若在最短路径上，则它的上一个顶点称为来源），Visited数组记录是否访问过顶点。<br>定义一些新的概念：</p>
+<ol>
+<li>沉没成本：在源点到终点的过程中，经过的路径上的权值之和。</li>
+<li>预期成本：从某一点到终点所经过路径权值之和。<br>寻找最短路径的过程就是在寻找中间节点的最小沉没成本和该点的最小预期成本。</li>
+</ol>
+<p>完成准备后就可以开始寻找最短路径：</p>
+<ol>
+<li>从源点开始寻找与源点相接的点，并更新距离，来源，并标记为以访问。</li>
+<li>在距离数组中寻找值最小的顶点，并寻找与其相接的顶点，计算其距离（沉没成本+到相接顶点的与其成本），来源，并标记为已访问。</li>
+<li>在距离数组中寻找最小值且未被访问过的节点继续步骤2中查找方法直到所有顶点都被访问。</li>
+<li>按照数组中来源从终点开始输出最短路径。</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>定义以下结构:<br>使用二维矩阵存储图，g为图，nv为顶点数，ne为边数，v为源点。<br>dist为辅助数组，path为来源数组，Visited为访问数组。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#define INF 625535</span><br><span class="line">#define MaxVertexNum 100;</span><br><span class="line">int g[105][105];</span><br><span class="line">int nv,ne,v;//v是源点</span><br><span class="line">int dist[105],path[105];</span><br><span class="line">int ch[105];</span><br></pre></td></tr></table></figure>
+
+<p>代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">void Dijkstra(Graph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">	for(int i=0;i&lt;ne;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		dist[i]=g[v][i];</span><br><span class="line">		if(g[v][i]!=INF)</span><br><span class="line">		&#123;</span><br><span class="line">			path[i]=v;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	int minn;//最小的dist </span><br><span class="line">	int k;//最小dist值是k点 </span><br><span class="line">	for(int i=1;i&lt;nv;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		minn=INF;</span><br><span class="line">		for(int j=0;j&lt;nv;j++)//找最小的dist </span><br><span class="line">		&#123;</span><br><span class="line">			if(ch[j]==0&amp;&amp;dist[j]&lt;minn)</span><br><span class="line">			&#123;</span><br><span class="line">				minn=dist[j];</span><br><span class="line">				k=j;</span><br><span class="line">			 &#125; </span><br><span class="line">			</span><br><span class="line">		 &#125; </span><br><span class="line">		 ch[k]=1;</span><br><span class="line">		 for(int j=0;j&lt;nv;j++)</span><br><span class="line">		 &#123;</span><br><span class="line">		 	if(ch[j]==0&amp;&amp;dist[k]+g[k][j]&lt;dist[j])</span><br><span class="line">		 	&#123;</span><br><span class="line">		 		dist[j]=dist[k]+g[k][j];</span><br><span class="line">		 		path[j]=k;</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="Floyd算法"><a href="#Floyd算法" class="headerlink" title="Floyd算法"></a>Floyd算法</h1><p>以后再更新（&gt;_&lt;）~</p>
+
     
 
     
@@ -402,7 +426,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%9A%84%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">关于最短路径的一些概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Dijkstra%E7%AE%97%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">Dijkstra算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.1.</span> <span class="toc-text">思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Floyd%E7%AE%97%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">Floyd算法</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -542,6 +566,14 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">UE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
               </li>
              
@@ -550,15 +582,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
             
             <div class="clearfix"></div>

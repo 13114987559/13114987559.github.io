@@ -197,6 +197,133 @@
             
 
   
+    <article id="post-essay/虚幻-蒙太奇与混合动画" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB-%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/" target="_blank">虚幻：蒙太奇与混合动画</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB-%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/" class="archive-article-date">
+        <time datetime="2023-09-19T12:50:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-19</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="蒙太奇动画"><a href="#蒙太奇动画" class="headerlink" title="蒙太奇动画"></a>蒙太奇动画</h1><p>在UE中可以使用蒙太奇动画完成一些效果，完成人物的一些特俗运动，比如攀爬、跳跃、技能等等。<br>使用蒙太奇的动画只需要创建一个蒙太奇动画，插入一个slot和section，便可以在动画蓝图涨使用，我们可以不关心蒙太奇动画的实现细节而达到很好的表现效果。</p>
+<h2 id="制作蒙太奇动画"><a href="#制作蒙太奇动画" class="headerlink" title="制作蒙太奇动画"></a>制作蒙太奇动画</h2><p>首先选中一个动画，直接右键创建蒙太奇动画并命名，创建后可以发现动画蓝图中多了一个蒙太奇动画，这个动画就是我们的蒙太奇动画。</p>
+<p>点击进入蒙太奇动画，可以在动画左侧看到Montage和Notifies两栏，Montage栏中可以新建slot以供我们使用，notifies栏中可以新建通知，通知可以让我们在动画播放时触发一些动作，比如播放声音、播放特效等等。</p>
+<p>在montage栏中直接右键选择新建slot，并在DefaultGroup中选择新建的slot和section；notifies的操作与slot类似，创建好后可以拖动创建好的section和notify，在播放时选择section可以跳转到开始的区域（一个蒙太奇动画可以包含多个片段，可以使用sectin来控制播放那个片段）。</p>
+<p>在使用时只需要到动画蓝图中选择DefaultSlot，在细节面板中选择我们自己新建的slot，随后便可以在蓝图或C++中选择合适的时机播放蒙太奇动画。</p>
+<p>至此就制作了一个简单的蒙太奇动画。</p>
+<h2 id="使用蒙太奇动画的简单例子"><a href="#使用蒙太奇动画的简单例子" class="headerlink" title="使用蒙太奇动画的简单例子"></a>使用蒙太奇动画的简单例子</h2><p>在角色的运动中我们实现了逻辑中的运动功能，还需要给角色添加动画，对于跳跃动画血药控制起跳、滞空、落地三个状态的动画，我们就可以使用蒙太奇与动画状态机来实现。</p>
+<p>我们按照上述方法制作一个蒙太奇动画，其中包含了LightLanding和HevayLanding两个动画片段并给section分别起名为Light和Heavy，当角色落地速度不大时我们可以使用LightLanding片段，当角色落地速度较大时可以使用HeavyLanding片段。</p>
+<p>在动画蓝图中新建一个状态机，在状态机中添加起跳和滞空动画，起跳动画完成后循环播放滞空动画，实现起跳与滞空功能。</p>
+<p>当角色落地时，使用虚幻自带的OnMovementModeChange来控制播放蒙太奇，这个函数可以在C++中重写，或直接在蓝图中重新，两者只是参数上略有不同，在C++中只有PreMovementMode，蓝图中还包含了NewMovementMdoe（不算自定义），但对于实现落地没有什么区别。</p>
+<p>以C++为例，在主角中添加</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public:</span><br><span class="line">virtual void OnMovementModeChanged(EMovementMode PreMovementMode, uint8 PrevCustomMode) override;</span><br></pre></td></tr></table></figure>
+
+<p>并在cpp中添加实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void ACharacter::OnMovementModeChanged(EMovementMode PreMovementMode, uint8 PrevCustomMode)</span><br><span class="line">&#123;</span><br><span class="line">    if(PreMovementMode == EMovementMode::MOVE_Falling)&#123;</span><br><span class="line">        AnimInstance-&gt;Montage_Play(Montage);</span><br><span class="line">        AnimInstance-&gt;Montage_JumpToSection(FName(&quot;Light&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上的只是伪代码，AnimInstance是动画实例，Montage是蒙太奇动画，FName是要播放的片段，Montage_Play是播放蒙太奇，Montage_JumpToSection是跳转到Light片段。</p>
+<p>对于HeavyLanding可以添加一个bool来判断播放那个片段，可以检测角色滞空时的速度，当达到某一值时置为真，播放完蒙太奇动画后再置为假，就可以实现落地功能。</p>
+<p>对于HeavyLanding，还可以添加两个动画通知，在开始时禁止角色运动，在片段播放完成后将MovementMode设置为Walking。</p>
+<p>同时要调用RetsetJumpState函数，重置跳跃状态，否则角色会只跳跃一次。</p>
+<p>完成以上操作便通过蒙太奇动画完成了跳跃功能。</p>
+<h1 id="混合动画"><a href="#混合动画" class="headerlink" title="混合动画"></a>混合动画</h1><p>假如有两个动画，一个时角色的行走动画但是没有武器（一把手枪），另一个角色有持枪的待机动画，当我们需要角色的持枪行走动画时，就可以通过混合动画，使角色的上半身混合出持枪动作而下半身依旧是行走动画，这样就得到了一个持枪行走动画。</p>
+<p>同样我们不关系混合动画的如何实现而只关心如何使用。</p>
+<p>同样使用上面的例子，将两个动画拖入到动画蓝图中，使用LayerBlendperbone节点，以行走动画作为base，持枪动画作为blend。</p>
+<p>在混合节点的细节面板中选择LayerSetup-BranchFitters-AddElements。BoneName使开始混合节点，BlendDethp为混合深度。BoneName是要混合的古河名称，Dethp表示混合深度，-1表示从该骨骼的父骨骼开始混合，1表示从子骨骼开始混合，0表示从该骨骼开始混合，同时也是默认设置。</p>
+<p>我们选择Spine骨骼的位置开始混合并选择深度为0，Spine大概是胸部的位置，不同的动画可以选择不同骨骼以达到最好的效果。</p>
+<p>完成以上操作后就可以得到一个持枪行走动画。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB-%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-note/数据结构与算法-散列表" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -401,7 +528,29 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    
+    <h1 id="关于最短路径的一些概念"><a href="#关于最短路径的一些概念" class="headerlink" title="关于最短路径的一些概念"></a>关于最短路径的一些概念</h1><p>源点：路径起始的第一个顶点。<br>终点：路径终止的最后一个顶点。<br>最短路径：对于无权图来说，就是从源点到终点经过的边数最少的路径；对于带权图来说，就是路径上权值之和最少的路径。</p>
+<p>常用的最短路径算法有：SPFA算法、Dijkstra算法、Bellman-Ford算法、SPT算法、Floyd算法，将介绍Dijkstra算法和Floyd算法。</p>
+<h1 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h1><p>迪杰斯特拉算法是一个单源点的最短路径算法，其时间复杂度为O(n^2)。</p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>使用边集数组或者邻接表来存图，并自定义一个辅助数组，分别记录原点到顶点的最短路径和，顶点的来源（该顶点若在最短路径上，则它的上一个顶点称为来源），Visited数组记录是否访问过顶点。<br>定义一些新的概念：</p>
+<ol>
+<li>沉没成本：在源点到终点的过程中，经过的路径上的权值之和。</li>
+<li>预期成本：从某一点到终点所经过路径权值之和。<br>寻找最短路径的过程就是在寻找中间节点的最小沉没成本和该点的最小预期成本。</li>
+</ol>
+<p>完成准备后就可以开始寻找最短路径：</p>
+<ol>
+<li>从源点开始寻找与源点相接的点，并更新距离，来源，并标记为以访问。</li>
+<li>在距离数组中寻找值最小的顶点，并寻找与其相接的顶点，计算其距离（沉没成本+到相接顶点的与其成本），来源，并标记为已访问。</li>
+<li>在距离数组中寻找最小值且未被访问过的节点继续步骤2中查找方法直到所有顶点都被访问。</li>
+<li>按照数组中来源从终点开始输出最短路径。</li>
+</ol>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>定义以下结构:<br>使用二维矩阵存储图，g为图，nv为顶点数，ne为边数，v为源点。<br>dist为辅助数组，path为来源数组，Visited为访问数组。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#define INF 625535</span><br><span class="line">#define MaxVertexNum 100;</span><br><span class="line">int g[105][105];</span><br><span class="line">int nv,ne,v;//v是源点</span><br><span class="line">int dist[105],path[105];</span><br><span class="line">int ch[105];</span><br></pre></td></tr></table></figure>
+
+<p>代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">void Dijkstra(Graph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">	for(int i=0;i&lt;ne;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		dist[i]=g[v][i];</span><br><span class="line">		if(g[v][i]!=INF)</span><br><span class="line">		&#123;</span><br><span class="line">			path[i]=v;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	int minn;//最小的dist </span><br><span class="line">	int k;//最小dist值是k点 </span><br><span class="line">	for(int i=1;i&lt;nv;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		minn=INF;</span><br><span class="line">		for(int j=0;j&lt;nv;j++)//找最小的dist </span><br><span class="line">		&#123;</span><br><span class="line">			if(ch[j]==0&amp;&amp;dist[j]&lt;minn)</span><br><span class="line">			&#123;</span><br><span class="line">				minn=dist[j];</span><br><span class="line">				k=j;</span><br><span class="line">			 &#125; </span><br><span class="line">			</span><br><span class="line">		 &#125; </span><br><span class="line">		 ch[k]=1;</span><br><span class="line">		 for(int j=0;j&lt;nv;j++)</span><br><span class="line">		 &#123;</span><br><span class="line">		 	if(ch[j]==0&amp;&amp;dist[k]+g[k][j]&lt;dist[j])</span><br><span class="line">		 	&#123;</span><br><span class="line">		 		dist[j]=dist[k]+g[k][j];</span><br><span class="line">		 		path[j]=k;</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="Floyd算法"><a href="#Floyd算法" class="headerlink" title="Floyd算法"></a>Floyd算法</h1><p>以后再更新（&gt;_&lt;）~</p>
+
     
 
     
@@ -501,7 +650,31 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    
+    <h1 id="最小生成树的概念"><a href="#最小生成树的概念" class="headerlink" title="最小生成树的概念"></a>最小生成树的概念</h1><p>最小生成树，即构造连通网的总代价（总权值）最小的树为最小生成树。</p>
+<p>最小生成树的一些性质：</p>
+<ol>
+<li>最小生成树一定是连通的。</li>
+<li>如果去掉某条边，则最小生成树就不再连通。</li>
+<li>最小生成树的边数一定等于顶点数减1。</li>
+<li>一个连通图可以有多个生成树。</li>
+<li>生成树中不存在环。</li>
+<li>对于包含n个顶点的连通图，其最小生成树包含n-1条边。</li>
+<li>对于包含n个顶点的完全无向图，最多包含n^(n-2)条边。</li>
+</ol>
+<h1 id="最小生成树的算法"><a href="#最小生成树的算法" class="headerlink" title="最小生成树的算法"></a>最小生成树的算法</h1><h2 id="普里姆算法"><a href="#普里姆算法" class="headerlink" title="普里姆算法"></a>普里姆算法</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们将顶点分为两类，一类为A，另一类为B，其中A类表示已经加入最小生成树的顶点，B类表示尚未加入最小生成树的顶点。<br>我们每次都从B类中寻找一个顶点加入A类并使得A类中得顶点权值之和最小，这样我们就可以得到一个最小生成树。<br>为了实现上述思路，我们使用邻接表，并且还需要一个辅助空间dist来挑选权值最小的顶点。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>定义如下数据结构：<br>令最大顶点数为10<br>Edge表示边表，Vertex为相连的顶点，Weight为权值<br>Graph表示图，其中Vertex为顶点，Edge为边表指针<br>G图，下标为顶点<br>dist为辅助数组,用于记录最短的距离<br>Visited为辅助数组，如果顶点在A中则标为1，否则为0<br>Tree用来存放结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#define MaxVertexNum 10</span><br><span class="line">#define INF 2^31-1</span><br><span class="line">struct Edge</span><br><span class="line">&#123;</span><br><span class="line">    int Vertex;</span><br><span class="line">    int Weight;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct Graph</span><br><span class="line">&#123;</span><br><span class="line">    int Vertex;</span><br><span class="line">    int* Edge;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Graph G[MaxVertexNum];</span><br><span class="line">int dist[MaxVertexNum]=&#123;INF&#125;;</span><br><span class="line">bool Visted[MaxVertexNum]=&#123;false&#125;;</span><br><span class="line"></span><br><span class="line">struct Tree</span><br><span class="line">&#123;</span><br><span class="line">    int Begin;</span><br><span class="line">    int End;</span><br><span class="line">    int Weight;</span><br><span class="line">&#125;;</span><br><span class="line">Tree T[MaxVertexNum-1];</span><br></pre></td></tr></table></figure>
+
+<p>算法实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void Prime(MGraph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">    Visited[0]=1; //先把第一个顶点加入到A类中</span><br><span class="line">    int count=0;</span><br><span class="line"></span><br><span class="line">    while(count!=MaxVertexNum-1)&#123;</span><br><span class="line">        //寻找最小距离</span><br><span class="line">        int Min=INF;</span><br><span class="line">        for(int i=0;i&lt;MaxVertexNum;i++)&#123;          </span><br><span class="line">            for(int j=0;j&lt;G[i].size();j++)&#123;</span><br><span class="line">                if(Visited[G[i][j].Vertex]==false)&#123;</span><br><span class="line">                    dist[G[i][j].Vertex]=G[i][j].Weight;</span><br><span class="line">                    Min=min(Min,G[i][j].Weight);</span><br><span class="line">                &#125;               </span><br><span class="line">            &#125;        </span><br><span class="line">        &#125;</span><br><span class="line">        //将最小距离加入到树中</span><br><span class="line">        for(int j=0;j&lt;G[i].size();j++)&#123;</span><br><span class="line">            if(dist[j]==Min &amp;&amp; Visited[j]==false)&#123;</span><br><span class="line">                Visited[j]=true;</span><br><span class="line">                T[count].Begin=i;</span><br><span class="line">                T[count].End=G[i][j].Vertex;</span><br><span class="line">                T[count].Weight=Min;</span><br><span class="line">                count++;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法"></a>克鲁斯卡尔算法</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>采用贪心策略，我们每次都挑选一个权值最小的边放入生成树中并检查是否成环，知道所有节点都加入生成树中。<br>这里使用边集数组来表示图，并在构建图时按权值递增构建或使用sort进行排序。<br>如何检测有环生成：定义一个终点数组，下标为起始点，值为终点，为INF表示没有节点相连，每次都在这个数组例查询终点，若指向数组中的同一个位置，则说明有环（并查集）。</p>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><p>定义如下结构:<br>最大定点数<br>边集数组<br>结果数组<br>终点数组，下标对应顶点，值对应终点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#define MaxVertexNum 10</span><br><span class="line">#definde MaxEdgeNum 15</span><br><span class="line">#define INF 2^21-1</span><br><span class="line">struct Graph</span><br><span class="line">&#123;</span><br><span class="line">    int Begin;</span><br><span class="line">    int End;</span><br><span class="line">    int Weight;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct Tree</span><br><span class="line">&#123;</span><br><span class="line">    int Begin;</span><br><span class="line">    int End;</span><br><span class="line">    int Weight;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Graph G[MaxEdgeNum];</span><br><span class="line">Tree T[MaxVertexNum-1];</span><br><span class="line">int EndArray[MaxVertexNum]=&#123;INF&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>算法实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">int Get(int cur)</span><br><span class="line">&#123;</span><br><span class="line">    while(EndArray[cur]!=INF)&#123;</span><br><span class="line">        cur=EndArray[cur];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return cur;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void Kruskal(MGraph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">    //假设图的权值是递增的</span><br><span class="line">    int count=0;</span><br><span class="line">    int i=0,j=0;</span><br><span class="line">    int EdgeNum=0;</span><br><span class="line">    while(EdgeNum&lt;MaxVertexNum-1)&#123;</span><br><span class="line">        if(Get(G[count].Begin)==Get(G[count].End))&#123;</span><br><span class="line">            count++;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            T[EdgeNum].Begin=G[count].Begin;</span><br><span class="line">            T[EdgeNum].End=G[count].End;</span><br><span class="line">            T[EdgeNum].Weight=G[count].Weight;</span><br><span class="line">            EdgeNum++;</span><br><span class="line">            EndArray[Get(G[count].Begin)]=G[count].End;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
     
 
     
@@ -1478,7 +1651,7 @@
 
 
   
-    <article id="post-note/虚幻-角色的基本移动功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-essay/虚幻-角色的基本移动功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -1486,7 +1659,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/08/09/note/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" target="_blank">虚幻-角色的运动功能</a>
+	  <a class="article-title" href="/2023/08/09/essay/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" target="_blank">虚幻：角色的基本运动功能</a>
   
     </h1>
   
@@ -1494,7 +1667,7 @@
 
   
   
-<a href="/2023/08/09/note/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" class="archive-article-date">
+<a href="/2023/08/09/essay/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" class="archive-article-date">
         <time datetime="2023-08-09T11:58:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-09</time>
 </a>
 
@@ -1570,11 +1743,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		
 		</ul>
@@ -1586,7 +1759,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
         		</li>
       		
 		</ul>
@@ -1595,7 +1768,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/08/09/note/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/08/09/essay/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/">展开全文 >></a>
     </p>
     
 
@@ -1625,93 +1798,10 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
   
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/08/06/hello-world/" target="_blank">Hello World</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/08/06/hello-world/" class="archive-article-date">
-        <time datetime="2023-08-06T12:20:06.535Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-06</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-    
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/08/06/hello-world/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 
@@ -1833,6 +1923,14 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">UE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
               </li>
              
@@ -1841,15 +1939,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
             
             <div class="clearfix"></div>
