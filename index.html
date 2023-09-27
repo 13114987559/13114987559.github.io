@@ -197,7 +197,7 @@
             
 
   
-    <article id="post-essay/虚幻-蒙太奇与混合动画" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-essay/虚幻多线程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -205,7 +205,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB-%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/" target="_blank">虚幻：蒙太奇与混合动画</a>
+	  <a class="article-title" href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_blank">虚幻多线程浅析</a>
   
     </h1>
   
@@ -213,8 +213,8 @@
 
   
   
-<a href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB-%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/" class="archive-article-date">
-        <time datetime="2023-09-19T12:50:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-19</time>
+<a href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="archive-article-date">
+        <time datetime="2023-09-25T14:27:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-25</time>
 </a>
 
   
@@ -226,34 +226,12 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="蒙太奇动画"><a href="#蒙太奇动画" class="headerlink" title="蒙太奇动画"></a>蒙太奇动画</h1><p>在UE中可以使用蒙太奇动画完成一些效果，完成人物的一些特俗运动，比如攀爬、跳跃、技能等等。<br>使用蒙太奇的动画只需要创建一个蒙太奇动画，插入一个slot和section，便可以在动画蓝图涨使用，我们可以不关心蒙太奇动画的实现细节而达到很好的表现效果。</p>
-<h2 id="制作蒙太奇动画"><a href="#制作蒙太奇动画" class="headerlink" title="制作蒙太奇动画"></a>制作蒙太奇动画</h2><p>首先选中一个动画，直接右键创建蒙太奇动画并命名，创建后可以发现动画蓝图中多了一个蒙太奇动画，这个动画就是我们的蒙太奇动画。</p>
-<p>点击进入蒙太奇动画，可以在动画左侧看到Montage和Notifies两栏，Montage栏中可以新建slot以供我们使用，notifies栏中可以新建通知，通知可以让我们在动画播放时触发一些动作，比如播放声音、播放特效等等。</p>
-<p>在montage栏中直接右键选择新建slot，并在DefaultGroup中选择新建的slot和section；notifies的操作与slot类似，创建好后可以拖动创建好的section和notify，在播放时选择section可以跳转到开始的区域（一个蒙太奇动画可以包含多个片段，可以使用sectin来控制播放那个片段）。</p>
-<p>在使用时只需要到动画蓝图中选择DefaultSlot，在细节面板中选择我们自己新建的slot，随后便可以在蓝图或C++中选择合适的时机播放蒙太奇动画。</p>
-<p>至此就制作了一个简单的蒙太奇动画。</p>
-<h2 id="使用蒙太奇动画的简单例子"><a href="#使用蒙太奇动画的简单例子" class="headerlink" title="使用蒙太奇动画的简单例子"></a>使用蒙太奇动画的简单例子</h2><p>在角色的运动中我们实现了逻辑中的运动功能，还需要给角色添加动画，对于跳跃动画血药控制起跳、滞空、落地三个状态的动画，我们就可以使用蒙太奇与动画状态机来实现。</p>
-<p>我们按照上述方法制作一个蒙太奇动画，其中包含了LightLanding和HevayLanding两个动画片段并给section分别起名为Light和Heavy，当角色落地速度不大时我们可以使用LightLanding片段，当角色落地速度较大时可以使用HeavyLanding片段。</p>
-<p>在动画蓝图中新建一个状态机，在状态机中添加起跳和滞空动画，起跳动画完成后循环播放滞空动画，实现起跳与滞空功能。</p>
-<p>当角色落地时，使用虚幻自带的OnMovementModeChange来控制播放蒙太奇，这个函数可以在C++中重写，或直接在蓝图中重新，两者只是参数上略有不同，在C++中只有PreMovementMode，蓝图中还包含了NewMovementMdoe（不算自定义），但对于实现落地没有什么区别。</p>
-<p>以C++为例，在主角中添加</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">public:</span><br><span class="line">virtual void OnMovementModeChanged(EMovementMode PreMovementMode, uint8 PrevCustomMode) override;</span><br></pre></td></tr></table></figure>
-
-<p>并在cpp中添加实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void ACharacter::OnMovementModeChanged(EMovementMode PreMovementMode, uint8 PrevCustomMode)</span><br><span class="line">&#123;</span><br><span class="line">    if(PreMovementMode == EMovementMode::MOVE_Falling)&#123;</span><br><span class="line">        AnimInstance-&gt;Montage_Play(Montage);</span><br><span class="line">        AnimInstance-&gt;Montage_JumpToSection(FName(&quot;Light&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>以上的只是伪代码，AnimInstance是动画实例，Montage是蒙太奇动画，FName是要播放的片段，Montage_Play是播放蒙太奇，Montage_JumpToSection是跳转到Light片段。</p>
-<p>对于HeavyLanding可以添加一个bool来判断播放那个片段，可以检测角色滞空时的速度，当达到某一值时置为真，播放完蒙太奇动画后再置为假，就可以实现落地功能。</p>
-<p>对于HeavyLanding，还可以添加两个动画通知，在开始时禁止角色运动，在片段播放完成后将MovementMode设置为Walking。</p>
-<p>同时要调用RetsetJumpState函数，重置跳跃状态，否则角色会只跳跃一次。</p>
-<p>完成以上操作便通过蒙太奇动画完成了跳跃功能。</p>
-<h1 id="混合动画"><a href="#混合动画" class="headerlink" title="混合动画"></a>混合动画</h1><p>假如有两个动画，一个时角色的行走动画但是没有武器（一把手枪），另一个角色有持枪的待机动画，当我们需要角色的持枪行走动画时，就可以通过混合动画，使角色的上半身混合出持枪动作而下半身依旧是行走动画，这样就得到了一个持枪行走动画。</p>
-<p>同样我们不关系混合动画的如何实现而只关心如何使用。</p>
-<p>同样使用上面的例子，将两个动画拖入到动画蓝图中，使用LayerBlendperbone节点，以行走动画作为base，持枪动画作为blend。</p>
-<p>在混合节点的细节面板中选择LayerSetup-BranchFitters-AddElements。BoneName使开始混合节点，BlendDethp为混合深度。BoneName是要混合的古河名称，Dethp表示混合深度，-1表示从该骨骼的父骨骼开始混合，1表示从子骨骼开始混合，0表示从该骨骼开始混合，同时也是默认设置。</p>
-<p>我们选择Spine骨骼的位置开始混合并选择深度为0，Spine大概是胸部的位置，不同的动画可以选择不同骨骼以达到最好的效果。</p>
-<p>完成以上操作后就可以得到一个持枪行走动画。</p>
-
+    <h1 id="虚幻多线程简介"><a href="#虚幻多线程简介" class="headerlink" title="虚幻多线程简介"></a>虚幻多线程简介</h1><p>虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。<br>Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。</p>
+<h1 id="虚幻多线程的使用"><a href="#虚幻多线程的使用" class="headerlink" title="虚幻多线程的使用"></a>虚幻多线程的使用</h1><h2 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h2><p>我们创建一个类并继承FRunnable，重写Init、Run、Exit函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">UMyThread</span> : <span class="keyword">public</span> FRunnable</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UMyThread</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">UMyThread</span>();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">Init</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> uint32 <span class="title">Run</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Exit</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>::</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">AMyActor</span>* TestActor;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+    
+    <a class="article-more-a" href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/#more">more >></a>
+    
     
 
     
@@ -269,11 +247,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
         		</li>
       		
 		</ul>
@@ -294,7 +276,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB-%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/">展开全文 >></a>
     </p>
     
 
@@ -324,7 +306,7 @@
 
 
   
-    <article id="post-note/数据结构与算法-散列表" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-note/数据结构与算法-堆与优先队列" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -332,7 +314,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/09/11/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%95%A3%E5%88%97%E8%A1%A8/" target="_blank">数据结构与算法：散列表</a>
+	  <a class="article-title" href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" target="_blank">数据结构与算法-堆与优先队列</a>
   
     </h1>
   
@@ -340,8 +322,8 @@
 
   
   
-<a href="/2023/09/11/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%95%A3%E5%88%97%E8%A1%A8/" class="archive-article-date">
-        <time datetime="2023-09-11T10:38:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-11</time>
+<a href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" class="archive-article-date">
+        <time datetime="2023-09-23T12:14:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
 </a>
 
   
@@ -353,82 +335,18 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="散列表定义"><a href="#散列表定义" class="headerlink" title="散列表定义"></a>散列表定义</h1><p>散列表（HashTable，也叫哈希表），是根据关键码值(Key)而直接进行访问的数据结构。也就是说，它通过把键值映射到整数的方法(Value&#x3D;f(Key))，来访问记录，这加快了查找速度。</p>
-<p>在存储散列表时，通过散列函数来确定每个键值对应的存储位置，当我们要查找一个Key时，便可以通过散列函数直接找到Value的位置。</p>
-<p>散列冲突：查找时可能会出现f(Key1)&#x3D;f(Key2)这种情况，即两个不同的Key，通过散列函数计算出来的值相同，这种现象称为散列冲突。</p>
-<h1 id="散列表的实现"><a href="#散列表的实现" class="headerlink" title="散列表的实现"></a>散列表的实现</h1><p>为了实现散列表，我们需要一个散列函数，以下是散列函数的几个构造方法。</p>
-<h2 id="直接定址法"><a href="#直接定址法" class="headerlink" title="直接定址法"></a>直接定址法</h2><p>直接定址法就是取关键码的某个线性函数值为散列地址。<br>定义f(Key)&#x3D;a*Key+b (a,b为常数)，f(Key)的值就是散列地址。</p>
-<p>假设有1-100个数字作为年龄，以年龄为Key，对应人数为Value，就可以使用直接定址法。</p>
-<h2 id="数字分析法"><a href="#数字分析法" class="headerlink" title="数字分析法"></a>数字分析法</h2><p>散列表的Key是数字，数字分析法就是分析数字的每一位特征，取数字的各个数位来构造散列函数。<br>例如以手机号或者身份证号作为Key时，就可以使用数字分析法。</p>
-<p>还是以手机号为例，在设计散列函数时，可以选取手机号的后四位作为Key，为防止冲突，还可以将后四位反转、右环移、左环移等，这样就可以保证Key的分布均匀。</p>
-<h2 id="平方取中法"><a href="#平方取中法" class="headerlink" title="平方取中法"></a>平方取中法</h2><p>取关键码平方后的中间几位作为散列地址。</p>
-<p>假如Key&#x3D;1234，我们可以取Key的平方15227，再取中间的321作为散列地址。<br>它适用于关键字分布未知且位数不是很大的情况。</p>
-<h2 id="折叠法"><a href="#折叠法" class="headerlink" title="折叠法"></a>折叠法</h2><p>将关键字分割成位数相等的几个部分（最后一部分可以不等），然后将这几部分叠加求和，然后按散列表的长度，取后几位作为散列地址。</p>
-<p>例如Key&#x3D;123456789，可以分割成123+456+789&#x3D;1368，取后三位368作为散列地址。<br>折叠法适用于关键字位数比较大且不需要知道关键字分布的情况。</p>
-<h2 id="除留余数法"><a href="#除留余数法" class="headerlink" title="除留余数法"></a>除留余数法</h2><p>取关键字被某个不大于散列表表长m的数p除后所得的余数为散列地址。<br>散列函数定义为f(Key)&#x3D;Key%p (p&lt;&#x3D;m)，p的取值范围根据实际情况而定。</p>
-<p>例如有12个数据，我们取p&#x3D;12，得到如下表：</p>
-<table>
-<thead>
-<tr>
-<th>散列地址</th>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-<th>5</th>
-<th>6</th>
-<th>7</th>
-<th>8</th>
-<th>9</th>
-<th>10</th>
-<th>11</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Key</td>
-<td>12</td>
-<td>25</td>
-<td>38</td>
-<td>15</td>
-<td>16</td>
-<td>29</td>
-<td>78</td>
-<td>67</td>
-<td>56</td>
-<td>21</td>
-<td>22</td>
-<td>47</td>
-</tr>
-</tbody></table>
-<p>但如果有同时出现18、30，那么就会发生冲突，所以p的取值要小于等于m的最小质数。</p>
-<h2 id="随机数法"><a href="#随机数法" class="headerlink" title="随机数法"></a>随机数法</h2><p>选择一个随机函数，把关键码映射成这个函数输出的值，作为散列地址。<br>散列函数定义为f(Key)&#x3D;Random(Key),Random为随机函数</p>
-<h1 id="处理冲突"><a href="#处理冲突" class="headerlink" title="处理冲突"></a>处理冲突</h1><p>当两个Key的散列地址发生冲突时，只需要在表中找到一个空位将冲突Key放入即可，可以使用以下方法。</p>
-<h2 id="开放地址法"><a href="#开放地址法" class="headerlink" title="开放地址法"></a>开放地址法</h2><p>开放地址法就是当冲突发生时，按照某种规则取一个下一地址作为新的存储地址。</p>
-<h3 id="线性探测法"><a href="#线性探测法" class="headerlink" title="线性探测法"></a>线性探测法</h3><p>公式定义为：f(Key)&#x3D;(f(Key)+di)%m (di&lt;&#x3D;m-1)，m为散列表的长度。</p>
-<p>假设有集合{12,67,56,16,25,37,22,29,15,47,48,34},表长为12，用f(Key)&#x3D;Key%12。<br>当计算24与37时，它们的f(Key)都为1，发生冲突，所以对于37，带入公式f(Key)&#x3D;(f(Key)+1)%12&#x3D;2，所以37应该插入到第2个位置，此时冲突便解决。</p>
-<p>假如加入50，计算时又与37在的位置冲突，而50与37本来可以不冲突，我们成这张现象为堆积。</p>
-<h3 id="二次探测法"><a href="#二次探测法" class="headerlink" title="二次探测法"></a>二次探测法</h3><p>我们重新定义公式：f(Key)&#x3D;(f(Key)+di)%m (di&#x3D;1^2,-1^2,2^2,-2^2……q^2,-q^2)，q&lt;&#x3D;m&#x2F;2,m为散列表的长度。</p>
-<p>这样在寻找空址时，我们就可以双向寻找，可以不让关键字都聚集在某一块区域。</p>
-<h3 id="随机探测法"><a href="#随机探测法" class="headerlink" title="随机探测法"></a>随机探测法</h3><p>随机探测法与二次探测法类似，只是随机探测法是随机找一个位置。</p>
-<p>将公式定义为：f(Key)&#x3D;(f(Key)+di)%m，di为随机数列，m为散列表的长度。</p>
-<h2 id="再散列表法"><a href="#再散列表法" class="headerlink" title="再散列表法"></a>再散列表法</h2><p>对于散列表，我们可以使用多个散列函数寻找地址，当发生冲突时可以将冲突的Key使用另一个散列函数寻找地址，直到找到空位。<br>但作为代价，它的时间性能可能会变差。</p>
-<h2 id="链地址法"><a href="#链地址法" class="headerlink" title="链地址法"></a>链地址法</h2><p>核心思路在于当发生冲突时，不再寻找新的地址，而是使用一个链表将所有冲突的Key连接起来。<br>链地址法对于会发生很多冲突的散列函数来说，提供了不会找不到地址的保障，但代价却是查找的性能会下降。</p>
-<h2 id="建立公共溢出区"><a href="#建立公共溢出区" class="headerlink" title="建立公共溢出区"></a>建立公共溢出区</h2><p>建立公共溢出区，将所有冲突的Key放在一个公共溢出区，将所有冲突的Key放在公共溢出区。<br>在查找时，先通过散列函数寻找地址，再与基本表中内容进行比较，相等则取出，冲突则到公共溢出区寻找。<br>对于冲突比较少的散列函数来说，建立公共溢出区可以提高查找的效率。</p>
-<h1 id="散列表的实现-1"><a href="#散列表的实现-1" class="headerlink" title="散列表的实现"></a>散列表的实现</h1><p>定义以下结构：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#define NULLKEY 2^31-1</span><br><span class="line">#define HashSize 12</span><br><span class="line">struct HashTable</span><br><span class="line">&#123;</span><br><span class="line">    int *Elem;</span><br><span class="line">    int *Cur;</span><br><span class="line">    int TableSize;</span><br><span class="line">&#125;</span><br><span class="line">int m=0;</span><br></pre></td></tr></table></figure>
-<p>m为散列表的长度，作为全局变量。<br>Elem为散列表元素，Cur为下标用于判断是否冲突，TabSize为大小。</p>
-<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void InitHashTable(HashTable&amp; H)</span><br><span class="line">&#123;</span><br><span class="line">    int i=0;</span><br><span class="line">    m=HashSize;</span><br><span class="line">    H.TableSize=HashSize;</span><br><span class="line">    H.Elem=new int[HashSize];</span><br><span class="line">    for(i=0;i&lt;HashSize;i++)&#123;</span><br><span class="line">        H.Elem[i]=NULLKEY;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>定义散列函数</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int HashFunc(int Key)</span><br><span class="line">&#123;</span><br><span class="line">    return Key%m;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>插入操作</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">void InsertHash(HashTable&amp; H,int Key,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    int Addr=HashFunc(Key);</span><br><span class="line">    while(H.Elem[Addr]!=NULLKEY)&#123;</span><br><span class="line">        Addr=(Addr+1)%m;</span><br><span class="line">        //处理冲突</span><br><span class="line">    &#125;</span><br><span class="line">    H.Elem[Addr]=Value;</span><br><span class="line">    H.Cur[Addr]=Key;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>查找操作</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">void SearchHash(HashTable&amp; H,int Key)</span><br><span class="line">&#123;</span><br><span class="line">    int Addr=HashFunc(Key);</span><br><span class="line">    while(H.CUr[Addr]!=Key)&#123;</span><br><span class="line">        Addr=(Addr+1)%m;</span><br><span class="line">        //处理冲突</span><br><span class="line">        if(H.Cur[Addr]==NULLKEY || Addr==HashFunc(Key))&#123;</span><br><span class="line">            cout&lt;&lt;&quot;Not Find Key&quot;&lt;&lt;endl;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;&quot;Find Value:&quot; &lt;&lt; H.Elem[Addr] &lt;&lt;endl;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+    <h1 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h1><h2 id="堆的概念和性质"><a href="#堆的概念和性质" class="headerlink" title="堆的概念和性质"></a>堆的概念和性质</h2><p>堆（Heap）：堆是一棵完全二叉树，且满足以下性质：</p>
+<ol>
+<li>堆的堆顶元素是最大（或最小）的。</li>
+<li>堆中每个节点的值都大于（或小于）其左右孩子节点的值。</li>
+</ol>
+<h2 id="堆的实现"><a href="#堆的实现" class="headerlink" title="堆的实现"></a>堆的实现</h2><p>以小顶堆为例，因为堆是一棵完全二叉树，所以可以使用数组来模拟堆。</p>
+<p>假设我们现在有一数组，可以将该数组调整为堆，调整时，需要从最后一个非叶子节点开始调整，因为叶子节点没有孩子节点，所以调整时，只需要调整非叶子节点即可，它的整体调整过程是自下而上然后自上而下的。</p>
+<p>调整过程：比较节点与它的左右孩子。将最小的节点放在父节点。</p>
+<p>假设有一数组需要调整为堆，数组下标从0开始，从n&#x2F;2-2位置开始调整，一直到0的位置。<br>假如要调整为大顶堆，代码如下：<br>本段代码将数组调整为一个大顶堆，若要调整为小顶堆，只需要改变比较条件即可（将大于号改为小于号）——将最大值置于父节点。</p>
+    
+    <a class="article-more-a" href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/#more">more >></a>
+    
     
 
     
@@ -450,6 +368,10 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
         		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">堆</a>
+        		</li>
       		
 		</ul>
 	</div>
@@ -469,7 +391,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/11/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%95%A3%E5%88%97%E8%A1%A8/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">展开全文 >></a>
     </p>
     
 
@@ -499,7 +421,7 @@
 
 
   
-    <article id="post-note/数据结构与算法-最短路径" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-essay/虚幻Niagara使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -507,7 +429,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/" target="_blank">数据结构与算法：最短路径</a>
+	  <a class="article-title" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/" target="_blank">虚幻Niagara使用</a>
   
     </h1>
   
@@ -515,8 +437,8 @@
 
   
   
-<a href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/" class="archive-article-date">
-        <time datetime="2023-09-09T09:22:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-09</time>
+<a href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/" class="archive-article-date">
+        <time datetime="2023-09-23T09:55:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
 </a>
 
   
@@ -528,29 +450,351 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="关于最短路径的一些概念"><a href="#关于最短路径的一些概念" class="headerlink" title="关于最短路径的一些概念"></a>关于最短路径的一些概念</h1><p>源点：路径起始的第一个顶点。<br>终点：路径终止的最后一个顶点。<br>最短路径：对于无权图来说，就是从源点到终点经过的边数最少的路径；对于带权图来说，就是路径上权值之和最少的路径。</p>
-<p>常用的最短路径算法有：SPFA算法、Dijkstra算法、Bellman-Ford算法、SPT算法、Floyd算法，将介绍Dijkstra算法和Floyd算法。</p>
-<h1 id="Dijkstra算法"><a href="#Dijkstra算法" class="headerlink" title="Dijkstra算法"></a>Dijkstra算法</h1><p>迪杰斯特拉算法是一个单源点的最短路径算法，其时间复杂度为O(n^2)。</p>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>使用边集数组或者邻接表来存图，并自定义一个辅助数组，分别记录原点到顶点的最短路径和，顶点的来源（该顶点若在最短路径上，则它的上一个顶点称为来源），Visited数组记录是否访问过顶点。<br>定义一些新的概念：</p>
+    <h1 id="启用Niagara"><a href="#启用Niagara" class="headerlink" title="启用Niagara"></a>启用Niagara</h1><p>在新版虚幻引擎中，Niagara已经集成到引擎中，无需额外安装。</p>
+<p>在Edit-Plugins-FX中可以找到Niagara，勾选后重启编辑器即可。</p>
+<p>安装完成后在内容浏览器中右键可以在FX中找到包含Niagara的内容。</p>
+<p>这里只是在C++和蓝团中如何使用Niagara，并不自己创建Niagara，关于如何创建可以参考官方文档。</p>
+<h1 id="使用Niagara"><a href="#使用Niagara" class="headerlink" title="使用Niagara"></a>使用Niagara</h1><h2 id="在C-中使用Niagara"><a href="#在C-中使用Niagara" class="headerlink" title="在C++中使用Niagara"></a>在C++中使用Niagara</h2><p>要使用Niagara，首先要将Niagara的模块添加进入工程中：<br>打开工程，在build.cs中添加：”Niagara”，使该模块添加如工程中。</p>
+<p>需要在C++中创建一个NiagaraSystem,并添加到需要使用的物体上。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加头文件</span></span><br><span class="line"><span class="comment">//如果报错就添加完整路径或包含上一级文件</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraFunctionLibrary.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraSystem.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraComponent.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">UPROPERTY</span>(EditDefaultsOnly, Category = <span class="string">&quot;Niagara&quot;</span>)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UNiagaraSystem</span>* NiagaraSystem;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在类中添加使用函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">FireNiagara</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>对使用函数作出实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProjectName::FireNiagara</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="keyword">if</span>(NiagaraSystem)&#123;     </span><br><span class="line">        NiagaraComponet=UNiagaraFunctionLibrary::<span class="built_in">SpawnSystemAttached</span>(FireNiagara,RootComponent,NAME_None,FVector::ZeroVector,FRotator::ZeroRotator,FVector::OneVector,EAttachLocation::Type::KeepRelativeOffset,<span class="literal">true</span>,ENCPoolMethod::None);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    函数声明：参数名称为其含义，可以看到函数返回一个NiagaraComponent，所以可以在头文件中声明一个NiagaraComponent变量，在使用使直接将函数返回值赋值给该变量。（感觉不用也可以，还没试过doge）</span></span><br><span class="line"><span class="comment">    UNiagaraComponent* UNiagaraFunctionLibrary::SpawnSystemAttached(UNiagaraSystem* SystemTemplate,USceneComponent* AttachToComponent,</span></span><br><span class="line"><span class="comment">    FName AttachPointName,FVector Location,FRotator Rotation,FVector Scale,EAttachLocation::Type LocationType,bool bAutoDestroy,</span></span><br><span class="line"><span class="comment">    ENCPoolMethod PoolingMethod,bool bAutoActivate,bool bPreCullCheck)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者另一种实现</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProjectName::FireNiagara</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(NiagaraSystem)&#123;</span><br><span class="line">        NiagaraComponet=UNiagaraFunctionLibrary::<span class="built_in">SpawnSystemAtLocation</span>(<span class="built_in">Getworld</span>(),FireNiagara,<span class="built_in">GetActorLocation</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    函数声明：一般使用时只需要添加前三个参数即可</span></span><br><span class="line"><span class="comment">    UNiagaraComponent* SpawnSystemAtLocation(const UObject* WorldContextObject, UNiagaraSystem* SystemTemplate, FVector SpawnLocation, </span></span><br><span class="line"><span class="comment">    FRotator SpawnRotation, FVector Scale, bool bAutoDestroy, bool bAutoActivate, ENCPoolMethod PoolingMethod, bool bPreCullCheck)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="在蓝图中使用Niagara"><a href="#在蓝图中使用Niagara" class="headerlink" title="在蓝图中使用Niagara"></a>在蓝图中使用Niagara</h2><p>在蓝图中使用就很简单了，直接搜索Spawn System Attach 或者 Spawn System at Location,参数于C++中相同，直接按照需求填入即可。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>只是使用现成的System并没有什么难度，但自己实现一个Niagara比普通粒子效果要复杂得多。</p>
+<p>更多细节以及API可以查看官方文档：<br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/RenderingAndGraphics/Niagara/">https://docs.unrealengine.com/4.27/zh-CN/RenderingAndGraphics/Niagara/</a><br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraFunctionLibrary/">https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraFunctionLibrary/</a><br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraComponent/">https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraComponent/</a></p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Niagara</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-essay/虚幻反射机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" target="_blank">虚幻反射机制浅析</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" class="archive-article-date">
+        <time datetime="2023-09-23T09:53:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="虚幻的反射"><a href="#虚幻的反射" class="headerlink" title="虚幻的反射"></a>虚幻的反射</h1><p>反射是虚幻引擎中的基础技术，虚幻中的细节面板、序列化、垃圾回收、蓝图与C++交互等功能都依赖于反射。但原生C++并不支持反射，因此虚幻拥有一套自己的反射系统。</p>
+<p>本文将对虚幻的反射机制进行浅析，更多信息可以查看工程文件中的generated和Marcos源码文件，里面有对反射更详细的解释。</p>
+<h1 id="反射的简要机制"><a href="#反射的简要机制" class="headerlink" title="反射的简要机制"></a>反射的简要机制</h1><p><em>Unreal Build Tool(UBT)和Unreal Header Tool(UHT)<em>两个协同工作来生成运行时反射需要的数据。UBT通过扫描头文件，记录任何至少有一个反射类型的头文件的模块。如果其中任意一个头文件从上一次编译起发生了变化，那么UHT就会被调用来利用和更新反射数据。</em>UHT分析头文件，创建一系列反射数据</em>，并且生成包含反射数据的C++代码,放到每一个模块的generated文件中，使用标记宏标记的数据编译后可以在generated文件中看到，使用了一些宏对数据进行包装.</p>
+<p>用生成的C++代码来存储反射数据的一个最大好处就是，它可以保证跟二进制做到同步,不会加载陈旧或者过时的反射数据，因为它是跟引擎的其它代码同时编译的，并且它会在程序启动的时候使用C++表达式来计算成员偏移等，而不是通过针对特定平台&#x2F;编译器&#x2F;优化的组合中进行逆向工程。</p>
+<p>生成的诸如StaticClass()、StaticStruct()函数是为了让当前类型更好的获取反射数据，以及那此转换函数（thunks）用来在蓝图或者网络复制中调用C++函数。这些必须声明为类或者结构体的一部分，这也就解释了为什么GENERATED_UCLASS_BODY() or GENERATED_USTRUCT_BODY()宏会包含在你的反射系统的类型中，而#include “TypeName.generated.h”的头文件中定义了这些宏。</p>
+    
+    <a class="article-more-a" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">反射</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-essay/Cpp反射" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/" target="_blank">C++反射</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/" class="archive-article-date">
+        <time datetime="2023-09-23T07:02:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="反射的概念"><a href="#反射的概念" class="headerlink" title="反射的概念"></a>反射的概念</h1><p>允许程序运行时获取类内部信息，并且能操作对象的内部属性和方法。</p>
+<p>但C++本身并没有反射的概念，需要通过第三方库来实现。</p>
+<p>反射的目标：</p>
 <ol>
-<li>沉没成本：在源点到终点的过程中，经过的路径上的权值之和。</li>
-<li>预期成本：从某一点到终点所经过路径权值之和。<br>寻找最短路径的过程就是在寻找中间节点的最小沉没成本和该点的最小预期成本。</li>
+<li>类对象反射。</li>
+<li>类成员数据反射。</li>
+<li>类成员函数反射。</li>
 </ol>
-<p>完成准备后就可以开始寻找最短路径：</p>
-<ol>
-<li>从源点开始寻找与源点相接的点，并更新距离，来源，并标记为以访问。</li>
-<li>在距离数组中寻找值最小的顶点，并寻找与其相接的顶点，计算其距离（沉没成本+到相接顶点的与其成本），来源，并标记为已访问。</li>
-<li>在距离数组中寻找最小值且未被访问过的节点继续步骤2中查找方法直到所有顶点都被访问。</li>
-<li>按照数组中来源从终点开始输出最短路径。</li>
-</ol>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>定义以下结构:<br>使用二维矩阵存储图，g为图，nv为顶点数，ne为边数，v为源点。<br>dist为辅助数组，path为来源数组，Visited为访问数组。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#define INF 625535</span><br><span class="line">#define MaxVertexNum 100;</span><br><span class="line">int g[105][105];</span><br><span class="line">int nv,ne,v;//v是源点</span><br><span class="line">int dist[105],path[105];</span><br><span class="line">int ch[105];</span><br></pre></td></tr></table></figure>
+<p>注册时成员为public作用域<br>通过注册宏实现反射功能</p>
+    
+    <a class="article-more-a" href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/#more">more >></a>
+    
+    
 
-<p>代码</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">void Dijkstra(Graph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">	for(int i=0;i&lt;ne;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		dist[i]=g[v][i];</span><br><span class="line">		if(g[v][i]!=INF)</span><br><span class="line">		&#123;</span><br><span class="line">			path[i]=v;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	int minn;//最小的dist </span><br><span class="line">	int k;//最小dist值是k点 </span><br><span class="line">	for(int i=1;i&lt;nv;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		minn=INF;</span><br><span class="line">		for(int j=0;j&lt;nv;j++)//找最小的dist </span><br><span class="line">		&#123;</span><br><span class="line">			if(ch[j]==0&amp;&amp;dist[j]&lt;minn)</span><br><span class="line">			&#123;</span><br><span class="line">				minn=dist[j];</span><br><span class="line">				k=j;</span><br><span class="line">			 &#125; </span><br><span class="line">			</span><br><span class="line">		 &#125; </span><br><span class="line">		 ch[k]=1;</span><br><span class="line">		 for(int j=0;j&lt;nv;j++)</span><br><span class="line">		 &#123;</span><br><span class="line">		 	if(ch[j]==0&amp;&amp;dist[k]+g[k][j]&lt;dist[j])</span><br><span class="line">		 	&#123;</span><br><span class="line">		 		dist[j]=dist[k]+g[k][j];</span><br><span class="line">		 		path[j]=k;</span><br><span class="line">			 &#125;</span><br><span class="line">		 &#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    
 
-<h1 id="Floyd算法"><a href="#Floyd算法" class="headerlink" title="Floyd算法"></a>Floyd算法</h1><p>以后再更新（&gt;_&lt;）~</p>
+    
 
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">反射</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-note/数据结构与算法-归并与统计排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：归并与统计排序</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/" class="archive-article-date">
+        <time datetime="2023-09-20T09:18:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>算法思想：先将需要排序的元素分开，在合并的过程中将元素进行排序，最终得到一个有序数组。<br>分开方法：逻辑二分。</p>
+<p>模拟：将数组拆分为单个元素<br><img src="/Pic/Sort/%E6%8B%86%E5%88%86.jpg"></p>
+    
+    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/#more">more >></a>
+    
     
 
     
@@ -572,6 +816,10 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
         		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
+        		</li>
       		
 		</ul>
 	</div>
@@ -591,7 +839,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/">展开全文 >></a>
     </p>
     
 
@@ -621,7 +869,7 @@
 
 
   
-    <article id="post-note/数据结构与算法-最小生成树" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-note/数据结构与算法-选择排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -629,7 +877,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" target="_blank">数据结构与算法：最小生成树</a>
+	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：选择排序</a>
   
     </h1>
   
@@ -637,8 +885,8 @@
 
   
   
-<a href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" class="archive-article-date">
-        <time datetime="2023-09-09T09:21:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-09</time>
+<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" class="archive-article-date">
+        <time datetime="2023-09-20T09:18:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
 </a>
 
   
@@ -650,31 +898,12 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="最小生成树的概念"><a href="#最小生成树的概念" class="headerlink" title="最小生成树的概念"></a>最小生成树的概念</h1><p>最小生成树，即构造连通网的总代价（总权值）最小的树为最小生成树。</p>
-<p>最小生成树的一些性质：</p>
-<ol>
-<li>最小生成树一定是连通的。</li>
-<li>如果去掉某条边，则最小生成树就不再连通。</li>
-<li>最小生成树的边数一定等于顶点数减1。</li>
-<li>一个连通图可以有多个生成树。</li>
-<li>生成树中不存在环。</li>
-<li>对于包含n个顶点的连通图，其最小生成树包含n-1条边。</li>
-<li>对于包含n个顶点的完全无向图，最多包含n^(n-2)条边。</li>
-</ol>
-<h1 id="最小生成树的算法"><a href="#最小生成树的算法" class="headerlink" title="最小生成树的算法"></a>最小生成树的算法</h1><h2 id="普里姆算法"><a href="#普里姆算法" class="headerlink" title="普里姆算法"></a>普里姆算法</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们将顶点分为两类，一类为A，另一类为B，其中A类表示已经加入最小生成树的顶点，B类表示尚未加入最小生成树的顶点。<br>我们每次都从B类中寻找一个顶点加入A类并使得A类中得顶点权值之和最小，这样我们就可以得到一个最小生成树。<br>为了实现上述思路，我们使用邻接表，并且还需要一个辅助空间dist来挑选权值最小的顶点。</p>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>定义如下数据结构：<br>令最大顶点数为10<br>Edge表示边表，Vertex为相连的顶点，Weight为权值<br>Graph表示图，其中Vertex为顶点，Edge为边表指针<br>G图，下标为顶点<br>dist为辅助数组,用于记录最短的距离<br>Visited为辅助数组，如果顶点在A中则标为1，否则为0<br>Tree用来存放结果</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#define MaxVertexNum 10</span><br><span class="line">#define INF 2^31-1</span><br><span class="line">struct Edge</span><br><span class="line">&#123;</span><br><span class="line">    int Vertex;</span><br><span class="line">    int Weight;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct Graph</span><br><span class="line">&#123;</span><br><span class="line">    int Vertex;</span><br><span class="line">    int* Edge;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Graph G[MaxVertexNum];</span><br><span class="line">int dist[MaxVertexNum]=&#123;INF&#125;;</span><br><span class="line">bool Visted[MaxVertexNum]=&#123;false&#125;;</span><br><span class="line"></span><br><span class="line">struct Tree</span><br><span class="line">&#123;</span><br><span class="line">    int Begin;</span><br><span class="line">    int End;</span><br><span class="line">    int Weight;</span><br><span class="line">&#125;;</span><br><span class="line">Tree T[MaxVertexNum-1];</span><br></pre></td></tr></table></figure>
-
-<p>算法实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void Prime(MGraph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">    Visited[0]=1; //先把第一个顶点加入到A类中</span><br><span class="line">    int count=0;</span><br><span class="line"></span><br><span class="line">    while(count!=MaxVertexNum-1)&#123;</span><br><span class="line">        //寻找最小距离</span><br><span class="line">        int Min=INF;</span><br><span class="line">        for(int i=0;i&lt;MaxVertexNum;i++)&#123;          </span><br><span class="line">            for(int j=0;j&lt;G[i].size();j++)&#123;</span><br><span class="line">                if(Visited[G[i][j].Vertex]==false)&#123;</span><br><span class="line">                    dist[G[i][j].Vertex]=G[i][j].Weight;</span><br><span class="line">                    Min=min(Min,G[i][j].Weight);</span><br><span class="line">                &#125;               </span><br><span class="line">            &#125;        </span><br><span class="line">        &#125;</span><br><span class="line">        //将最小距离加入到树中</span><br><span class="line">        for(int j=0;j&lt;G[i].size();j++)&#123;</span><br><span class="line">            if(dist[j]==Min &amp;&amp; Visited[j]==false)&#123;</span><br><span class="line">                Visited[j]=true;</span><br><span class="line">                T[count].Begin=i;</span><br><span class="line">                T[count].End=G[i][j].Vertex;</span><br><span class="line">                T[count].Weight=Min;</span><br><span class="line">                count++;</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法"></a>克鲁斯卡尔算法</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>采用贪心策略，我们每次都挑选一个权值最小的边放入生成树中并检查是否成环，知道所有节点都加入生成树中。<br>这里使用边集数组来表示图，并在构建图时按权值递增构建或使用sort进行排序。<br>如何检测有环生成：定义一个终点数组，下标为起始点，值为终点，为INF表示没有节点相连，每次都在这个数组例查询终点，若指向数组中的同一个位置，则说明有环（并查集）。</p>
-<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><p>定义如下结构:<br>最大定点数<br>边集数组<br>结果数组<br>终点数组，下标对应顶点，值对应终点</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#define MaxVertexNum 10</span><br><span class="line">#definde MaxEdgeNum 15</span><br><span class="line">#define INF 2^21-1</span><br><span class="line">struct Graph</span><br><span class="line">&#123;</span><br><span class="line">    int Begin;</span><br><span class="line">    int End;</span><br><span class="line">    int Weight;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct Tree</span><br><span class="line">&#123;</span><br><span class="line">    int Begin;</span><br><span class="line">    int End;</span><br><span class="line">    int Weight;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Graph G[MaxEdgeNum];</span><br><span class="line">Tree T[MaxVertexNum-1];</span><br><span class="line">int EndArray[MaxVertexNum]=&#123;INF&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>算法实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">int Get(int cur)</span><br><span class="line">&#123;</span><br><span class="line">    while(EndArray[cur]!=INF)&#123;</span><br><span class="line">        cur=EndArray[cur];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return cur;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void Kruskal(MGraph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">    //假设图的权值是递增的</span><br><span class="line">    int count=0;</span><br><span class="line">    int i=0,j=0;</span><br><span class="line">    int EdgeNum=0;</span><br><span class="line">    while(EdgeNum&lt;MaxVertexNum-1)&#123;</span><br><span class="line">        if(Get(G[count].Begin)==Get(G[count].End))&#123;</span><br><span class="line">            count++;</span><br><span class="line">            continue;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            T[EdgeNum].Begin=G[count].Begin;</span><br><span class="line">            T[EdgeNum].End=G[count].End;</span><br><span class="line">            T[EdgeNum].Weight=G[count].Weight;</span><br><span class="line">            EdgeNum++;</span><br><span class="line">            EndArray[Get(G[count].Begin)]=G[count].End;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+    <h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>每次从乱序区中选择一个最小的排序<br>分为简单选择排序和堆排序</p>
+<h1 id="简单选择排序"><a href="#简单选择排序" class="headerlink" title="简单选择排序"></a>简单选择排序</h1><p>每次遍历都找到一个最小的元素，放在乱序区的第一个位置。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">SelectSort</span><span class="params">(<span class="type">int</span> arr[], <span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">        <span class="type">int</span> Min=i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=i+<span class="number">1</span>;j&lt;n;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(arr[j]&lt;arr[Min])&#123;</span><br><span class="line">                Min=j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">swap</span>(arr[i],arr[Min]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    
+    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/#more">more >></a>
+    
     
 
     
@@ -696,239 +925,9 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
         		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/数据结构与算法-图" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/" target="_blank">数据结构与算法：图</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/" class="archive-article-date">
-        <time datetime="2023-09-06T09:35:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-06</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="图的概念"><a href="#图的概念" class="headerlink" title="图的概念"></a>图的概念</h1><p>图（Graph）是由一组顶点(V)和一组能够将两个顶点相连的边(e)的非空有限集组成的。</p>
-<p>例如：</p>
-<p>定义一个图G&#x3D;(V,E)，V&#x3D;{V1,V2,V3,V4},E&#x3D;{E1,E2,E3,E4,E5,E6}<br>E1&#x3D;&lt;V1,V2&gt; E2&#x3D;&lt;V1,V3&gt; E3&#x3D;&lt;V1,V4&gt; E4&#x3D;&lt;V2,V3&gt; E5&#x3D;&lt;V3,V2&gt; E6&#x3D;&lt;V3,V3&gt;<br><img src="/Pic/Graph/%E5%9B%BE%E4%BE%8B.jpg"></p>
-<h2 id="一些定义"><a href="#一些定义" class="headerlink" title="一些定义"></a>一些定义</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><ol>
-<li>有向边：一条边所代表的顶点是有序的，则为有向边，也称弧，例如&lt; V1,V2 &gt;和&lt; V2,V1 &gt;是不同的两个边或弧。</li>
-<li>无向边：一条边所带表的顶点是无序的，则为无向边，例如(V1,V2)和(V2,V1)是同一个边。</li>
-<li>弧的头尾：一条边从V1指向V2，则V1为弧尾，V2为弧头。</li>
-<li>度：一个顶点的度是指与它相连的边的数目，入度指入边数，出度指出边数。</li>
-<li>路径：从顶点V1到V2的路径是指从V1到V2的边所表示的顶点序列。</li>
-<li>权值：与图的边相关的数称为权值，带权值的图称为网。</li>
-<li>连通：若两个顶点之间存在路径，则称这两个顶点是连通的。</li>
-</ol>
-<h3 id="图的分类"><a href="#图的分类" class="headerlink" title="图的分类"></a>图的分类</h3><ol>
-<li>简单图：不存在顶点到自身的边且一条边不重复出现，这样的图称为简单图。</li>
-<li>无向图：图中任意一条边代表的顶点是无序的，则为无向图。</li>
-<li>有向图：图中任意一条边代表的顶点是有序的，则为有向图。 </li>
-<li>完全图：图中任意两个顶点之间都存在边，则为完全图。</li>
-<li>连通图：图中任意两个顶点之间都存在路径，则为连通图，否则为非连通图。</li>
-</ol>
-<h1 id="图的存储"><a href="#图的存储" class="headerlink" title="图的存储"></a>图的存储</h1><h2 id="邻接矩阵"><a href="#邻接矩阵" class="headerlink" title="邻接矩阵"></a>邻接矩阵</h2><p>使用一个一维数组存储顶点信息，使用一个二维数组存储边信息。</p>
-<p>结构如下：</p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>V0</th>
-<th>V1</th>
-<th>V2</th>
-<th>V3</th>
-</tr>
-</thead>
-</table>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>V0</th>
-<th>V1</th>
-<th>V2</th>
-<th>V3</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>V0</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>V1</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>V2</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>V3</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<h3 id="无向图"><a href="#无向图" class="headerlink" title="无向图"></a>无向图</h3><p>对于无向图，若V1、V2之间存在边，则表中第一行第二列和第二行第一列的值为1，若不存在则为0.</p>
-<p>特点：</p>
-<ol>
-<li>表是对称矩阵。</li>
-<li>某个顶点的度就是顶i行（或第i列）所有元素之和。</li>
-</ol>
-<h3 id="有向图"><a href="#有向图" class="headerlink" title="有向图"></a>有向图</h3><p>对于有向图，若V1、V2之间存在边，则表中第一行第二列的值为1，若不存在则为0。</p>
-<p>特点：</p>
-<ol>
-<li>表不对称，即第一行和第二行所代表的边不同。</li>
-<li>要考虑出度和入度，顶点的出度是顶i行所有元素之和，顶点的入度是顶i列所有元素之和。</li>
-</ol>
-<h3 id="带权图"><a href="#带权图" class="headerlink" title="带权图"></a>带权图</h3><p>权值可以是任意值，所以对于带权图，若两点之间不存在边，则赋值为无穷大，否则赋值为权值。<br>假设权值是int类型，则使用INT_MAX表示边不存在。</p>
-<h2 id="邻接表"><a href="#邻接表" class="headerlink" title="邻接表"></a>邻接表</h2><p>使用邻接矩阵的空间浪费较大，因此可以使用邻接表来存储图。</p>
-<p>结构：使用一维数组或链表存储顶点信息，使用链表存储边信息。</p>
-<h3 id="无向图-1"><a href="#无向图-1" class="headerlink" title="无向图"></a>无向图</h3><p>假设有无向图G&#x3D;(V,E)<br>V&#x3D;(V0,V1,V2,V3)<br>E&#x3D;(V0,V1),(V0,V2),(V0,V3),(V1,V2),(V2,V3)<br>其表示如下：<br><img src="/Pic/Graph/%E6%97%A0%E5%90%91%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg"></p>
-<h3 id="有向图-1"><a href="#有向图-1" class="headerlink" title="有向图"></a>有向图</h3><p>假设有有向图G&#x3D;(V,E)<br>V&#x3D;(V0,V1,V2,V3)<br>E&#x3D;{&lt;V0,V1&gt;,&lt;V0,V3&gt;,&lt;V1,V0&gt;,&lt;V1,V2&gt;,&lt;V2,V0&gt;,&lt;V2,V3&gt;}<br>以边表为弧头，就有以下结构：<br><img src="/Pic/Graph/%E6%9C%89%E5%90%91%E5%BC%A7%E5%A4%B4%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg"></p>
-<p>使用边表作为弧头容易统计出度，但不容易统计入度；使用边表作为弧尾，则容易统计入度，但不容易统计出度。</p>
-<h3 id="带权图-1"><a href="#带权图-1" class="headerlink" title="带权图"></a>带权图</h3><p>假设有有向图G&#x3D;(V,E)<br>V&#x3D;(V0,V1,V2,V3)<br>E&#x3D;{&lt;V0,V1&gt;&#x3D;4,&lt;V0,V3&gt;&#x3D;6,&lt;V1,V0&gt;&#x3D;3,&lt;V1,V2&gt;&#x3D;2,&lt;V2,V0&gt;&#x3D;5,&lt;V2,V3&gt;&#x3D;8</p>
-<p>同样以边表为弧头，则有：<br><img src="/Pic/Graph/%E6%9C%89%E5%90%91%E5%B8%A6%E6%9D%83%E9%82%BB%E6%8E%A5%E8%A1%A8.jpg">} </p>
-<h2 id="十字链"><a href="#十字链" class="headerlink" title="十字链"></a>十字链</h2><p>十字链表是把邻接表和逆邻接表结合在一起的一种结构，有如下例子：<br>！<a href="/Pic/Graph/%E5%8D%81%E5%AD%97%E9%93%BE%E8%A1%A8%E4%BE%8B%E5%AD%90.jpg"></a></p>
-<p>我们定义如下结构</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">struct Vertex</span><br><span class="line">&#123;</span><br><span class="line">    int V;</span><br><span class="line">    int FirstIn;</span><br><span class="line">    int FirstOut;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct EdgeList</span><br><span class="line">&#123;</span><br><span class="line">    int TialVertex;</span><br><span class="line">    int HeadVertex;</span><br><span class="line">    int HeadLink;</span><br><span class="line">    int TailLink; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在顶点结构中FirstIn表示顶点的第一个入边，FirstOut表示顶点的第一个出边,V代表顶点。<br>在边表结构中TailVertex表示狐尾顶点，HeadVertex表示弧头顶点，HeadLink表示弧头相同的下一条弧，TailLink表示弧尾相同的下一条弧。</p>
-<p>按照上述进行连接后<br><img src="/Pic/Graph/%E5%8D%81%E5%AD%97%E9%93%BE%E8%A1%A8%E8%BF%9E%E6%8E%A5.jpg"></p>
-<p>除标线数字外来接边表，并将第一个数（TailVertex）初始化为顶点下标。<br>对于第一行以0为弧尾的顶点为V3，所以第二个数填为3，第二第三行同理，因为没有以V3为弧尾的顶点，所以第四行填0。</p>
-<p>接下来连线。<br>以V0为弧头的顶点有V1、V2，所以V0所在行出一条线连接V1行V2行所在边表中的顶点V0（数字0），连接好后就得到编号1、2的两条边。<br>以V1为弧头的顶点只有V2，所以V1所在行顶点出一条线连接V2行所在边表中的顶点V1（数字1），连接好后就得到编号3边。<br>以V2为弧头的顶点只有V1，所以V2所在行顶点出一条线连接V1行所在边表中的顶点V2（数字2），连接好后就得到编号4边。<br>以V3为弧头的顶点只有V0，所以V3所在行顶点出一条线连接V0行所在边表中的顶点V3（数字3），连接好后就得到编号5边。<br>通过以上步骤就得到一个十字链表。</p>
-<h2 id="邻接多重表"><a href="#邻接多重表" class="headerlink" title="邻接多重表"></a>邻接多重表</h2><p>邻接多重表与十字链表类似，我们定义以下结构：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct Virtex</span><br><span class="line">&#123;</span><br><span class="line">    int V;</span><br><span class="line">    int Edge;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct EdgeList</span><br><span class="line">&#123;</span><br><span class="line">    int iVertex;</span><br><span class="line">    int iLink;</span><br><span class="line">    int jVertex;</span><br><span class="line">    int jLink;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>iLink和jLink表示依附于iVertex和jVertex的顶点下标，作为中转点存在。</p>
-<p>以下图为列：<br><img src="/Pic/Graph/%E9%82%BB%E6%8E%A5%E5%A4%9A%E9%87%8D%E8%A1%A8%E4%BE%8B%E5%AD%90.jpg"></p>
-<p>连接后过程与十字链表类似，连接后得到如下图：<br><img src="/Pic/Graph/%E9%82%BB%E6%8E%A5%E5%A4%9A%E9%87%8D%E8%A1%A8%E8%BF%9E%E6%8E%A5.jpg"></p>
-<p>具体连接过程如下：<br>首先连接1、2、3、4四条边。<br>对于V0来说，有3条边(V0,V1)、(V0,V2)、(V0,V3),第一行已经连接了(V0,V1)，连接(V0,V2)(V0,V3)时，可以先寻找V3行中依附于V0的边将其连接，对于V2可以使用最后一行来寻找，它同样可以在V3行中找到。<br>对于V1，有两条边，(V1,V2)、(V1,V0)，在V0行寻找V1顶点，从最后一行寻找V2顶点。<br>对于V2，有三条边，(V2,V1)、(V2,V0)、(V2,V3)，(V2,V3)已经连接，在V1行寻找V2顶点，再从V1行向最后一行寻早V2顶点。<br>对于顶点V3，有两条边，(V3,V0)、(V3,V1)，已经连接了(V3,V0),在V2行寻找V3顶点并连接。<br>最后得到1-10条边。</p>
-<h2 id="边集数组"><a href="#边集数组" class="headerlink" title="边集数组"></a>边集数组</h2><p>由两个一维数组组成，其中一个储存顶点信息，另一个数组存储边信息，边信息包括边的起点和终点以及权值（如果有的话）。</p>
-<p>结构定义如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int Vertex[MaxVertexNum];</span><br><span class="line">struct Edge</span><br><span class="line">&#123;</span><br><span class="line">    int start;</span><br><span class="line">    int end;</span><br><span class="line">    int weight;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Edge EdgeArray[MaxVertexNum];</span><br></pre></td></tr></table></figure>
-
-<h1 id="图的遍历"><a href="#图的遍历" class="headerlink" title="图的遍历"></a>图的遍历</h1><h2 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h2><p>深度优先遍历，简称DFS，是从初始结点出发，沿着一条路一直走到底，再回溯，再走下一条路，直到走完所有路。<br>简单来说就是从开始一条路走到底，没有路时回溯一步继续走下一条路。<br>从定义可以看出深度优先遍历与树的前序遍历相似，所以可以使用栈实现DFS。</p>
-<p>思路：</p>
-<ol>
-<li>从顶点开始，走过的路写上记号。</li>
-<li>走向离自己最近的未走过的节点。</li>
-<li>当这条路没有路时（即没有可以访问的节点），回溯一步，访问还未走过的节点。</li>
-<li>重复2、3，直到所有节点都访问过。</li>
-</ol>
-<p>代码实现(使用邻接表)：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">定义结构</span><br><span class="line">struct Vertex</span><br><span class="line">&#123;</span><br><span class="line">    int Vertex;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct Graph</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    Vertex* V;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Graph G[MaxVertexNum];</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">递归实现</span><br><span class="line">bool Vistied[MaxVertexNum]=&#123;0&#125;;</span><br><span class="line">//顶点是否访问，1为访问，0为未访问</span><br><span class="line"></span><br><span class="line">void DFS(Graph&amp; G, int v)</span><br><span class="line">&#123;</span><br><span class="line">    //V为当前顶点下标，G为图</span><br><span class="line">    if(Vistied[v]==true)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; G[v].Data &lt;&lt; &quot; &quot;;</span><br><span class="line">    Vistied[v]=true;</span><br><span class="line"></span><br><span class="line">    for(int i=0;i&lt;MaxVertexNum;i++)&#123;</span><br><span class="line">        if(G[v].V[i].Vertex!=-1 &amp;&amp; Visited[G[v].V[i].Vertex]==false)&#123; </span><br><span class="line">            DFS(G,G[v].V[i].Vertex);</span><br><span class="line">        &#125; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">栈实现</span><br><span class="line">void DFS(Graph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">    stack&lt;int&gt; s;</span><br><span class="line">    int v=0;</span><br><span class="line">    s.push(v)；</span><br><span class="line">    while(!s.empty())&#123;</span><br><span class="line">        int v=s.top();</span><br><span class="line">        if(Visited[v]==false)&#123;</span><br><span class="line">           Visited[v]=true;</span><br><span class="line">           cout &lt;&lt; G[v].Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for(int i=0;i&lt;G[v].size();i++)&#123;</span><br><span class="line">            if(Visited[G[v].V[i].Vertex]==false)&#123;</span><br><span class="line">                s.push(G[v].V[i].Vertex);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">            if(i==G[v].size()-1)&#123;</span><br><span class="line">                s.pop();</span><br><span class="line">                //此时G[v].V[i].Vertex已经全部访问过，进行回溯</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;          </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="广度优先遍历"><a href="#广度优先遍历" class="headerlink" title="广度优先遍历"></a>广度优先遍历</h2><p>广度优先遍历，简称BFS，从初顶点出发，首先访问该顶点所有相连的顶点，然后依次访问这些顶点相连的顶点。<br>遍历顺序与树的层序遍历类似，可以使用队列实现。</p>
-<p>思路：</p>
-<ol>
-<li>将初始顶点入队。</li>
-<li>访问队首顶点，并将其所有与它相连的顶点入队，并弹出该顶点。</li>
-<li>重复步骤2，知道队列为空。</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void BFS(Graph&amp; G)</span><br><span class="line">&#123;</span><br><span class="line">    queue&lt;int&gt; q;</span><br><span class="line">    q.push(0);</span><br><span class="line">    while(!q.empty())&#123;</span><br><span class="line">        int v=q.front();</span><br><span class="line">        q.pop();</span><br><span class="line"></span><br><span class="line">        if(Visited[v]==false)&#123;</span><br><span class="line">            cout &lt;&lt; G[v].Data &lt;&lt; &quot; &quot;;</span><br><span class="line">            Visited[v]=true;</span><br><span class="line">        &#125;</span><br><span class="line">          </span><br><span class="line">        for(int i=0;i&lt;G[v].size();i++)&#123;</span><br><span class="line">            if(Visited[G[v].V[i].Vertex]==false)&#123;</span><br><span class="line">                q.push(G[v].V[i].Vertex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>第一部为图的一些基本概念和定义。<br>第二部分为图的存储结构。<br>第三部分为图的遍历。</p>
-<p>关于图的另一些算法，如最小生成树、最短路径、关键路径、拓扑排序等，会在后续文章中介绍。</p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
         		</li>
       		
 		</ul>
@@ -949,7 +948,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/">展开全文 >></a>
     </p>
     
 
@@ -979,7 +978,7 @@
 
 
   
-    <article id="post-note/数据结构与算法-二叉树" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-note/数据结构与算法-交换排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -987,7 +986,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/" target="_blank">数据结构与算法：二叉树</a>
+	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：交换排序</a>
   
     </h1>
   
@@ -995,8 +994,8 @@
 
   
   
-<a href="/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/" class="archive-article-date">
-        <time datetime="2023-08-23T11:40:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-23</time>
+<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/" class="archive-article-date">
+        <time datetime="2023-09-20T09:17:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
 </a>
 
   
@@ -1008,171 +1007,13 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><h2 id="树的定义"><a href="#树的定义" class="headerlink" title="树的定义"></a>树的定义</h2><p>树是n(n&gt;&#x3D;0)个结点的有限集合，当n&#x3D;0时，称为空树。在任意一棵非空树中：</p>
-<ol>
-<li>有且仅有一个特定的称为根的结点。</li>
-<li>当n&gt;1时，其余结点可分为m(m&gt;0)个互不相交的有限集，每个集合本身又是一棵树，称为原树的子树。</li>
-</ol>
-<h2 id="树的相关概念"><a href="#树的相关概念" class="headerlink" title="树的相关概念"></a>树的相关概念</h2><ol>
-<li>节点的度：节点拥有的子树个数称为节点的度。 </li>
-<li>节点的深度：从根开始往下，逐层累加，根的深度为0。</li>
-<li>森林：由m(m&gt;&#x3D;0)棵不相交的树的集合称为森林。</li>
-</ol>
-<h2 id="树的存储结构"><a href="#树的存储结构" class="headerlink" title="树的存储结构"></a>树的存储结构</h2><h3 id="双亲表示法"><a href="#双亲表示法" class="headerlink" title="双亲表示法"></a>双亲表示法</h3><p>用一组连续空间存储树中的节点，同时在每个节点中，附设一个指示器指示其双亲结点在数组中的位置。</p>
-<p>节点定义如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    int Parent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="孩子表示法"><a href="#孩子表示法" class="headerlink" title="孩子表示法"></a>孩子表示法</h3><p>孩子表示法是将每个节点的孩子结点排列起来，形成一个线性结构，然后用链表建立节点与孩子结点之间的关联关系。</p>
-<p>孩子链表的定义如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *FirstChild;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="孩子兄弟表示法"><a href="#孩子兄弟表示法" class="headerlink" title="孩子兄弟表示法"></a>孩子兄弟表示法</h3><p>孩子兄弟表示法是将每个节点的孩子结点排列起来，形成一个线性结构，然后用指针来建立节点与孩子结点之间的关联关系。</p>
-<p>节点定义如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *FirstChild;</span><br><span class="line">    struct Node *NextSibling;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><ol>
-<li>每个节点最多有两个孩子结点，分别称为左孩子和右孩子。</li>
-<li>每个节点最多有一个双亲结点。</li>
-<li>除根结点外，其余每个结点又包含一个零或两个以上的子树。</li>
-</ol>
-<h2 id="特殊的二叉树"><a href="#特殊的二叉树" class="headerlink" title="特殊的二叉树"></a>特殊的二叉树</h2><ol>
-<li>斜树：所有节点均为左子树或右子树的二叉树。</li>
-<li>满二叉树：除叶子节点外所有节点均有左右子树且所有叶子节点均在同一层上。</li>
-<li>完全二叉树：除最后一层外，每一层节点数均达到最大值，且最后一层节点均连续集中在最左边。</li>
-</ol>
-<h2 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h2><ol>
-<li>在二叉树的第i层上<em>至多</em>有2i-1个节点（i&gt;&#x3D;1）。</li>
-<li>深度为k的二叉树<em>至多</em>有2k-1个节点（k&gt;&#x3D;1）。</li>
-<li>对于任意一棵二叉树T，如果叶子节点数为n0，度为2的节点数为n2，则n0&#x3D;n2+1。</li>
-<li>具有n个节点的完全二叉树的深度为[log2n]+1。</li>
-</ol>
-<h2 id="二叉树存储结构"><a href="#二叉树存储结构" class="headerlink" title="二叉树存储结构"></a>二叉树存储结构</h2><h3 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h3><p>用一组连续空间存储二叉树中的节点，用二叉树中结点在数组中的下标表示结点在二叉树中的位置。</p>
-<p>节点定义如下，Data表示数据域，LeftChild表示左孩子下标，RightChild表示右孩子下标</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    int LeftChild;</span><br><span class="line">    int RightChild;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h3 id="链式存储结构"><a href="#链式存储结构" class="headerlink" title="链式存储结构"></a>链式存储结构</h3><p>链式存储结构采用二叉链表存储结构，每个节点包括数据域和左右孩子指针。</p>
-<p>节点定义如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *LeftChild;</span><br><span class="line">    struct Node *RightChild;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h2><h3 id="先序遍历"><a href="#先序遍历" class="headerlink" title="先序遍历"></a>先序遍历</h3><p>递归遍历</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void PreOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Tree)</span><br><span class="line">    &#123;</span><br><span class="line">        cout &lt;&lt; Tree-&gt;Data &lt;&lt; endl;</span><br><span class="line">        PreOrder(Tree-&gt;LeftChild);</span><br><span class="line">        PreOrder(Tree-&gt;RightChild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>迭代遍历</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void PreOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    stack&lt;Node *&gt; s;</span><br><span class="line">    struct Node *p;</span><br><span class="line">    s.push(Root);</span><br><span class="line">    while(!s.empty())&#123;</span><br><span class="line">        p=s.top();</span><br><span class="line">        cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        s.pop();</span><br><span class="line">        if(p-&gt;Right)&#123;</span><br><span class="line">            s.push(p-&gt;Right);</span><br><span class="line">        &#125;</span><br><span class="line">        if(p-&gt;Left)&#123;</span><br><span class="line">            s.push(p-&gt;Left);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h3><p>递归遍历</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void InOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Tree)</span><br><span class="line">    &#123;</span><br><span class="line">        InOrder(Tree-&gt;LeftChild);</span><br><span class="line">        cout &lt;&lt; Tree-&gt;Data &lt;&lt; endl;</span><br><span class="line">        InOrder(Tree-&gt;RightChild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>迭代遍历</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">void InOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stack&lt;Node *&gt; s;</span><br><span class="line">    struct Node *p;</span><br><span class="line">    while(!s.empty() || Root!=NULL)&#123;</span><br><span class="line">        if(Root)&#123;</span><br><span class="line">            s.push(Root);</span><br><span class="line">            Root=Root-&gt;Left;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            p=s.top();</span><br><span class="line">            cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">            Root=p-&gt;Right;</span><br><span class="line">            s.pop();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="后续遍历"><a href="#后续遍历" class="headerlink" title="后续遍历"></a>后续遍历</h3><p>递归遍历</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void PostOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Tree)</span><br><span class="line">    &#123;</span><br><span class="line">        PostOrder(Tree-&gt;LeftChild);</span><br><span class="line">        PostOrder(Tree-&gt;RightChild);</span><br><span class="line">        cout &lt;&lt; Tree-&gt;Data &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>迭代遍历（单栈）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">void PostOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stack&lt;Node *&gt; s;</span><br><span class="line">    struct Node *p=Root;</span><br><span class="line">    struct Node* Temp;</span><br><span class="line">    while(!s.empty() || p!=NULL)&#123;</span><br><span class="line">        if(p)&#123;</span><br><span class="line">            s.push(p);</span><br><span class="line">            p=p-&gt;Left;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            p=s.top();</span><br><span class="line">            if(p-&gt;Right &amp;&amp; Temp!=p-&gt;Right)&#123;</span><br><span class="line">                p=p-&gt;Right;</span><br><span class="line">            &#125;</span><br><span class="line">            else&#123;</span><br><span class="line">                cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">                Temp=p;</span><br><span class="line">                s.pop();</span><br><span class="line">                p=NULL;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>迭代遍历（双栈）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">void PostOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    if(!Root)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stack&lt;Node *&gt; s1,s2;</span><br><span class="line">    struct Node *p;</span><br><span class="line">    s1.push(Root);</span><br><span class="line">    while(!s1.empty())&#123;</span><br><span class="line">        p=s1.top();</span><br><span class="line">        s1.pop();</span><br><span class="line">        s2.push(p);</span><br><span class="line">        if(p-&gt;Left)&#123;</span><br><span class="line">            s1.push(p-&gt;Left);</span><br><span class="line">        &#125;</span><br><span class="line">        if (p-&gt;Right)&#123;</span><br><span class="line">            s1.push(p-&gt;Right);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    while(!s2.empty())&#123;</span><br><span class="line">        cout &lt;&lt; s2.top()-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        s2.pop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="层序遍历"><a href="#层序遍历" class="headerlink" title="层序遍历"></a>层序遍历</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void LevelOrder(struct Node *Tree)</span><br><span class="line">&#123;</span><br><span class="line">    queue&lt;struct Node *&gt; q;</span><br><span class="line">    q.push(Tree);</span><br><span class="line">    while(!q.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        struct Node *p = q.front();</span><br><span class="line">        q.pop();</span><br><span class="line">        cout &lt;&lt; p-&gt;Data &lt;&lt; endl;</span><br><span class="line">        if(p-&gt;LeftChild)&#123;</span><br><span class="line">            q.push(p-&gt;LeftChild);</span><br><span class="line">        &#125;</span><br><span class="line">        if(p-&gt;RightChild)&#123;</span><br><span class="line">            q.push(p-&gt;RightChild);             </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="线索二叉树"><a href="#线索二叉树" class="headerlink" title="线索二叉树"></a>线索二叉树</h1><h2 id="线索二叉树的定义"><a href="#线索二叉树的定义" class="headerlink" title="线索二叉树的定义"></a>线索二叉树的定义</h2><p>线索二叉树中有的节点指向左右孩子，有的节点指向前驱和后继，这种二叉树称为线索二叉树。</p>
-<h2 id="线索二叉树的实现"><a href="#线索二叉树的实现" class="headerlink" title="线索二叉树的实现"></a>线索二叉树的实现</h2><p>因为叶子节点没有左右孩子，所以对叶子节点进行特殊处理，将左指针指向后继，右指针指向前驱。<br>并且由于有的节点有左右孩子，所以在线索化是还要增加一个标志以表示当前节点指向左右孩子还是前驱后继。</p>
-<p>代码实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node *LeftChild,*RightChild;</span><br><span class="line">    int LTag,RTag;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>以上是对节点的定义，LTag和RTag分别表示当前节点是左孩子还是右孩子且默认为0，如果Tag&#x3D;0表示指向的是左孩子，如果Tag&#x3D;1表示指向的是右孩子。</p>
-<h2 id="如何线索化"><a href="#如何线索化" class="headerlink" title="如何线索化"></a>如何线索化</h2><p>我们对二叉树进行某种遍历使其便为线索二叉树的过程称为线索化。</p>
-<p>以中序遍历为例，线索化的过程如下：</p>
-<ol>
-<li>如果当前节点没有左孩子，则左指针指向中序遍历的前驱，并且左指针的LTag置为1，表示指向前驱。</li>
-<li>如果当前节点有左孩子，则左指针指向左孩子，并且左指针的LTag置为0，表示指向左孩子。</li>
-<li>如果当前节点没有右孩子，则右指针指向中序遍历的后继，并且右指针的RTag置为1，表示指向后继。</li>
-<li>如果当前节点有右孩子，则右指针指向右孩子，并且右指针的RTag置为0，表示指向右孩子。</li>
-<li>如果没有前驱，则指向为NULL，如果没有后继，则指向为NULL。</li>
-</ol>
-<p>代码实现（采用递归中序遍历）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Node *Pre;</span><br><span class="line">void InThreading(Node *p)</span><br><span class="line">&#123;</span><br><span class="line">    if(!p)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    InThreading(p-&gt;LeftChild);</span><br><span class="line"></span><br><span class="line">    if(!p-&gt;LeftChild)&#123;</span><br><span class="line">        p-&gt;LeftChild = Pre;</span><br><span class="line">        p-&gt;LTag = 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if(!p-&gt;RightChild)&#123;</span><br><span class="line">        p-&gt;RightChild = Pre;</span><br><span class="line">        p-&gt;RTag = 1;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Pre = p;</span><br><span class="line"></span><br><span class="line">    InThreading(p-&gt;RightChild);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
-
-<h2 id="如何通过线索二叉树进行遍历"><a href="#如何通过线索二叉树进行遍历" class="headerlink" title="如何通过线索二叉树进行遍历"></a>如何通过线索二叉树进行遍历</h2><p>通过线索二叉树进行遍历的过程和二叉链表类似，但是由于线索二叉树中有的节点有左右孩子，有的节点有前驱和后继，所以遍历的过程需要对有左右孩子的节点和没有左右孩子的节点进行特殊处理。</p>
-<p>代码实现（中序遍历）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void InOrder(Node *Root)</span><br><span class="line">&#123;</span><br><span class="line">    Node *p=Root;</span><br><span class="line">    while(p)&#123;</span><br><span class="line">        while(p-&gt;LTag==0)&#123;</span><br><span class="line">            p = p-&gt;LeftChild;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line"></span><br><span class="line">        while(p-&gt;RTag==1 &amp;&amp; p-&gt;RightChild!=NULL)&#123;</span><br><span class="line">            p = p-&gt;RightChild;</span><br><span class="line">            cout &lt;&lt; p-&gt;Data &lt;&lt; &quot; &quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        p = p-&gt;RightChild;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="赫夫曼树"><a href="#赫夫曼树" class="headerlink" title="赫夫曼树"></a>赫夫曼树</h1><h2 id="什么是赫夫曼树"><a href="#什么是赫夫曼树" class="headerlink" title="什么是赫夫曼树"></a>什么是赫夫曼树</h2><p>赫夫曼树是带权路径长度最短的二叉树，也叫最优二叉树。</p>
-<p>路径和路径长度：在一棵树中，从一个结点往下可以达到的孩子或孙子结点之间的通路，称为路径。通路中分支的数目称为路径长度。若规定根结点的层数为1，则从根结点到第L层结点的路径长度为L-1。</p>
-<p>结点的权：给树中结点赋予一个数值，称为这个结点的权。权是表示结点重要程度的量。</p>
-<p>结点的带权路径长度：从根结点到该结点之间的路径长度与该结点的权的乘积。</p>
-<p>树的带权路径长度：所有叶子结点的带权路径长度之和。</p>
-<h2 id="构建赫夫曼树"><a href="#构建赫夫曼树" class="headerlink" title="构建赫夫曼树"></a>构建赫夫曼树</h2><ol>
-<li>从带权值的叶子节点小到大进行排序。</li>
-<li>选择权值最小的两个节点，将这两个节点合并，较小的节点在左边，生成新的节点，并将新节点的权值设为这两个节点的权值之和。</li>
-<li>重复步骤2，直到只剩下一个节点。</li>
-</ol>
-<h2 id="赫夫曼编码"><a href="#赫夫曼编码" class="headerlink" title="赫夫曼编码"></a>赫夫曼编码</h2><p>赫夫曼编码是一种<em>前缀编码（不能是另一字符串的前缀）</em>，赫夫曼编码的实现过程如下：</p>
-<ol>
-<li>统计字符出现的次数，得到每个字符的权值。</li>
-<li>按照权值从小到大的顺序，将所有的字符和权值形成一个数组。</li>
-<li>初始化一个二叉树，将权值数组中的元素按照从左到右的顺序依次放入到二叉树中</li>
-</ol>
-<p>假如有一段文本”ABDCADFEED“，使用二进制传输：</p>
-<table>
-<thead>
-<tr>
-<th>字母</th>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-<th>D</th>
-<th>E</th>
-<th>F</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>二进制</td>
-<td>000</td>
-<td>001</td>
-<td>010</td>
-<td>011</td>
-<td>100</td>
-<td>101</td>
-</tr>
-</tbody></table>
-<p>得到的二进制串为：000001011001000010101100100010</p>
-<p>如果采用赫夫曼编码：<br>统计字母出现的频率，得到如下表格</p>
-<table>
-<thead>
-<tr>
-<th>字母</th>
-<th>A</th>
-<th>B</th>
-<th>C</th>
-<th>D</th>
-<th>E</th>
-<th>F</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>频率</td>
-<td>2</td>
-<td>1</td>
-<td>1</td>
-<td>3</td>
-<td>2</td>
-<td>1</td>
-</tr>
-<tr>
-<td>赫夫曼编码</td>
-<td>011</td>
-<td>100</td>
-<td>101</td>
-<td>11</td>
-<td>00</td>
-<td>010</td>
-</tr>
-</tbody></table>
-<p><img src="/Pic/Huffman/Huffman-f.jpg" alt="频率表示"><br>转为编码后<br><img src="/Pic/Huffman/Huffman-code.jpg" alt="编码表示"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>主要关于树、二叉树、线索二叉树、赫夫曼树的概念和实现，后续更新B树和红黑树。</p>
-
+    <h1 id="交换排序"><a href="#交换排序" class="headerlink" title="交换排序"></a>交换排序</h1><p>基于比较的排序算法，通过不断交换元素的位置，使得排序的元素达到有序。<br>主要有冒泡排序和快速排序。</p>
+<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>冒泡排序思路与实现都很简单，通过不断比较两个相邻的元素，如果第一个元素比第二个元素大，则交换两个元素的位置，这样循环一轮下来，最大的元素就浮到了最右边。</p>
+<p>同样将数组分为待排区和有序区，实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BubbleSort</span><span class="params">(<span class="type">int</span>* arr, <span class="type">int</span> n)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n<span class="number">-1</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;n-i<span class="number">-1</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(arr[j]&gt;arr[j+<span class="number">1</span>])&#123;</span><br><span class="line">                <span class="built_in">swap</span>(arr[j],arr[j+<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    
+    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/#more">more >></a>
+    
     
 
     
@@ -1192,7 +1033,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
         		</li>
       		
 		</ul>
@@ -1213,7 +1058,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/">展开全文 >></a>
     </p>
     
 
@@ -1243,7 +1088,7 @@
 
 
   
-    <article id="post-essay/对游戏资源进行拆包" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-note/数据结构与算法-插入排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -1251,7 +1096,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/08/23/essay/%E5%AF%B9%E6%B8%B8%E6%88%8F%E8%B5%84%E6%BA%90%E8%BF%9B%E8%A1%8C%E6%8B%86%E5%8C%85/" target="_blank">对手游资源进行拆包</a>
+	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：插入排序</a>
   
     </h1>
   
@@ -1259,8 +1104,8 @@
 
   
   
-<a href="/2023/08/23/essay/%E5%AF%B9%E6%B8%B8%E6%88%8F%E8%B5%84%E6%BA%90%E8%BF%9B%E8%A1%8C%E6%8B%86%E5%8C%85/" class="archive-article-date">
-        <time datetime="2023-08-22T23:40:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-23</time>
+<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" class="archive-article-date">
+        <time datetime="2023-09-20T09:17:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
 </a>
 
   
@@ -1272,315 +1117,10 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="准备工具"><a href="#准备工具" class="headerlink" title="准备工具"></a>准备工具</h1><p>1.AssetStudio<br>2.游戏安装包<br>3.解压软件</p>
-<p>AssetStudio是进行解包的工具，主要针对的是Uinty的游戏<br>Github链接：<a target="_blank" rel="noopener" href="https://github.com/Perfare/AssetStudio">https://github.com/Perfare/AssetStudio</a><br>网盘链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1oPR8JQ_tKsrgV-dLxgF7Pg?pwd=f8m6">https://pan.baidu.com/s/1oPR8JQ_tKsrgV-dLxgF7Pg?pwd=f8m6</a><br>游戏安装包可以直接从官方网站下载，我会以崩坏2举例<br>解压软件任意，常用的解压软件一般都没什么问题</p>
-<h1 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h1><p><strong>第一种方法</strong></p>
-<p>下载完游戏安装包后对安装包进行解压，可以直接对apk后缀进行解压，也可将后缀改成压缩包后缀后进行解压<br>随后打开解压文件找到 <em>&#x2F;assets&#x2F;Res&#x2F;AssetBundles</em> 文件，里面是需要的资源</p>
-<p>解压完成后打开AssetStudio，点击左上File，可以看到有Load和Extract两个大类，Extract是在Load以后添加的额外资源。<br>Load File是手动选择要载入的资源，Load Folder是一次加载整个文件夹，选用第二种方法，直接将AssetBundles中的文件加载到AssetStudio中，加载完成后点击AssetList-Type可以按照类型进行对资源进行排序，随后找到要用的资源即可</p>
-<p><strong>第二种方法</strong></p>
-<p>下在完安装包后直接安装游戏，进入游戏后下载资源，下载完成后退出游戏，进入文件管理器，找到 <em>&#x2F;Android&#x2F;data&#x2F;YourDownloadGame&#x2F;files&#x2F;Res&#x2F;AssetBundles</em> 将里面的内容导入到一个文件夹中</p>
-<p>之后重复上述操作，用AssetStudio打开文件夹找自己要的资源即可</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>以上两种方法主要针对图片等资源，区别在于有的资源的内容会有些差异，比如使用第一种方法找到的文件用第二种方法可能会找不到，反之同理</p>
-<p>对于其他游戏拆包过程类似，都是找到资源文件</p>
-<p>导出的资源可以用来制作Live2D或Spine等动画，也可以直接导入到Unity中使用（不过可能需要安装一些插件）</p>
-
+    <h1 id="有关排序的一些概念"><a href="#有关排序的一些概念" class="headerlink" title="有关排序的一些概念"></a>有关排序的一些概念</h1><p>时间复杂度：一个算法执行所耗费的时间。<br>空间复杂度：运行完一个程序所需内存的大小。<br>原地排序：空间复杂度为 O(1)，不需要申请额外的空间。<br>内部排序：待排序的元素全部存放在内存中。<br>外部排序：待排序元素很多，需要从外存中读取元素。<br>稳定性：排序前后两个相同元素的相对位置不变。</p>
     
-
+    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/#more">more >></a>
     
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">拆包</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/08/23/essay/%E5%AF%B9%E6%B8%B8%E6%88%8F%E8%B5%84%E6%BA%90%E8%BF%9B%E8%A1%8C%E6%8B%86%E5%8C%85/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-essay/个人制作游戏的流程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/08/11/essay/%E4%B8%AA%E4%BA%BA%E5%88%B6%E4%BD%9C%E6%B8%B8%E6%88%8F%E7%9A%84%E6%B5%81%E7%A8%8B/" target="_blank">游戏的制作流程</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/08/11/essay/%E4%B8%AA%E4%BA%BA%E5%88%B6%E4%BD%9C%E6%B8%B8%E6%88%8F%E7%9A%84%E6%B5%81%E7%A8%8B/" class="archive-article-date">
-        <time datetime="2023-08-10T23:49:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-11</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a><strong>概要</strong></h1><p><em>仅作为个人项目总结，并不适用于一般情况</em></p>
-<p>一个完整的故事最初可能只是构想的一个片段，最终将这个片段不断补充完善成一个完整的故事。</p>
-<p>我觉得自己做一个游戏Demo也是类似的，从最初某一游戏片段或情节的构思逐步扩展到一个游戏。</p>
-<p>这个逐步扩展的过程便于游戏的制作过程是类似的，从某一部分延伸到整个世界，我个人的理解这</p>
-<p>一部分是主角的构建，通过完成主角的一些功能来决定世界应该是什么样的，例如玩家可以攀爬，则</p>
-<p>世界提供可供攀爬的建筑或地形；或者玩家可以使用道具，则世界以直接放置或NPC等直接或间接给</p>
-<p>玩家使用。</p>
-<h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a><strong>准备工作</strong></h1><p>依照概要中的方式优先确当主角的能力，同时需要记录玩家的功能做合理性分析，实现困难的功能可以</p>
-<p>选择放弃或作为扩展待以后实现。</p>
-<p>确定主角的功能后确定世界，将世界的提供的功能与主角的能力联系在一起。</p>
-<p>例如：我确定的主角可以使用直剑攻击、会使用魔法、还能进行闪避和使用道具，那么我可以将世界设置成</p>
-<p>一个大的开放世界或者2D形式呈现。其中主角具有攻击能力，所以我在世界中放置了不同种类的敌人与玩家</p>
-<p>战斗，并且为主角和敌人提供了不同的属性以确保战斗能顺利进行；玩家需要使用道具则可以让玩家通过击杀</p>
-<p>敌人或直接拾取场景中物品来获取道具。</p>
-<p>此外世界还应具有引导玩家的能力，能让玩家知道自己下一步应该做什么而非像无头苍蝇一样乱撞。此时就</p>
-<p>需要给玩家设置一个最终目标，让玩家去尝试完成这个目标。</p>
-<p>有了以上内容一个游戏的架子差不都就搭好了，在记录了这些需求后便可以正式开始游戏制作，并在这一过程</p>
-<p>中不断丰富游戏内容。</p>
-<h1 id="制作部分"><a href="#制作部分" class="headerlink" title="制作部分"></a><strong>制作部分</strong></h1><p>制作过程按照<em>主角-搭建简单场景-添加交互-搭建复杂场景进行</em>，有了需求以后直接按照需求进行开发。</p>
-<p>将主角功能分类：从简单的功能开始实现；在游戏内通过简单逻辑-动画-场景测试-复杂逻辑-完善动画这一过程实现</p>
-<p>随后填充世界，完成交互测试，不断进行这一过程完成Demo。</p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/08/11/essay/%E4%B8%AA%E4%BA%BA%E5%88%B6%E4%BD%9C%E6%B8%B8%E6%88%8F%E7%9A%84%E6%B5%81%E7%A8%8B/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/数据结构与算法-线性数据结构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" target="_blank">数据结构与算法-线性数据结构</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="archive-article-date">
-        <time datetime="2023-08-10T04:53:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-10</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="线性的数据结构"><a href="#线性的数据结构" class="headerlink" title="线性的数据结构"></a><strong>线性的数据结构</strong></h1><p>线性结构是指元素只有一个<em>前趋</em>和<em>后继</em></p>
-<p>线性的数据结构分为<em>物理线性结构</em>和<em>逻辑线性结构</em></p>
-<p>物理线性是元素在内存中的<em>地址是连续的</em>；逻辑线性在内存中的地址不一定是连续的，在逻辑上存在前趋和后继</p>
-<p>常用的线性数据结构包括<em>数组、链表、栈、队列</em></p>
-<h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a><strong>数组</strong></h2><p>数组是最常用的线性数据结构，一般使用时可以在内存中申请一块固定大小的空间用于存储各类型元素</p>
-<p><em>优点：</em><br>    支持随机存取，读写都是O(1)复杂度，只需要知道下标即可</p>
-<p><em>缺点：</em><br>    1.大小一般都是固定的，如果扩容则需要申请一块新的内存将原有数据迁移过去<br>    2.插入和删除操作困难，</p>
-<h2 id="链表"><a href="#链表" class="headerlink" title="链表"></a><strong>链表</strong></h2><p>前面说到数组的插入和删除效率不高，可以通过链表来解决这一问题</p>
-<p><em>链表的基本结构</em></p>
-<p>最简单的链表包括一个数据域和一个指针域，其中数据域用于存放数据，指针域用于存放下个节点的地址</p>
-<p>代码表示如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node* Next;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>这种结构可以实现更高效的插入和删除操作，但作为代价，它不支持随机存取，变成一种顺序存取的结构</p>
-<p>链表不止这一种形式，还有双向链表和循环链表</p>
-<p>双向链表：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struct Node</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct Node* Pre;</span><br><span class="line">    struct Node* Last;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>循环链表：只需将最后一个元素的后继指向第一个元素即可，如果时双向链表则还需将头节点的前趋指向最后一个元素</p>
-<p><em>插入和删除操作</em></p>
-<p>以简单链表为例</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">删除操作</span><br><span class="line">&#123;</span><br><span class="line">    Node* Temp=DeleteNode;</span><br><span class="line">    Node* Pre=PreNode;</span><br><span class="line">    Pre-&gt;Next=Temp-&gt;Next;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">插入操作</span><br><span class="line">&#123;</span><br><span class="line">    InsertNode-&gt;Next=ThisNode-&gt;Next;</span><br><span class="line">    ThisNode-&gt;Next=InsertNode;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a><strong>栈</strong></h2><p><em>什么是栈</em></p>
-<p>栈(stack),是一种先进后出(或后进先出)的结构，后进的元素为栈顶(top),最先进的为栈底</p>
-<p>一个常用的例子是浏览器的网页：当我们浏览网页时我们可以通过一些操作进行回退到上一次浏览的内容</p>
-<p>或者玩的玩具枪的弹夹也是一个栈，我们把子弹装入弹夹看作压栈，每次扣动扳机可以看作一次出栈</p>
-<p>栈的主要功能包括进栈、出栈、获取栈顶元素</p>
-<p>栈的实现方式有两种，分别是<em>顺序栈</em>和<em>链栈</em></p>
-<p><em>顺序栈的实现</em></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct stack</span><br><span class="line">&#123;</span><br><span class="line">    int *Data;</span><br><span class="line">    int top;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>栈的进栈、出栈、获取栈顶元素实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">进栈  </span><br><span class="line">void Push(stack* S,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    S-&gt;top++;</span><br><span class="line">    Data[top]=Value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">出栈</span><br><span class="line">void Pop(stack *S)</span><br><span class="line">&#123;</span><br><span class="line">    S-&gt;top--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">获取栈顶元素  </span><br><span class="line">int Top(stack* S)</span><br><span class="line">&#123;</span><br><span class="line">    return S-&gt;Data[top]; </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><em>链栈的实现</em></p>
-<p>链栈的实现基础是链表，使用头插法，把访问限制在链表的第一个元素，就可以实现对栈的访问</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">struct ListStack</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct ListStack* Next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ListStack* S;</span><br></pre></td></tr></table></figure>
-
-<p>栈的操作</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">入栈  </span><br><span class="line">void Push(ListStack* S,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    ListStack* Temp=new ListStack;</span><br><span class="line">    Temp-&gt;Data=Value;</span><br><span class="line">    Temp-&gt;Next=S-&gt;Next;</span><br><span class="line">    S-&gt;Next=Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">出栈</span><br><span class="line">void Pop(ListStack* S)</span><br><span class="line">&#123;</span><br><span class="line">    ListStack* Temp=S;</span><br><span class="line">    S=S-&gt;Next;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">获取栈顶元素  </span><br><span class="line">int Top(ListStack* S)</span><br><span class="line">&#123;</span><br><span class="line">    return S-&gt;Data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p><em><strong>注意：以上操作是假设均不为空的情况，实际实现时要进行判空操作</strong></em></p>
-<h2 id="队列"><a href="#队列" class="headerlink" title="队列"></a><strong>队列</strong></h2><p><em>什么是队列</em></p>
-<p>队列是一种先进先出(后进后出)的数据结构，它只能在队尾添加元素，在队头弹出元素</p>
-<p>一个常见的例子是排队(无论是去银行取钱或者在超市买东西都会排队)，当我们排队时总是会自觉地站到队尾</p>
-<p>而非插队，当位于队首的人离开时我们会向前走一步直到我们走到队首接受相应的服务(弹出队列)</p>
-<p>上面的对垒是一种<em>单端队列</em>，当然还有一种队列是<em>双端队列</em>，双端队列与单端队列的区别是双端队列的</p>
-<p>队尾和队首都可以进行插入和弹出操作</p>
-<p><em>队列的实现</em></p>
-<p>队列有多种实现方式，我们可以使用循环数组来实现，通过声明front、rear指针来实现对队首和队尾的操作</p>
-<p>当然也可以使用链表来实现单端队列和双端队列</p>
-<p><em>单端队列</em></p>
-<p>使用循环数组实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#define MaxSize 20</span><br><span class="line">struct queue</span><br><span class="line">&#123;</span><br><span class="line">    int Data[MaxSize];</span><br><span class="line">    int front=0;</span><br><span class="line">    int rear=0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>队列功能的实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">入队操作  </span><br><span class="line">void Push(queue* Q,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    if(Q-&gt;rear+1%MaxSize == Q-&gt;front)&#123;</span><br><span class="line">        return;</span><br><span class="line">        进行判满操作</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Q-&gt;Data[Q-&gt;rear]=Value;</span><br><span class="line">    Q-&gt;rear=(Q-&gt;rear+1)%MaxSize;   完成循环操作</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">出队操作</span><br><span class="line">void Pop(queue* Q)</span><br><span class="line">&#123;</span><br><span class="line">    if(Q-&gt;front==Q-&gt;rear)&#123;</span><br><span class="line">        return;</span><br><span class="line">        进行判满操作</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    Q-&gt;front=(Q-&gt;front+1)%MaxSize;  完成循环操作</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>因为可以对队首和队尾访问，可以进行一层封装以获取队首和队尾的元素</p>
-<p>使用链表的实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct queue</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    struct queue* Next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct ListQueue</span><br><span class="line">&#123;</span><br><span class="line">    queue* front;</span><br><span class="line">    queue* rear;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>队列功能的实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">入队</span><br><span class="line">void Push(ListQueue* LQ,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    queue* Temp=new queue;</span><br><span class="line">    Temp-&gt;Data=Value;</span><br><span class="line">    LQ-&gt;rear-&gt;Next=Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">出队</span><br><span class="line">void Pop(ListQueue* LQ)</span><br><span class="line">&#123;</span><br><span class="line">    queue* Temp=LQ-&gt;front;</span><br><span class="line">    LQ-&gt;fornt=LQ-&gt;front-&gt;Next;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">同样要进行判空操作</span><br></pre></td></tr></table></figure>
-
-<p><em>双端队列</em></p>
-<p>使用循环数组方式实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#define MaxSize 10</span><br><span class="line">struct deque</span><br><span class="line">&#123;</span><br><span class="line">    int Data[Maxsize];</span><br><span class="line">    int front=0;</span><br><span class="line">    int rear=0;</span><br><span class="line">    int size=0;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>双端队列功能实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">头插</span><br><span class="line">void PushFront(deque* D,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    if(D-&gt;size==MaxSize)&#123;</span><br><span class="line">        return;</span><br><span class="line">        满了，无法插入</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    front--;</span><br><span class="line">    front=(front+MaxSize)%MaxSize;</span><br><span class="line">    D-&gt;Data[front]=Value;</span><br><span class="line">    D-&gt;size++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">头删</span><br><span class="line">void PopFront(deque* D)</span><br><span class="line">&#123;</span><br><span class="line">    if(D-&gt;size==0)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    D-&gt;front++;</span><br><span class="line">    D-&gt;front=(D-&gt;front+MaxSize)%MaxSize;</span><br><span class="line">    D-&gt;size--;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">尾插</span><br><span class="line">void PushBack(deque* D,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    if(D-&gt;size==MaxSize)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    D-&gt;rear++;</span><br><span class="line">    D-&gt;rear=(D-&gt;rear+MaxSize)%MaxSize;</span><br><span class="line">    D-&gt;Data[D-&gt;rear]=Value;</span><br><span class="line">    D-&gt;size++;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">尾删</span><br><span class="line">void PopBack(deque* D)</span><br><span class="line">&#123;</span><br><span class="line">    if(D-&gt;size==0)&#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    D-&gt;rear--;</span><br><span class="line">    D-&gt;rear=(D-&gt;rear+MaxSize)%MaxSize;</span><br><span class="line">    D-&gt;size--;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用链表来实现</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">struct ListDequeNode</span><br><span class="line">&#123;</span><br><span class="line">    int Data;</span><br><span class="line">    ListDequeNode* Pre;</span><br><span class="line">    ListDequeNode* Next;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct ListDeque</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* front;</span><br><span class="line">    ListDequeNode* rear;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>实现链表队列的功能</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">头插</span><br><span class="line">void PushFront(ListDeque* LD,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* Temp=new ListDequeNode;</span><br><span class="line">    Temp-&gt;Data=Value;</span><br><span class="line"></span><br><span class="line">    ListDequeNode* TempFront=LD-&gt;front;</span><br><span class="line"></span><br><span class="line">    Temp-&gt;Next=LD-&gt;front;</span><br><span class="line">    LD-&gt;front=TempFront;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">头删</span><br><span class="line">void PopFront(ListDeque* LD)</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* Temp=LD-&gt;front;</span><br><span class="line">    LD-&gt;front=LD-&gt;front-&gt;Next;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">尾插</span><br><span class="line">void PushBack(ListDeque* LD,int Value)</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* Temp=new ListDequeNode;</span><br><span class="line">    Temp-&gt;Data=Value;</span><br><span class="line"></span><br><span class="line">    ListDequeNode* TempRear=LD-&gt;rear;</span><br><span class="line">    LD-&gt;rear-&gt;Next=Temp;</span><br><span class="line"></span><br><span class="line">    LD-&gt;rear=LD-&gt;rear-&gt;Next;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">尾删</span><br><span class="line">void PopBack(ListDeque* LD)</span><br><span class="line">&#123;</span><br><span class="line">    ListDequeNode* Temp=LD-&gt;rear;</span><br><span class="line">    LD-&gt;rear=LD-&gt;rear-&gt;Pre;</span><br><span class="line">    delete Temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里双端队列在插入删除时需要同时设置Pre和Next和判空操作</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h1><p>介绍了4种常见的线性表并简单实现了一些主要功能，在实际开发中需要对线性表的结构进行完善，</p>
-<p>可以使用面向对象来设计数据结构以满足需求</p>
-<p><em><strong>在实际操作中还要注意数据的边界条件和对元素是否合法进行判断(例如判断是否为空指针，是否为脏数据等)</strong></em></p>
-
     
 
     
@@ -1600,7 +1140,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
         		</li>
       		
 		</ul>
@@ -1621,7 +1165,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/">展开全文 >></a>
     </p>
     
 
@@ -1651,7 +1195,7 @@
 
 
   
-    <article id="post-essay/虚幻-角色的基本移动功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-note/数据结构与算法-拓扑排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -1659,7 +1203,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/08/09/essay/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" target="_blank">虚幻：角色的基本运动功能</a>
+	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：拓扑排序</a>
   
     </h1>
   
@@ -1667,8 +1211,8 @@
 
   
   
-<a href="/2023/08/09/essay/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/" class="archive-article-date">
-        <time datetime="2023-08-09T11:58:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-09</time>
+<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" class="archive-article-date">
+        <time datetime="2023-09-20T09:16:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
 </a>
 
   
@@ -1680,54 +1224,20 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="角色基本运动的实现"><a href="#角色基本运动的实现" class="headerlink" title="角色基本运动的实现"></a><strong>角色基本运动的实现</strong></h1><h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a><strong>基础知识</strong></h2><p>角色的移动功能是通过Movement组件实现的，角色由Controller进行直接控制，主角由PlayerController控制</p>
-<p>敌人则由AIController控制；其中对于主角，PlayerController可由键盘、鼠标、手柄等获取到玩家输入实现对</p>
-<p>角色的控制。</p>
-<p>GameMode包含了对游戏的诸多设置，PlayerController就在其中，我们可以在GameMode中设置自己写的PlayerController。</p>
-<p>关于游戏框架，可以参考官方文档： <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/InteractiveExperiences/Framework/">https://docs.unrealengine.com/4.27/zh-CN/InteractiveExperiences/Framework/</a></p>
-<h2 id="进行设置"><a href="#进行设置" class="headerlink" title="进行设置"></a><strong>进行设置</strong></h2><h3 id="基本移动"><a href="#基本移动" class="headerlink" title="基本移动"></a><strong>基本移动</strong></h3><p>创建新工程后，新建一个Character类和Controller类，命名为MainCharacter和MainPlayerController，同时</p>
-<p>以MainCharacter为父类创建一个蓝图命名为BP_MainPlayer;</p>
-<p>新建一个自己的GameMode并在WorldSettings中设置，至此便完满足基本的要求。</p>
-<p>在GameMode的默认构造函数中进行如下设置：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PlayerControllerClass=AMainPlayerController::StaticClass();</span><br><span class="line">DefaultPawnClass=LoadClass&lt;AMainCharacter&gt;(NULL,TEXT(&quot;Blueprint&#x27;/Game/Character/MainPlayer/BP_MainPlayer.BP_MainPlayer_C&#x27;&quot;));</span><br></pre></td></tr></table></figure>
-
-<p>在Projest Settings-Input-Axis Mappings中添加两个输入事件，分别为MoveForward和MoveRight，MoveForward绑定W</p>
-<p>和S，缩放值为+1和-1，MoveRight绑定AD，缩放值同上，完成输入事件绑定</p>
-<p>在MainCharacter.h的protected中声明如下代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">void MoveForward(float Value);</span><br><span class="line">void MoveRight(float Value);</span><br></pre></td></tr></table></figure>
-
-<p>随后进行定义：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void AMainCharacter::MoveForward(float Value)</span><br><span class="line">&#123;</span><br><span class="line">    FVector Dir=FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X);</span><br><span class="line">    AddMovementInput(Dir,Value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void AMainCharacter::MoveRight(float Value)</span><br><span class="line">&#123;</span><br><span class="line">    FVector Dir=FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::Y);</span><br><span class="line">    AddMovementInput(Dir,Value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最后在SetupPlayerInputComponent函数中进行绑定：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PlayerInputComponent-&gt;BindAxis(TEXT(&quot;MoveForward),this,&amp;AMainCharacter::MoveForward);</span><br><span class="line">PlayerInputComponent-&gt;BindAxis(TEXT(&quot;MoveRIght),this,&amp;AMianCharacter::MoveRight);</span><br></pre></td></tr></table></figure>
-
-<p>至此便可以实现角色的前后左右移动逻辑，接下来完成跳跃和旋转视角</p>
-<h3 id="跳跃与旋转视角"><a href="#跳跃与旋转视角" class="headerlink" title="跳跃与旋转视角"></a><strong>跳跃与旋转视角</strong></h3><p>操作过程与上述过程相似，在Project Settings-Input-Action Mappings中添加一个值并命名为Jump，绑定SpaceBar</p>
-<p>随后添加如下声明与实现：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">void DoJump()</span><br><span class="line">&#123;</span><br><span class="line">    Jump();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>并在SetUpPlayerInputComponent函数中进行绑定:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PlayerInputComponet-&gt;BindAction(TEXT(&quot;Jump&quot;),IE_Pressed,this,&amp;AMainCharacter::DoJump);</span><br><span class="line">或者</span><br><span class="line">PlayerInputComponet-&gt;BindAction(TEXT(&quot;Jump&quot;),IE_Pressed,this,&amp;AMainCharacter::Jump);</span><br></pre></td></tr></table></figure>
-
-<p>以上两种方法都可以实现角色的跳跃，但如果在跳跃是有一些其他逻辑可以使用第一种方法</p>
-<p>旋转视角功能的实现方法是沿着控制器的方向进行旋转</p>
-<p>在Project Settings-Input-Axis Mappings中添加LookUp和LookRight两个值，绑定鼠标的Y和X，Y的缩放值可根据自己的习惯</p>
-<p>进行更改，完成以上设置后便可在代码中进行设置</p>
-<p>声明并实现两个函数，并完成绑定：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void LookUp(float Value)</span><br><span class="line">&#123;</span><br><span class="line">    AddControllerPitchInput(Value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void LookRight(float Value)</span><br><span class="line">&#123;</span><br><span class="line">    AddControllerYawInput(Value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PlayerInputComponent-&gt;BindAxis(TEXT(&quot;LookUp&quot;),this,&amp;AMainCharacter::LookUp);</span><br><span class="line">PlayerInputComponent-&gt;BindAxis(TEXT(&quot;LookRight),this,&amp;AMianCharacter::LookRight);</span><br></pre></td></tr></table></figure>
-
-<p>由此完成视角旋转的绑定，还可以通过添加额外的参数来限制视角旋转，如添加ViewportMoveSpeed、ViewportOffset等约束</p>
-<p>视口的旋转速度和最大偏移量</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>主要是输入事件的绑定，在Project Settings-Input中根据需求完成相应的绑定</p>
-<p>Action和Axis两种绑定区别在于Action是只响应一次，Axis是轴向事件，会一直响应，可以在调用函数中添加如下代码验证</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UE_LOG(LogTemp,Log,TEXT(&quot;this is a log&quot;));</span><br></pre></td></tr></table></figure>
-
-<p>如果是Action会只打印一次，而Axis会打印多次</p>
-<p>同时还有两种绑定方式，BindAction和BindAxis的功能显而易见，区别在于参数的不同，BindAction中多了一个按下与抬起的状态</p>
-<p>其余大致相同，更详细的信息可以参考官方文档： <a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/InteractiveExperiences/Input/">https://docs.unrealengine.com/4.27/zh-CN/InteractiveExperiences/Input/</a></p>
-<p>更多复杂的运动可以通过绑定自己编写的MovementComponent进行实现</p>
-
+    <h1 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h1><h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><ol>
+<li>有向无环图：有向说明图的路径是有方向的，无环说明图的路径不能成环。</li>
+<li>拓扑序列：设一个具有n个顶点的有向图，其中顶点序列V1—Vn满足一条路径，若Vi必须在Vj之前，则称这个顶点序列为拓扑序列。</li>
+<li>拓扑排序：按照顶点的依赖关系进行排序，使得没有前驱的顶点排在最前，没有后继的顶点排在后面，直到所有节点都被移除。</li>
+</ol>
+<h2 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h2><p>它的思路总结起来只有两步：</p>
+<ol>
+<li>在有向图中选择一个没有前驱的顶点并输出。</li>
+<li>删除该顶点和以它为尾的弧。</li>
+<li>重复上述两步直到所有顶点都被输出，或者当前图中不存在无前驱的顶点为止。</li>
+</ol>
+    
+    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/#more">more >></a>
+    
     
 
     
@@ -1743,11 +1253,19 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">图</a>
         		</li>
       		
 		</ul>
@@ -1759,7 +1277,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
         		</li>
       		
 		</ul>
@@ -1768,7 +1286,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/08/09/essay/%E8%99%9A%E5%B9%BB-%E8%A7%92%E8%89%B2%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%A7%BB%E5%8A%A8%E5%8A%9F%E8%83%BD/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">展开全文 >></a>
     </p>
     
 
@@ -1919,11 +1437,15 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1931,7 +1453,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
+                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1939,7 +1469,31 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">排序</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">堆</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">散列表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
             
             <div class="clearfix"></div>
