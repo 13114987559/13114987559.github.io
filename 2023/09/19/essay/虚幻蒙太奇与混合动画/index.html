@@ -18,7 +18,7 @@
 <meta property="og:description" content="蒙太奇动画在UE中可以使用蒙太奇动画完成一些效果，完成人物的一些特俗运动，比如攀爬、跳跃、技能等等。使用蒙太奇的动画只需要创建一个蒙太奇动画，插入一个slot和section，便可以在动画蓝图涨使用，我们可以不关心蒙太奇动画的实现细节而达到很好的表现效果。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-19T12:50:05.000Z">
-<meta property="article:modified_time" content="2023-09-25T11:26:32.863Z">
+<meta property="article:modified_time" content="2023-09-28T04:14:14.281Z">
 <meta property="article:author" content="KongXinQing">
 <meta property="article:tag" content="Cpp">
 <meta property="article:tag" content="UE">
@@ -249,7 +249,7 @@
 
 <h2 id="制作蒙太奇动画"><a href="#制作蒙太奇动画" class="headerlink" title="制作蒙太奇动画"></a>制作蒙太奇动画</h2><p>首先选中一个动画，直接右键创建蒙太奇动画并命名，创建后可以发现动画蓝图中多了一个蒙太奇动画，这个动画就是我们的蒙太奇动画。</p>
 <p>点击进入蒙太奇动画，可以在动画左侧看到Montage和Notifies两栏，Montage栏中可以新建slot以供我们使用，notifies栏中可以新建通知，通知可以让我们在动画播放时触发一些动作，比如播放声音、播放特效等等。</p>
-<p>在montage栏中直接右键选择新建slot，并在DefaultGroup中选择新建的slot和section；notifies的操作与slot类似，创建好后可以拖动创建好的section和notify，在播放时选择section可以跳转到开始的区域（一个蒙太奇动画可以包含多个片段，可以使用sectin来控制播放那个片段）。</p>
+<p>在montage栏中直接右键选择新建slot，并在DefaultGroup中选择新建的slot和section；notifies的操作与slot类似，创建好后可以拖动创建好的section和notify，在播放时选择section可以跳转到开始的区域（一个蒙太奇动画可以包含多个片段，可以使用section来控制播放哪个片段）。</p>
 <p>在使用时只需要到动画蓝图中选择DefaultSlot，在细节面板中选择我们自己新建的slot，随后便可以在蓝图或C++中选择合适的时机播放蒙太奇动画。</p>
 <p>至此就制作了一个简单的蒙太奇动画。</p>
 <h2 id="使用蒙太奇动画的简单例子"><a href="#使用蒙太奇动画的简单例子" class="headerlink" title="使用蒙太奇动画的简单例子"></a>使用蒙太奇动画的简单例子</h2><p>在角色的运动中我们实现了逻辑中的运动功能，还需要给角色添加动画，对于跳跃动画血药控制起跳、滞空、落地三个状态的动画，我们就可以使用蒙太奇与动画状态机来实现。</p>
@@ -573,27 +573,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">UE</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -602,14 +586,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -626,6 +602,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">UE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
             
             <div class="clearfix"></div>

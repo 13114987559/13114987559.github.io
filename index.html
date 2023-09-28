@@ -570,9 +570,8 @@
     
     <h1 id="虚幻的反射"><a href="#虚幻的反射" class="headerlink" title="虚幻的反射"></a>虚幻的反射</h1><p>反射是虚幻引擎中的基础技术，虚幻中的细节面板、序列化、垃圾回收、蓝图与C++交互等功能都依赖于反射。但原生C++并不支持反射，因此虚幻拥有一套自己的反射系统。</p>
 <p>本文将对虚幻的反射机制进行浅析，更多信息可以查看工程文件中的generated和Marcos源码文件，里面有对反射更详细的解释。</p>
-<h1 id="反射的简要机制"><a href="#反射的简要机制" class="headerlink" title="反射的简要机制"></a>反射的简要机制</h1><p><em>Unreal Build Tool(UBT)和Unreal Header Tool(UHT)<em>两个协同工作来生成运行时反射需要的数据。UBT通过扫描头文件，记录任何至少有一个反射类型的头文件的模块。如果其中任意一个头文件从上一次编译起发生了变化，那么UHT就会被调用来利用和更新反射数据。</em>UHT分析头文件，创建一系列反射数据</em>，并且生成包含反射数据的C++代码,放到每一个模块的generated文件中，使用标记宏标记的数据编译后可以在generated文件中看到，使用了一些宏对数据进行包装.</p>
+<h1 id="反射的简要机制"><a href="#反射的简要机制" class="headerlink" title="反射的简要机制"></a>反射的简要机制</h1><p><em>Unreal Build Tool(UBT)和Unreal Header Tool(UHT)<em>两个协同工作来生成运行时反射需要的数据。UBT通过扫描头文件，记录任何至少有一个反射类型的头文件的模块。如果其中任意一个头文件从上一次编译起发生了变化，那么UHT就会被调用来利用和更新反射数据。</em>UHT分析头文件，创建一系列反射数据</em>，并且生成包含反射数据的C++代码,放到每一个模块的generated文件中，使用标记宏标记的数据编译后可以在generated文件中看到，使用了一些宏对数据进行包装。</p>
 <p>用生成的C++代码来存储反射数据的一个最大好处就是，它可以保证跟二进制做到同步,不会加载陈旧或者过时的反射数据，因为它是跟引擎的其它代码同时编译的，并且它会在程序启动的时候使用C++表达式来计算成员偏移等，而不是通过针对特定平台&#x2F;编译器&#x2F;优化的组合中进行逆向工程。</p>
-<p>生成的诸如StaticClass()、StaticStruct()函数是为了让当前类型更好的获取反射数据，以及那此转换函数（thunks）用来在蓝图或者网络复制中调用C++函数。这些必须声明为类或者结构体的一部分，这也就解释了为什么GENERATED_UCLASS_BODY() or GENERATED_USTRUCT_BODY()宏会包含在你的反射系统的类型中，而#include “TypeName.generated.h”的头文件中定义了这些宏。</p>
     
     <a class="article-more-a" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/#more">more >></a>
     
@@ -1441,27 +1440,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">UE</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1470,14 +1453,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1494,6 +1469,30 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">UE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
             
             <div class="clearfix"></div>
