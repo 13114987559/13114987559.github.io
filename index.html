@@ -197,7 +197,7 @@
             
 
   
-    <article id="post-essay/虚幻多线程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-note/设计模式8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -205,7 +205,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_blank">虚幻多线程浅析</a>
+	  <a class="article-title" href="/2023/10/17/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F8/" target="_blank">设计模式（八）</a>
   
     </h1>
   
@@ -213,8 +213,8 @@
 
   
   
-<a href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="archive-article-date">
-        <time datetime="2023-09-25T14:27:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-25</time>
+<a href="/2023/10/17/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F8/" class="archive-article-date">
+        <time datetime="2023-10-17T09:56:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-17</time>
 </a>
 
   
@@ -226,12 +226,15 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="虚幻多线程简介"><a href="#虚幻多线程简介" class="headerlink" title="虚幻多线程简介"></a>虚幻多线程简介</h1><p>虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。<br>Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。</p>
-<h1 id="虚幻多线程的使用"><a href="#虚幻多线程的使用" class="headerlink" title="虚幻多线程的使用"></a>虚幻多线程的使用</h1><h2 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h2><p>我们创建一个类并继承FRunnable，重写Init、Run、Exit函数。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">UMyThread</span> : <span class="keyword">public</span> FRunnable</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UMyThread</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">UMyThread</span>();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">Init</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> uint32 <span class="title">Run</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Exit</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>::</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">AMyActor</span>* TestActor;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-    
-    <a class="article-more-a" href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/#more">more >></a>
-    
+    <h1 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h1><p>定义：将请求封装成为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Command</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">execute</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将命令封装成对象</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteCommand</span> : <span class="keyword">public</span> Command</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">execute</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//将命令封装成对象</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ConcreteCommand2</span> : <span class="keyword">public</span> Command</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">execute</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MacroCommand</span>:<span class="keyword">public</span> Command</span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;Command*&gt; commands;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Add</span><span class="params">(Command* command)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Remove</span><span class="params">(Command* command)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">execute</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> command:commands)&#123;</span><br><span class="line">            command-&gt;<span class="built_in">execute</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Command* command1 = <span class="keyword">new</span> <span class="built_in">ConcreteCommand</span>();</span><br><span class="line">    Command* command2 = <span class="keyword">new</span> <span class="built_in">ConcreteCommand2</span>();</span><br><span class="line">    MacroCommand* macroCommand = <span class="keyword">new</span> <span class="built_in">MacroCommand</span>();</span><br><span class="line">    macroCommand-&gt;<span class="built_in">Add</span>(command1);</span><br><span class="line">    macroCommand-&gt;<span class="built_in">Add</span>(command2);</span><br><span class="line">    macroCommand-&gt;<span class="built_in">execute</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="访问器模式"><a href="#访问器模式" class="headerlink" title="访问器模式"></a>访问器模式</h1><p>如果要增加新的行为，如果直接在基类中增加会带来变更负担甚至破坏原有设计。</p>
+<p>定义：表示一个作用于某对象结构中的各元素的操作。使得可以在不改变各元素的类前提下定义作用域这些元素的新操作。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Visitor</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Element</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Func1</span><span class="params">()</span></span>=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ElementA</span>:<span class="keyword">public</span> ELement</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Func1</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ElementB</span>:<span class="keyword">public</span> Element</span><br><span class="line">&#123;   </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Func1</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">假如要增加Func2，可以为基类增加一个访问器</span></span><br><span class="line"><span class="comment">子类重写Accept</span></span><br><span class="line"><span class="comment">定义一个Visitor子类重写VisitElem方法提供访问能力</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Element</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Accept</span><span class="params">(Visitor* visitor)</span></span>=<span class="number">0</span>;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ElementA</span>:<span class="keyword">public</span> ELement</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Accapt</span><span class="params">(Visitor* visitor)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        visitor-&gt;<span class="built_in">VisitElemA</span>(<span class="keyword">this</span>);</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Visitor1</span>:<span class="keyword">public</span> Visitor</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span>  <span class="type">void</span> <span class="title">VisitElemA</span><span class="params">(ElementA* elem)</span></span></span><br><span class="line"><span class="function">&#125;</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="解析器模式"><a href="#解析器模式" class="headerlink" title="解析器模式"></a>解析器模式</h1><p>将特定领域的问题抽象成语法问题<br>定义：给定一个语言，定义它的文法表示，并定义一个解释器。这个解释器使用该标识来解释语言中的句子。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">例如一个字符串&quot;a+b-c+d&quot;</span></span><br><span class="line"><span class="comment">我们可以将其解析为一棵树</span></span><br><span class="line"><span class="comment">         +</span></span><br><span class="line"><span class="comment">        / \</span></span><br><span class="line"><span class="comment">        -   d</span></span><br><span class="line"><span class="comment">       / \   </span></span><br><span class="line"><span class="comment">       +   c</span></span><br><span class="line"><span class="comment">     / \</span></span><br><span class="line"><span class="comment">    a   b</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Expression</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Interpreter</span><span class="params">(map&lt;<span class="type">int</span>,<span class="type">int</span>&gt; var)</span></span>=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Expression</span>()&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">VarExpression</span>:<span class="keyword">public</span> Expression</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span> Key;</span><br><span class="line">    puiblic:</span><br><span class="line">    <span class="built_in">VarExpression</span>(<span class="type">char</span> key)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;Key=key;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Interpreter</span><span class="params">(map&lt;<span class="type">int</span>,<span class="type">int</span>&gt; var)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> var[Key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SymbolExpression</span>:<span class="keyword">public</span> Expression</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//左右符号</span></span><br><span class="line">    Expression* Left;</span><br><span class="line">    Expression* Right;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">SymbolExpression</span>(Expression* left,Expression* right)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;Left=left;</span><br><span class="line">        <span class="keyword">this</span>-&gt;Right=right;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AddExpression</span>:<span class="keyword">public</span> SymbolExpression</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">AddExpression</span>(Expression* left,Expression* right)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">SymbolExpression</span>(left,right);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Interpreter</span><span class="params">(map&lt;<span class="type">int</span>,<span class="type">int</span>&gt; var)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Left-&gt;<span class="built_in">Interpreter</span>(var)+Right-&gt;<span class="built_in">Interpreter</span>(var);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//解析函数</span></span><br><span class="line"><span class="function">Expression* <span class="title">Analyse</span><span class="params">(string str)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="comment">//使用switch对str的符号进行解析</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
     
 
     
@@ -247,15 +250,443 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
         		</li>
-      		 
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/17/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F8/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-note/设计模式7" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/17/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F7/" target="_blank">设计模式（七）</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/17/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F7/" class="archive-article-date">
+        <time datetime="2023-10-17T08:49:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-17</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>数据结构模式：将特定的数据封装在内部，对外提供统一接口，来实现与特定数据结构无关的访问。<br>包括组合模式、迭代器模式、职责链模式。</p>
+<h1 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h1><p>定义：将对象组合成树形结构以表示“部分-整体”的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性（稳定性）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Component</span> </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span>=<span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//树节点</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Composite</span> : <span class="keyword">public</span> Component</span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;Component*&gt; components;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Add</span><span class="params">(Component* c)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Remove</span><span class="params">(Component* c)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; c : components)</span><br><span class="line">        &#123;</span><br><span class="line">            c-&gt;<span class="built_in">Process</span>(); </span><br><span class="line">            <span class="comment">//虚函数的调用</span></span><br><span class="line">            <span class="comment">//多态调用，将数据的访问封装在了树形结构的内部</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TreeNode</span>:<span class="keyword">public</span> Component</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//叶子节点</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Leaf</span> : <span class="keyword">public</span> Component</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Composite* R.ot= <span class="keyword">new</span> <span class="built_in">Composite</span>();</span><br><span class="line">    Composite* Tree1= <span class="keyword">new</span> <span class="built_in">TreeNode</span>();</span><br><span class="line">    Composite* Leaf1= <span class="keyword">new</span> <span class="built_in">Leaf</span>();</span><br><span class="line">    Root-&gt;<span class="built_in">Add</span>(Tree1);</span><br><span class="line">    Root-&gt;<span class="built_in">Add</span>(Leaf1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h1><p>定义：提供一种方法顺序访问一个聚合对象中的各个元素，而又不暴露该对象的内部表示。<br>迭代器在C++中的STL库中便有使用，C++中不在使用面向对象实现而是使用泛型来实现。</p>
+<h1 id="职责链模式"><a href="#职责链模式" class="headerlink" title="职责链模式"></a>职责链模式</h1><p>一个请求可能被多个对象处理，但是每个请求运行时只能由一个接受者处理，显示指定将带来性能损耗。</p>
+<p>定义：使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这些对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。</p>
+<p>构建一个职责链，如果对象可以处理则处理，不能处理则传递给下一个对象。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/17/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F7/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-note/设计模式6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/" target="_blank">设计模式6</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/" class="archive-article-date">
+        <time datetime="2023-10-16T08:41:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-16</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>状态变化模式</p>
+<h1 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h1><p>定义：允许一个对象在其内部状态改变时改变它的行为，从而使对象看起来似乎修改了它的行为。</p>
+<p>将所有行为都放入一个State的子类对象中，在状态切换时，切换相应的对象，同时维护State的接口。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">假设有一个网络应用</span></span><br><span class="line"><span class="comment">包括连接、断开、打开状态</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">NetState</span></span><br><span class="line">&#123;</span><br><span class="line">    E_Connect,</span><br><span class="line">    E_Disconnect,</span><br><span class="line">    E_Open,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Network</span></span><br><span class="line">&#123;</span><br><span class="line">    NetState state;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Operator1</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(state==E_Connect)&#123;</span><br><span class="line">            <span class="comment">//  ...</span></span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(state==E_Disconnect)&#123;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(state==E_Open)&#123;</span><br><span class="line">            <span class="comment">//...</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="built_in">Operator2</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">Operator操作会随state的变化而改变</span></span><br><span class="line"><span class="comment">可以使用策略模式将操作抽象为操作类</span></span><br><span class="line"><span class="comment">对应不同的state，使用不同的操作类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">使用类似的方法，让状态子类继承状态类</span></span><br><span class="line"><span class="comment">在NetWorkd中使用状态子类对象作为成员变量</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NetWork</span>:<span class="keyword">public</span> NetState</span><br><span class="line">&#123;</span><br><span class="line">    NetState* pState;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">NetWork</span>(NetState* pState)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;pState=pState;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Operator1</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        pState-&gt;<span class="built_in">Operator1</span>();</span><br><span class="line">        pState=pState-&gt;pNext; <span class="comment">//只需要知道下一个状态即可</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;；</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h1><p>某些对象的状态在转换时可能由于某些需要回溯到之前的某个状态，此时可以使用备忘录模式</p>
+<p>定义：在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Memento</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> state;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">SetState</span><span class="params">(<span class="type">int</span> state)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;state=state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">GetState</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="keyword">this</span>-&gt;state; &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">SetState</span><span class="params">(<span class="type">int</span> state)</span> </span>&#123; <span class="keyword">this</span>-&gt;state=state; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Originator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> state;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Originator</span>()</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">Mementor <span class="title">CreateMemento</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="function">Mementor <span class="title">m</span><span class="params">(state)</span></span>;</span><br><span class="line">        <span class="keyword">return</span> m;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">SetMemento</span><span class="params">(<span class="type">const</span> Memento&amp; m)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        state=m.<span class="built_in">GetState</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Originator originator;</span><br><span class="line">    Memento m=originator.<span class="built_in">CreateMemento</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//更改状态</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//从备忘录中恢复</span></span><br><span class="line">    originator.<span class="built_in">SetMemento</span>(m);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TexhNotes//" class="article-tag-list-link color5">TexhNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-essay/虚幻容器使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/" target="_blank">虚幻容器使用</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/" class="archive-article-date">
+        <time datetime="2023-10-15T08:34:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-15</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-essay/虚幻垃圾回收" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" target="_blank">虚幻垃圾回收</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" class="archive-article-date">
+        <time datetime="2023-10-15T08:32:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-15</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="虚幻的垃圾回收"><a href="#虚幻的垃圾回收" class="headerlink" title="虚幻的垃圾回收"></a>虚幻的垃圾回收</h1><h2 id="垃圾回收定义"><a href="#垃圾回收定义" class="headerlink" title="垃圾回收定义"></a>垃圾回收定义</h2><p>垃圾回收是一种自动的内存管理机制，当程序的动态内存不再需要时，会自动予以回收，这种机制称为垃圾回收。垃圾回收可以减少程序员的负担和犯错的机会。</p>
+<h2 id="垃圾回收算法大致分类"><a href="#垃圾回收算法大致分类" class="headerlink" title="垃圾回收算法大致分类"></a>垃圾回收算法大致分类</h2><ul>
+<li>引用计数式：通过额外的计数来实时计算单个对象的引用次数，当计数减少到0时就将对象回收。</li>
+<li>追踪式：当对象达到垃圾回收条件时（内存不够或到达回收时间时）通过扫描系统中是否有对象的引用来盘对对象是否存活，然后回收对象。</li>
+<li>保守式：并不能准确判断每一个对象是否存活，但是能保证在不回收存活对象的情况下回收尽可能多的无用对象。</li>
+<li>精确式：在回收过程中能够准确识别每一个无用对象，通常需要额外的数据消耗（UE中的UPROPERTY）</li>
+<li>搬迁式：在对象回收过程中需要移动对象在内存中的位置。</li>
+<li>非搬迁式：在对象回收过程中不需要移动对象在内存中的位置。</li>
+<li>实时式：不需要用户停止程序，就可以进行垃圾回收。</li>
+<li>非实时式：与实时式相反，需要用户停止程序，才能进行垃圾回收。</li>
+<li>渐进式：同样不需要终端程序执行，与实时式的区别在于不会立即回收对象，而是到达一定条件时才进行回收。</li>
+<li>非渐进式：与渐进式的区别在于立即回收对象。</li>
+</ul>
+<h2 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h2><h3 id="引用计数式"><a href="#引用计数式" class="headerlink" title="引用计数式"></a>引用计数式</h3><p>引用计数是即时且渐进式的</p>
+<ul>
+<li><p>优点：</p>
+<ol>
+<li>能够及时回收不需要的对象。</li>
+</ol>
+</li>
+<li><p>缺点</p>
+<ol>
+<li>修改对象时要更新旧对象的计数，增加则外的性能开销。</li>
+<li>要使用额外的空间来保存计数值。</li>
+<li>对于短生命周期的对象，频繁的分配和回收对象会导致内存碎片化严重。</li>
+<li>可能会出现环形引用的问题（不能正确调用析构对象造成内存泄漏）。</li>
+</ol>
+</li>
+</ul>
+<h3 id="标记清扫式"><a href="#标记清扫式" class="headerlink" title="标记清扫式"></a>标记清扫式</h3><p>通过扫描整个系统中对象的引用来判定对象的可达性，来判断对象是否需要回收。</p>
+<ul>
+<li><p>优点</p>
+<ol>
+<li>不会出现环形引用问题。</li>
+<li>不会有额外的性能开销。</li>
+<li>与用户程序分离。</li>
+</ol>
+</li>
+<li><p>缺点</p>
+<ol>
+<li>非实时式，需要用户停止程序才能进行垃圾回收。</li>
+<li>同样可能会增加内存碎片的数量。</li>
+<li>可能会对某些无用对象产生误判导致内存泄漏。</li>
+</ol>
+</li>
+</ul>
+<h3 id="虚幻的垃圾回收方式"><a href="#虚幻的垃圾回收方式" class="headerlink" title="虚幻的垃圾回收方式"></a>虚幻的垃圾回收方式</h3><p>虚幻主要采用的是标记-清扫式，主要分为以下几个阶段：</p>
+<ol>
+<li>第一阶段从根集合出发遍历所有可达对象，标记出可达对象和不可达对象。</li>
+<li>第二阶段渐进式清理不可达对象，UE会分帧清理它们避免卡顿。</li>
+</ol>
+<h1 id="虚幻垃圾回收的原理"><a href="#虚幻垃圾回收的原理" class="headerlink" title="虚幻垃圾回收的原理"></a>虚幻垃圾回收的原理</h1><h2 id="进行标记-清扫"><a href="#进行标记-清扫" class="headerlink" title="进行标记-清扫"></a>进行标记-清扫</h2><p>从根节点集合开始递归所有可达对象，并将其标记为可达；随后将没有标记的对象（不可达对象）进行清扫。</p>
+<h2 id="引发方式"><a href="#引发方式" class="headerlink" title="引发方式"></a>引发方式</h2><h3 id="主动引发"><a href="#主动引发" class="headerlink" title="主动引发"></a>主动引发</h3><p>在卸载一个资源后会立即调用一次垃圾回收，也可以调用ForceGarbageCollection()函数主动进行垃圾回收，或直接调用CollectGarbage()函数进行垃圾回收。</p>
+<h3 id="自动引发"><a href="#自动引发" class="headerlink" title="自动引发"></a>自动引发</h3><p>大部分情况下垃圾回收都是由虚幻自动引发的。<br>在world进行tick时，会调用UEngine::ConditionalGarbageCollect()函数对垃圾回收的条件进行判断，若满足回收条件则会进行垃圾回收。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">垃圾回收</a>
         		</li>
       		
 		</ul>
@@ -276,7 +707,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">展开全文 >></a>
     </p>
     
 
@@ -306,7 +737,7 @@
 
 
   
-    <article id="post-note/数据结构与算法-堆与优先队列" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-note/设计模式5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -314,7 +745,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" target="_blank">数据结构与算法-堆与优先队列</a>
+	  <a class="article-title" href="/2023/10/15/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F5/" target="_blank">设计模式（五）</a>
   
     </h1>
   
@@ -322,8 +753,8 @@
 
   
   
-<a href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" class="archive-article-date">
-        <time datetime="2023-09-23T12:14:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
+<a href="/2023/10/15/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F5/" class="archive-article-date">
+        <time datetime="2023-10-15T01:11:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-15</time>
 </a>
 
   
@@ -335,18 +766,436 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h1><h2 id="堆的概念和性质"><a href="#堆的概念和性质" class="headerlink" title="堆的概念和性质"></a>堆的概念和性质</h2><p>堆（Heap）：堆是一棵完全二叉树，且满足以下性质：</p>
+    <p>接口隔离模式：某些接口之间的依赖会带来一些问题甚至无法实现，采用隔离互相紧密关联的接口是一种解决方法。</p>
+<h1 id="门面模式"><a href="#门面模式" class="headerlink" title="门面模式"></a>门面模式</h1><p>定义：为子系统中的一组接口提供一个一致的界面，此模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
+<p>门面模式包含两个部分：</p>
+<ul>
+<li>门面类：为子系统中的一组接口提供一个一致的界面，门面类将客户端与子系统内部的通信ptr，负责协调各子系统，使子系统之间相互协作，为客户端提供统一服务。</li>
+<li>子系统类：实现子系统的功能，各个子系统可以相互独立，子系统之间松散耦合。</li>
+</ul>
+<h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1><p>定义：为其他对象提供一种代理以控制对这个对象的访问。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ISubjectt</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RealSubject</span> : <span class="keyword">public</span> ISubjectt</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用一层代理</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SubjectProxy</span> : <span class="keyword">public</span> ISubjectt</span><br><span class="line">&#123;</span><br><span class="line">    RealSubject* subject;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">App</span></span><br><span class="line">&#123;</span><br><span class="line">    ISubjectt* subject;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">App</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        subject = <span class="keyword">new</span> <span class="built_in">SubjectProxy</span>();</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Task</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        subject-&gt;<span class="built_in">Process</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h1><p>定义：将一个类的接口转换成客户希望的另外一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。<br>用于希望复用一些现存的类，但接口又与环境要求不一致的情况。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//目标接口</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ITarget</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//老接口</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">IAdaptee</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Foo</span><span class="params">()</span></span>=<span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Bar</span><span class="params">()</span></span>=<span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//遗留类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">OldClass</span>:<span class="keyword">public</span> IAdaptee</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Foo</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">Bar</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Adapter</span>:<span class="keyword">public</span> ITarget</span><br><span class="line">&#123;</span><br><span class="line">    IAdaptee* adaptee;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Adapter</span>(IAdaptee* adaptee)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;adaptee = adaptee;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Process</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//转换过程</span></span><br><span class="line">        adaptee-&gt;<span class="built_in">Foo</span>();</span><br><span class="line">        adaptee-&gt;<span class="built_in">Bar</span>();</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//对老接口的适配</span></span><br><span class="line">    IAdaptee* adaptee = <span class="keyword">new</span> <span class="built_in">OldClass</span>();</span><br><span class="line">    ITarget* target = <span class="keyword">new</span> <span class="built_in">Adapter</span>(adaptee);</span><br><span class="line">    target-&gt;<span class="built_in">Process</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h1><p>多个对象互相关联时，对象之间会维持一种很复杂的引用关系，导致难以控制和维护，所以使用一个中间对象来管理这些类。</p>
+<p>定义：使用一个中介对象来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TachNotes//" class="article-tag-list-link color5">TachNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/15/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F5/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-note/设计模式4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/13/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F4/" target="_blank">设计模式（四）</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/13/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F4/" class="archive-article-date">
+        <time datetime="2023-10-13T08:15:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-13</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><p>有些情况下需要保证一个类在系统中只有一个实例，才能保证它的正确性。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一个版本，我们将类构造函数设置为私有</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">Singleton</span>();</span><br><span class="line">    <span class="built_in">Singleton</span>(<span class="type">const</span> Singleton&amp;);</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> Singleton* <span class="title">GetInstance</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="type">static</span> Singleton* Instance;</span><br><span class="line">&#125;；</span><br><span class="line"></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(Instance == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> Instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">当实例为空时，则返回一个新创建的对象；当第二次调用时，返回唯一变量</span></span><br><span class="line"><span class="comment">但是进入多线程环境时，若两个线程同时调用GetInstance()，则有可能两个线程同时创建一个实例</span></span><br><span class="line"><span class="comment">因此为了实现多线程安全版本，需要对类进行改进</span></span><br><span class="line"><span class="comment">1. 可以声明一把锁，对GetInstance()进行加锁</span></span><br><span class="line"><span class="comment">    但在高并发环境下所带来的性能损耗是很大的</span></span><br><span class="line"><span class="comment">2. 可以使用双重检查加锁，在第一次判断Instance是否为空时，对Instance进行加锁</span></span><br><span class="line"><span class="comment">    Instance = new Singleton() 在CPU层应先分配内存，再调用构造器，最后将内存地址交给Instance</span></span><br><span class="line"><span class="comment">    但在实际运行时上面的代码会先调用构造器，再分配内存，最后将内存地址交给Instance</span></span><br><span class="line"><span class="comment">    可能会出现A线程执行new时，B线程进入第一层if，发现Instance不为空，最后B线程返回一个分配了内存但没有</span></span><br><span class="line"><span class="comment">    调用构造器的对象，导致程序崩溃</span></span><br><span class="line"><span class="comment">3. 可以使用静态局部变量，在类第一次加载时，会自动调用构造器，保证单例的唯一性</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Lock lock;</span><br><span class="line">    <span class="keyword">if</span>(Instance == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> Instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(Instance == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        Lock lock;</span><br><span class="line">        <span class="keyword">if</span>(Instance == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            Instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.</span></span><br><span class="line"><span class="keyword">class</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> Singleton* Instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">static</span> Singleton* <span class="title">GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h1><p>享元模式通过运用共享技术有效地支持大量细粒度的对象。</p>
+<p>如果对象已经创建，则返回，否则创建一个新的对象并加入对象池中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">字体处理类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Font</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    string Key;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Font</span>(<span class="type">const</span> string&amp; key)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FontFactory</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    map&lt;string, Font*&gt; FontPool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">Font* <span class="title">GetFont</span><span class="params">(<span class="type">const</span> string&amp; key)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//去寻找对象池中是否已经创建过，如果没有则创建一个新的，否则直接返回找到结果</span></span><br><span class="line">        <span class="keyword">if</span>(FontPool.<span class="built_in">find</span>(key) == FontPool.<span class="built_in">end</span>())&#123;</span><br><span class="line">            FontPool[key] = <span class="keyword">new</span> <span class="built_in">Font</span>(key);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> FontPool[key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/13/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F4/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-note/设计模式3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/12/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F3/" target="_blank">设计模式（三）</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/12/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F3/" class="archive-article-date">
+        <time datetime="2023-10-12T12:28:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-12</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>对象创建，绕开new来避免对象创建。</p>
+<h1 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h1><p>定义：定义一个创建对象的接口，让子类决定实例化哪一个类，工厂将这个类的实例化延迟。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">假设我们需要对二进制文件进行分割</span></span><br><span class="line"><span class="comment">可以创建一个BinarySplitter类，它有一个分割方法</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BinarySplitter</span> </span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Split</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">但现在需要增加一些功能</span></span><br><span class="line"><span class="comment">还需要对文本文件、图片文件等进行分割，需要额外声明类</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TextSplitter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Split</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ImageSplitter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Split</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">对于这种情况，我们可以提取一个抽象基类</span></span><br><span class="line"><span class="comment">让子类继承并重写Split方法</span></span><br><span class="line"><span class="comment">但使用时依然会在窗口类种添加new，仍是依赖具体类造成紧耦合</span></span><br><span class="line"><span class="comment">所以我们定义一个工厂来帮我们做new这件事</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ISplitter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Split</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//工厂基类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SplitterFactory</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> ISplitter* <span class="title">CreateSplitter</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MainWindow</span></span><br><span class="line">&#123;</span><br><span class="line">    SplitterFactory* Factory;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MainWindow</span>(SplitterFactory* Factory)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>-&gt;Factory=Factory;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">ButtonClick</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        ISplitter* Splitter=Factory-&gt;<span class="built_in">CreateSplitter</span>(); <span class="comment">//此时Splitter的具体实现便交给未来（Factory）来决定</span></span><br><span class="line">        Splitter-&gt;<span class="built_in">Split</span>();</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//重写具体工厂</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BinarySplitterFactory</span> : <span class="keyword">public</span> SplitterFactory</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> ISplitter* <span class="title">CreateSplitter</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">BinarySplitter</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    
+    <a class="article-more-a" href="/2023/10/12/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F3/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/12/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F3/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-note/设计模式2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/11/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F2/" target="_blank">设计模式（二）</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/11/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F2/" class="archive-article-date">
+        <time datetime="2023-10-11T08:39:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-11</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>单一职责模式：包括装饰器模式和桥模式</p>
+<h1 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h1><p>过度的使用继承会导致类膨胀，而使用组合则可以避免类膨胀，但是组合的缺点在于无法复用父类的方法，而装饰器模式可以实现复用父类的方法，同时也可以扩展功能。</p>
+<p>代码事例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">假如有设计一个流，可以实现对文件、网络、内存的读写等操作</span></span><br><span class="line"><span class="comment">假如又需要实现对文件、网络内容加密读写，则需要继承文件流和网络流，并重写方法</span></span><br><span class="line"><span class="comment">假如又需要加密和缓冲同时进行，则又需要进行一次继承</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stream</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* str)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">read</span><span class="params">(<span class="type">char</span>* str)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FileStream</span> : <span class="keyword">public</span> Stream</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* str)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CryptoFileStream</span> : <span class="keyword">public</span> FileStream</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* str)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="comment">//继续向下继承，发现有很多相同的地方</span></span><br><span class="line"><span class="comment">//所以我们进行改进，将继承改为组合</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FileStream</span>:<span class="keyword">public</span> Stream</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//使用继承来规范接口</span></span><br><span class="line">    Stream* stream;</span><br><span class="line">    <span class="comment">//Stream* stream=new Stream();</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* str)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        stream-&gt;<span class="built_in">write</span>(str);</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CryptoFileStream</span>:<span class="keyword">public</span> Stream</span><br><span class="line">&#123;</span><br><span class="line">    FileStream* stream;</span><br><span class="line">    <span class="comment">//Stream* stream=new FileStream();</span></span><br><span class="line">    <span class="comment">//保证在编译期相同，运行时多态</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* str)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        stream-&gt;<span class="built_in">write</span>(str);</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//可以增加构造函数，使编译时装配改为运行时装配</span></span><br><span class="line"><span class="comment">//eg:</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FileStream</span>:<span class="keyword">public</span> Stream</span><br><span class="line">&#123;</span><br><span class="line">    Stream* stream;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">FileStream</span>(Stream* stream):<span class="built_in">stream</span>(stream)&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CryptoFileStream</span>:<span class="keyword">public</span> Stream</span><br><span class="line">&#123;</span><br><span class="line">    Stream* stream;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">FileStream</span>(Stream* stream):<span class="built_in">stream</span>(stream)&#123;&#125;</span><br><span class="line">&#125;;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Stream* stream=<span class="keyword">new</span> <span class="built_in">Stream</span>();</span><br><span class="line">    FileStream* fileStream=<span class="keyword">new</span> <span class="built_in">FileStream</span>(stream);</span><br><span class="line">    CryptoFileStream* cryptoFileStream=<span class="keyword">new</span> <span class="built_in">CryptoFileStream</span>(FileStream);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+    
+    <a class="article-more-a" href="/2023/10/11/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F2/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/11/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F2/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-计算机网络基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" target="_blank">计算机网络基础</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="archive-article-date">
+        <time datetime="2023-10-09T12:54:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-09</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="TCP的三次握手"><a href="#TCP的三次握手" class="headerlink" title="TCP的三次握手"></a>TCP的三次握手</h1><ol>
+<li>客户端向服务器发送一个connect请求</li>
+<li>服务器收到请求后，会向客户端发送一个connect确认</li>
+<li>客户端收到connect确认后，会向服务器发送一个connect确认</li>
+</ol>
+<h1 id="TCP的四次挥手"><a href="#TCP的四次挥手" class="headerlink" title="TCP的四次挥手"></a>TCP的四次挥手</h1><p>哪一方发起结束请求都是可以的，我们假设客户端发出close请求</p>
 <ol>
-<li>堆的堆顶元素是最大（或最小）的。</li>
-<li>堆中每个节点的值都大于（或小于）其左右孩子节点的值。</li>
+<li>客户端向服务器发送一个close请求</li>
+<li>服务器针对客户端的FIN确认应答</li>
+<li>服务端请求断开连接</li>
+<li>客户端针对服务器的请求确认应答</li>
 </ol>
-<h2 id="堆的实现"><a href="#堆的实现" class="headerlink" title="堆的实现"></a>堆的实现</h2><p>以小顶堆为例，因为堆是一棵完全二叉树，所以可以使用数组来模拟堆。</p>
-<p>假设我们现在有一数组，可以将该数组调整为堆，调整时，需要从最后一个非叶子节点开始调整，因为叶子节点没有孩子节点，所以调整时，只需要调整非叶子节点即可，它的整体调整过程是自下而上然后自上而下的。</p>
-<p>调整过程：比较节点与它的左右孩子。将最小的节点放在父节点。</p>
-<p>假设有一数组需要调整为堆，数组下标从0开始，从n&#x2F;2-2位置开始调整，一直到0的位置。<br>假如要调整为大顶堆，代码如下：<br>本段代码将数组调整为一个大顶堆，若要调整为小顶堆，只需要改变比较条件即可（将大于号改为小于号）——将最大值置于父节点。</p>
-    
-    <a class="article-more-a" href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/#more">more >></a>
-    
+<h1 id="为什么建立连接需要三次握手，关闭连接需要四次挥手？"><a href="#为什么建立连接需要三次握手，关闭连接需要四次挥手？" class="headerlink" title="为什么建立连接需要三次握手，关闭连接需要四次挥手？"></a>为什么建立连接需要三次握手，关闭连接需要四次挥手？</h1>
     
 
     
@@ -362,15 +1211,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">堆</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机网络</a>
         		</li>
       		
 		</ul>
@@ -391,901 +1232,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-essay/虚幻Niagara使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/" target="_blank">虚幻Niagara使用</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/" class="archive-article-date">
-        <time datetime="2023-09-23T09:55:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="启用Niagara"><a href="#启用Niagara" class="headerlink" title="启用Niagara"></a>启用Niagara</h1><p>在新版虚幻引擎中，Niagara已经集成到引擎中，无需额外安装。</p>
-<p>在Edit-Plugins-FX中可以找到Niagara，勾选后重启编辑器即可。</p>
-<p>安装完成后在内容浏览器中右键可以在FX中找到包含Niagara的内容。</p>
-<p>这里只是在C++和蓝团中如何使用Niagara，并不自己创建Niagara，关于如何创建可以参考官方文档。</p>
-<h1 id="使用Niagara"><a href="#使用Niagara" class="headerlink" title="使用Niagara"></a>使用Niagara</h1><h2 id="在C-中使用Niagara"><a href="#在C-中使用Niagara" class="headerlink" title="在C++中使用Niagara"></a>在C++中使用Niagara</h2><p>要使用Niagara，首先要将Niagara的模块添加进入工程中：<br>打开工程，在build.cs中添加：”Niagara”，使该模块添加如工程中。</p>
-<p>需要在C++中创建一个NiagaraSystem,并添加到需要使用的物体上。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加头文件</span></span><br><span class="line"><span class="comment">//如果报错就添加完整路径或包含上一级文件</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraFunctionLibrary.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraSystem.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraComponent.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">UPROPERTY</span>(EditDefaultsOnly, Category = <span class="string">&quot;Niagara&quot;</span>)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UNiagaraSystem</span>* NiagaraSystem;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在类中添加使用函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">FireNiagara</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>对使用函数作出实现：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProjectName::FireNiagara</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="keyword">if</span>(NiagaraSystem)&#123;     </span><br><span class="line">        NiagaraComponet=UNiagaraFunctionLibrary::<span class="built_in">SpawnSystemAttached</span>(FireNiagara,RootComponent,NAME_None,FVector::ZeroVector,FRotator::ZeroRotator,FVector::OneVector,EAttachLocation::Type::KeepRelativeOffset,<span class="literal">true</span>,ENCPoolMethod::None);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    函数声明：参数名称为其含义，可以看到函数返回一个NiagaraComponent，所以可以在头文件中声明一个NiagaraComponent变量，在使用使直接将函数返回值赋值给该变量。（感觉不用也可以，还没试过doge）</span></span><br><span class="line"><span class="comment">    UNiagaraComponent* UNiagaraFunctionLibrary::SpawnSystemAttached(UNiagaraSystem* SystemTemplate,USceneComponent* AttachToComponent,</span></span><br><span class="line"><span class="comment">    FName AttachPointName,FVector Location,FRotator Rotation,FVector Scale,EAttachLocation::Type LocationType,bool bAutoDestroy,</span></span><br><span class="line"><span class="comment">    ENCPoolMethod PoolingMethod,bool bAutoActivate,bool bPreCullCheck)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者另一种实现</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProjectName::FireNiagara</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(NiagaraSystem)&#123;</span><br><span class="line">        NiagaraComponet=UNiagaraFunctionLibrary::<span class="built_in">SpawnSystemAtLocation</span>(<span class="built_in">Getworld</span>(),FireNiagara,<span class="built_in">GetActorLocation</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    函数声明：一般使用时只需要添加前三个参数即可</span></span><br><span class="line"><span class="comment">    UNiagaraComponent* SpawnSystemAtLocation(const UObject* WorldContextObject, UNiagaraSystem* SystemTemplate, FVector SpawnLocation, </span></span><br><span class="line"><span class="comment">    FRotator SpawnRotation, FVector Scale, bool bAutoDestroy, bool bAutoActivate, ENCPoolMethod PoolingMethod, bool bPreCullCheck)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="在蓝图中使用Niagara"><a href="#在蓝图中使用Niagara" class="headerlink" title="在蓝图中使用Niagara"></a>在蓝图中使用Niagara</h2><p>在蓝图中使用就很简单了，直接搜索Spawn System Attach 或者 Spawn System at Location,参数于C++中相同，直接按照需求填入即可。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>只是使用现成的System并没有什么难度，但自己实现一个Niagara比普通粒子效果要复杂得多。</p>
-<p>更多细节以及API可以查看官方文档：<br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/RenderingAndGraphics/Niagara/">https://docs.unrealengine.com/4.27/zh-CN/RenderingAndGraphics/Niagara/</a><br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraFunctionLibrary/">https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraFunctionLibrary/</a><br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraComponent/">https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraComponent/</a></p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Niagara</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-essay/虚幻反射机制" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" target="_blank">虚幻反射机制浅析</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" class="archive-article-date">
-        <time datetime="2023-09-23T09:53:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="虚幻的反射"><a href="#虚幻的反射" class="headerlink" title="虚幻的反射"></a>虚幻的反射</h1><p>反射是虚幻引擎中的基础技术，虚幻中的细节面板、序列化、垃圾回收、蓝图与C++交互等功能都依赖于反射。但原生C++并不支持反射，因此虚幻拥有一套自己的反射系统。</p>
-<p>本文将对虚幻的反射机制进行浅析，更多信息可以查看工程文件中的generated和Marcos源码文件，里面有对反射更详细的解释。</p>
-<h1 id="反射的简要机制"><a href="#反射的简要机制" class="headerlink" title="反射的简要机制"></a>反射的简要机制</h1><p><em>Unreal Build Tool(UBT)和Unreal Header Tool(UHT)<em>两个协同工作来生成运行时反射需要的数据。UBT通过扫描头文件，记录任何至少有一个反射类型的头文件的模块。如果其中任意一个头文件从上一次编译起发生了变化，那么UHT就会被调用来利用和更新反射数据。</em>UHT分析头文件，创建一系列反射数据</em>，并且生成包含反射数据的C++代码,放到每一个模块的generated文件中，使用标记宏标记的数据编译后可以在generated文件中看到，使用了一些宏对数据进行包装。</p>
-<p>用生成的C++代码来存储反射数据的一个最大好处就是，它可以保证跟二进制做到同步,不会加载陈旧或者过时的反射数据，因为它是跟引擎的其它代码同时编译的，并且它会在程序启动的时候使用C++表达式来计算成员偏移等，而不是通过针对特定平台&#x2F;编译器&#x2F;优化的组合中进行逆向工程。</p>
-    
-    <a class="article-more-a" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">反射</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-essay/Cpp反射" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/" target="_blank">C++反射</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/" class="archive-article-date">
-        <time datetime="2023-09-23T07:02:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="反射的概念"><a href="#反射的概念" class="headerlink" title="反射的概念"></a>反射的概念</h1><p>允许程序运行时获取类内部信息，并且能操作对象的内部属性和方法。</p>
-<p>但C++本身并没有反射的概念，需要通过第三方库来实现。</p>
-<p>反射的目标：</p>
-<ol>
-<li>类对象反射。</li>
-<li>类成员数据反射。</li>
-<li>类成员函数反射。</li>
-</ol>
-<p>注册时成员为public作用域<br>通过注册宏实现反射功能</p>
-    
-    <a class="article-more-a" href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">反射</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/数据结构与算法-归并与统计排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：归并与统计排序</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:18:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>算法思想：先将需要排序的元素分开，在合并的过程中将元素进行排序，最终得到一个有序数组。<br>分开方法：逻辑二分。</p>
-<p>模拟：将数组拆分为单个元素<br><img src="/Pic/Sort/%E6%8B%86%E5%88%86.jpg"></p>
-    
-    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/数据结构与算法-选择排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：选择排序</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:18:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h1><p>每次从乱序区中选择一个最小的排序<br>分为简单选择排序和堆排序</p>
-<h1 id="简单选择排序"><a href="#简单选择排序" class="headerlink" title="简单选择排序"></a>简单选择排序</h1><p>每次遍历都找到一个最小的元素，放在乱序区的第一个位置。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">SelectSort</span><span class="params">(<span class="type">int</span> arr[], <span class="type">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">        <span class="type">int</span> Min=i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=i+<span class="number">1</span>;j&lt;n;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(arr[j]&lt;arr[Min])&#123;</span><br><span class="line">                Min=j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">swap</span>(arr[i],arr[Min]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    
-    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/数据结构与算法-交换排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：交换排序</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:17:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="交换排序"><a href="#交换排序" class="headerlink" title="交换排序"></a>交换排序</h1><p>基于比较的排序算法，通过不断交换元素的位置，使得排序的元素达到有序。<br>主要有冒泡排序和快速排序。</p>
-<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>冒泡排序思路与实现都很简单，通过不断比较两个相邻的元素，如果第一个元素比第二个元素大，则交换两个元素的位置，这样循环一轮下来，最大的元素就浮到了最右边。</p>
-<p>同样将数组分为待排区和有序区，实现如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BubbleSort</span><span class="params">(<span class="type">int</span>* arr, <span class="type">int</span> n)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n<span class="number">-1</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;n-i<span class="number">-1</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(arr[j]&gt;arr[j+<span class="number">1</span>])&#123;</span><br><span class="line">                <span class="built_in">swap</span>(arr[j],arr[j+<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-    
-    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/数据结构与算法-插入排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：插入排序</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:17:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="有关排序的一些概念"><a href="#有关排序的一些概念" class="headerlink" title="有关排序的一些概念"></a>有关排序的一些概念</h1><p>时间复杂度：一个算法执行所耗费的时间。<br>空间复杂度：运行完一个程序所需内存的大小。<br>原地排序：空间复杂度为 O(1)，不需要申请额外的空间。<br>内部排序：待排序的元素全部存放在内存中。<br>外部排序：待排序元素很多，需要从外存中读取元素。<br>稳定性：排序前后两个相同元素的相对位置不变。</p>
-    
-    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/数据结构与算法-拓扑排序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：拓扑排序</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:16:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h1><h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><ol>
-<li>有向无环图：有向说明图的路径是有方向的，无环说明图的路径不能成环。</li>
-<li>拓扑序列：设一个具有n个顶点的有向图，其中顶点序列V1—Vn满足一条路径，若Vi必须在Vj之前，则称这个顶点序列为拓扑序列。</li>
-<li>拓扑排序：按照顶点的依赖关系进行排序，使得没有前驱的顶点排在最前，没有后继的顶点排在后面，直到所有节点都被移除。</li>
-</ol>
-<h2 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h2><p>它的思路总结起来只有两步：</p>
-<ol>
-<li>在有向图中选择一个没有前驱的顶点并输出。</li>
-<li>删除该顶点和以它为尾的弧。</li>
-<li>重复上述两步直到所有顶点都被输出，或者当前图中不存在无前驱的顶点为止。</li>
-</ol>
-    
-    <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">图</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/10/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">展开全文 >></a>
     </p>
     
 
@@ -1317,7 +1264,7 @@
   
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1440,43 +1387,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">排序</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">堆</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">散列表</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1492,7 +1411,47 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">排序</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">堆</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">散列表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
             
             <div class="clearfix"></div>
