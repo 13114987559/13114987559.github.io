@@ -18,7 +18,7 @@
 <meta property="og:description" content="虚幻多线程简介虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。 虚幻多线程的使用创建线程我们创建一个类并继承FRunnable，重写Init、Ru">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-25T14:27:35.000Z">
-<meta property="article:modified_time" content="2023-10-16T14:28:06.173Z">
+<meta property="article:modified_time" content="2023-11-04T09:47:16.687Z">
 <meta property="article:author" content="KongXinQing">
 <meta property="article:tag" content="Cpp">
 <meta property="article:tag" content="UE">
@@ -225,7 +225,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">639字</span>
+      <span class="post-count">644字</span>
     </span>
   </span>
 
@@ -267,6 +267,7 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMyActor::BeginThread</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    UMyThread* MyThread = <span class="keyword">new</span> <span class="built_in">UMyThread</span>(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//FRunnableThread* RunnableThread=FRunnableThread::Create(MyThread, TEXT(&quot;MyThread&quot;), 0, TPri_Normal);</span></span><br><span class="line">    <span class="comment">//第一个参数为线程类，第二个参数为线程名，第三个参数为线程优先级，第四个参数为线程堆栈大小</span></span><br><span class="line"></span><br><span class="line">    FRunnableThread* RunnableThread=FRunnableThread::<span class="built_in">Create</span>(MyThread, <span class="built_in">TEXT</span>(<span class="string">&quot;MyThread&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>将Actor拖入场景中，此时运行游戏，按下输入事件，如果看到打印消息并且物体移动，则说明线程创建并运行成功。<br>更多详细信息可以查看官方文档：<a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/HAL/">https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/HAL/</a> 在其中的FRunnable和FRunnableThread等文档中可以找到更多的信息。<br>在知乎中本篇文章可以学习比较详细的使用<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/133921916">https://zhuanlan.zhihu.com/p/133921916</a> </p>
+<p>后续待更新…</p>
 
     
 
@@ -567,6 +568,10 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
               </li>
              
@@ -575,15 +580,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -595,11 +592,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -608,6 +605,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -631,11 +636,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
             
             <div class="clearfix"></div>

@@ -10,15 +10,15 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="单例模式有些情况下需要保证一个类在系统中只有一个实例，才能保证它的正确性。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869&#x2F;&#x2F;第一个版本，我们将类构造函数设置为私有class Single">
+  <meta name="description" content="单例模式有些情况下需要保证一个类在系统中只有一个实例，才能保证它的正确性。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="设计模式（四）">
 <meta property="og:url" content="https://13114987559.github.io/2023/10/13/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F4/index.html">
 <meta property="og:site_name" content="KongXinQing~">
-<meta property="og:description" content="单例模式有些情况下需要保证一个类在系统中只有一个实例，才能保证它的正确性。 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869&#x2F;&#x2F;第一个版本，我们将类构造函数设置为私有class Single">
+<meta property="og:description" content="单例模式有些情况下需要保证一个类在系统中只有一个实例，才能保证它的正确性。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-10-13T08:15:23.000Z">
-<meta property="article:modified_time" content="2023-10-16T14:58:03.572Z">
+<meta property="article:modified_time" content="2023-11-04T09:48:32.671Z">
 <meta property="article:author" content="KongXinQing">
 <meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
@@ -244,6 +244,7 @@
   <div class="article-entry" itemprop="articleBody">
     
     <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><p>有些情况下需要保证一个类在系统中只有一个实例，才能保证它的正确性。</p>
+<span id="more"></span>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//第一个版本，我们将类构造函数设置为私有</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">Singleton</span>();</span><br><span class="line">    <span class="built_in">Singleton</span>(<span class="type">const</span> Singleton&amp;);</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> Singleton* <span class="title">GetInstance</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="type">static</span> Singleton* Instance;</span><br><span class="line">&#125;；</span><br><span class="line"></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(Instance == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> Instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Instance;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">当实例为空时，则返回一个新创建的对象；当第二次调用时，返回唯一变量</span></span><br><span class="line"><span class="comment">但是进入多线程环境时，若两个线程同时调用GetInstance()，则有可能两个线程同时创建一个实例</span></span><br><span class="line"><span class="comment">因此为了实现多线程安全版本，需要对类进行改进</span></span><br><span class="line"><span class="comment">1. 可以声明一把锁，对GetInstance()进行加锁</span></span><br><span class="line"><span class="comment">    但在高并发环境下所带来的性能损耗是很大的</span></span><br><span class="line"><span class="comment">2. 可以使用双重检查加锁，在第一次判断Instance是否为空时，对Instance进行加锁</span></span><br><span class="line"><span class="comment">    Instance = new Singleton() 在CPU层应先分配内存，再调用构造器，最后将内存地址交给Instance</span></span><br><span class="line"><span class="comment">    但在实际运行时上面的代码会先调用构造器，再分配内存，最后将内存地址交给Instance</span></span><br><span class="line"><span class="comment">    可能会出现A线程执行new时，B线程进入第一层if，发现Instance不为空，最后B线程返回一个分配了内存但没有</span></span><br><span class="line"><span class="comment">    调用构造器的对象，导致程序崩溃</span></span><br><span class="line"><span class="comment">3. 可以使用静态局部变量，在类第一次加载时，会自动调用构造器，保证单例的唯一性</span></span><br><span class="line"><span class="comment">    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 1.</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Lock lock;</span><br><span class="line">    <span class="keyword">if</span>(Instance == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> Instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2.</span></span><br><span class="line"><span class="function">Singleton* <span class="title">Singleton::GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(Instance == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        Lock lock;</span><br><span class="line">        <span class="keyword">if</span>(Instance == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            Instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Instance;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3.</span></span><br><span class="line"><span class="keyword">class</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> Singleton* Instance = <span class="keyword">new</span> <span class="built_in">Singleton</span>();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">static</span> Singleton* <span class="title">GetInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 
@@ -542,6 +543,10 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
               </li>
              
@@ -550,15 +555,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -570,11 +567,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -583,6 +580,14 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -606,11 +611,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
             
             <div class="clearfix"></div>
