@@ -197,6 +197,167 @@
             
 
   
+    <article id="post-essay/虚幻反射的基础应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/11/08/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/" target="_blank">虚幻反射的基础应用</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/11/08/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/" class="archive-article-date">
+        <time datetime="2023-11-08T13:47:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-08</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="通过反射获取类的名称"><a href="#通过反射获取类的名称" class="headerlink" title="通过反射获取类的名称"></a>通过反射获取类的名称</h1><p>通过继承自UObject的类可以获取到类名。<br>假如声明了一个名为Player的类，并在GameMode中实例化了一个Player，则可以通过GatName获取到类的名称。<br>Player的声明：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PROJECTNAME_API</span> UPlayer : <span class="keyword">public</span> UObject</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在GameMode中实例化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AProjectGameMode::<span class="built_in">AProjectGameMode</span>()</span><br><span class="line">&#123;</span><br><span class="line">    UPlayer* Player=<span class="built_in">NewObject</span>&lt;UPlayer&gt;();</span><br><span class="line">    UClass* PlayerClass=Player-&gt;<span class="built_in">GetClass</span>();</span><br><span class="line">    FName PlayerName=PlayerClass-&gt;<span class="built_in">GetFName</span>();</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Player Name is :%s&quot;</span>), *PlayerName.<span class="built_in">ToString</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>选择GameMode即可看到日志输出：Player Name is :UPlayer</p>
+<h1 id="获取与设置类字符串属性"><a href="#获取与设置类字符串属性" class="headerlink" title="获取与设置类字符串属性"></a>获取与设置类字符串属性</h1><p>现在UPlayer类中声明一个FString,UPROPERTY宏是必要的:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UPROPERTY</span>()</span><br><span class="line">FString TestName=<span class="string">&quot;MyName&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>同样在GameMode中进行操作：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (FProperty* Property = PlayerClass-&gt;PropertyLink; Property; Property = Property-&gt;PropertyLinkNext) &#123;</span><br><span class="line">    FString PropertyName=Property-&gt;<span class="built_in">GetName</span>();</span><br><span class="line">    FString PropertyType=Property-&gt;<span class="built_in">GetCPPType</span>();</span><br><span class="line">    <span class="keyword">if</span> (PropertyType == <span class="string">&quot;FString&quot;</span>) &#123;</span><br><span class="line">        <span class="comment">//类型转化</span></span><br><span class="line">        FStrProperty* StringProperty=<span class="built_in">CastField</span>&lt;FStrProperty&gt;(Property);</span><br><span class="line">        <span class="comment">//声明一个无类型的指针，ContainerPtrToValuePtr函数将返回一个指向属性的指针</span></span><br><span class="line">        <span class="comment">//Player是实例化对象，可以有多个，填入需要的那一个</span></span><br><span class="line">        <span class="type">void</span>* Addr=StringProperty-&gt;<span class="built_in">ContainerPtrToValuePtr</span>&lt;<span class="type">void</span>&gt;(Player);</span><br><span class="line">        <span class="comment">//获取属性值，已经假定为FString类型</span></span><br><span class="line">        FString PropertyValue=StringProperty-&gt;<span class="built_in">GetPropertyValue</span>(Addr);</span><br><span class="line">        <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The PlayerClass&#x27;s Name is :%s ,Type is :%s ,Value is :%s&quot;</span>),*PropertyName,*PropertyType,*PropertyValue);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>便能在日志中看到：”The PlayerClass’s Name is :TestName ,Type is :FString ,Value is :MyName”</p>
+<p>现在来设置这个属性,只需将Get改为Set，并赋入新值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">StringProperty-&gt;<span class="built_in">SetPropertyValue</span>(Addr,<span class="built_in">TEXT</span>(<span class="string">&quot;NewName&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>同样可以在日志中看到：”The PlayerClass’s Name is :TestName ,Type is :FString ,Value is :NewName”</p>
+<h1 id="获取类的函数"><a href="#获取类的函数" class="headerlink" title="获取类的函数"></a>获取类的函数</h1><p>操作方法类似，需要一个迭代器来获取类的成员函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(TFieldIterator&lt;UFuntion&gt; <span class="built_in">FunctionIterator</span>(PlayerClass);FunctionIterator;++FunctionIterator)&#123;</span><br><span class="line">    FString FunctionName=FunctionIterator-&gt;<span class="built_in">GetName</span>();</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The PlayerClass&#x27;s Functions&#x27; name is :%s&quot;</span>),*FunctionName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行后在日志中可以看到：”The PlayerClass’s Functions’ name is :ExecuteUbergraph”<br>这是UE为类默认添加的一个方法，我们在类中添加一个自己的函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UFUNCTION</span>()</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestFunction</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>随后再次执行，便可以看到一条额外的日志：”The PlayerClass’s Functions’ name is :TestFunction”</p>
+<p>除了能够获取名称外，还可以获取参数与返回值类型，首先对TestFunction进行修改：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UFUNCTION</span>()</span><br><span class="line"><span class="function">int32 <span class="title">TestFunction</span><span class="params">(int32 PassParam)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>随后嵌套一个迭代器进行访问：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(TFieldIterator&lt;FProperty&gt; <span class="built_in">ParamIterator</span>(*FunctionIterator);ParamIterator;++ParamIterator)&#123;</span><br><span class="line">    FString ParamType=ParamIterator-&gt;<span class="built_in">GetCPPType</span>();</span><br><span class="line">    FString ParamName=ParamIterator-&gt;<span class="built_in">GetName</span>();</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The PlayerClass&#x27;s Functions&#x27; Parameter&#x27;s type is :%s ,Name is :%s&quot;</span>),*ParamType,*ParamName);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在日志中可以看到函数的返回值被作为参数信息获取到，类型为int32，名称为ReturnValue。</p>
+<p>还可以获取到参数的标记(Flags),标记是一个枚举类型，以十六进制表示，并且可以由多个枚举组合而成，可以将得到的十六进制数按位数拆分查找即可知道参数的类型，</p>
+<p>在内层循环中添加如下代码来查看参数类型：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">EPropertyFlags ParamFlags=ParamIterator-&gt;<span class="built_in">GetPropertyFlags</span>();</span><br><span class="line"><span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The PlayerClass&#x27;s Functions&#x27; Parameter&#x27;s Flags is :%d&quot;</span>),ParamFlags);</span><br></pre></td></tr></table></figure>
+
+<h1 id="获取父类名称"><a href="#获取父类名称" class="headerlink" title="获取父类名称"></a>获取父类名称</h1><p>首先新建一个类，继承自PlayerObject，并命名为MainPlayerObject，同样在GameMode中进行操作，不同的是，要通过GetSuperClass获取父类名称：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">UMainPlayerObject* MainPlayer=<span class="built_in">NewObject</span>&lt;UMainPlayerObject&gt;();</span><br><span class="line">UClass* MainPlayerClass=MainPlayer-&gt;<span class="built_in">GetClass</span>()-&gt;<span class="built_in">GetSuperClass</span>();</span><br><span class="line">FName MainPlayerClassName=MainPlayerClass-&gt;<span class="built_in">GetFName</span>();</span><br><span class="line"><span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The MainPlayerObject&#x27;s SuperClass&#x27;s name is :%s&quot;</span>),*MainPlayerClassName.<span class="built_in">ToString</span>());</span><br></pre></td></tr></table></figure>
+
+<p>执行后便可在日志中看到：”The MainPlayerObject’s SuperClass’s name is :PlayerObject”</p>
+<h1 id="判断子类关系"><a href="#判断子类关系" class="headerlink" title="判断子类关系"></a>判断子类关系</h1><p>在虚幻中可以判断一个类是否为另一个类的子类，通过AClass.IsChildOf(BClass)即可判断：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(MainPlayerClass-&gt;<span class="built_in">IsChildOf</span>(PlayerObject))&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;MainPlayerObject is a Child of PlayerObject&quot;</span>));</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;MainPlayerObject is not a Child of PlayerObject&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行后可以在日志中看到输出：”MainPlayerObject is a Child of PlayerObject”</p>
+<p>此外还可以查看一个类的所有子类，通过GetDerivedClasses()实现<br>函数声明为：void GetDerivedClasses(const UClass* ClassToLookFor, TArray&lt;UClass*&gt;&amp; Results, bool bRecursive)<br>第一个参数为需要查找的类，第二个参数为查找结果，第三个参数为是否递归查找子类，即是否查找子类的子类<br>假如要查找PlayerObject类的所有子类，则可以写成：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TArray&lt;UClass*&gt; DerivedClasses;</span><br><span class="line"><span class="built_in">GetDerivedClasses</span>(PlayerObject::<span class="built_in">StaticClass</span>(),DerivedClasses,<span class="literal">false</span>);</span><br><span class="line"><span class="keyword">for</span>(int32 i=<span class="number">0</span>;i&lt;DerivedClasses.<span class="built_in">Num</span>();i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(DerivedClasses[i])&#123;</span><br><span class="line">        FName DerivedClassName=DerivedClasses[i]-&gt;<span class="built_in">GetFName</span>();</span><br><span class="line">        <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The DerivedClass&#x27;s name is :%s&quot;</span>),*DerivedClassName.<span class="built_in">ToString</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行后便可在日志中看到：”The DerivedClass’s name is :MainPlayerObject”</p>
+<h1 id="查找类生成的对象"><a href="#查找类生成的对象" class="headerlink" title="查找类生成的对象"></a>查找类生成的对象</h1><p>操作方法与查找子类的方法类似，将UClass<em>改为UObject</em>即可:<br>我们去查找UMainPlayerObject的实例化对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">UMainPlayerObject* MainPlayer=<span class="built_in">NewObject</span>&lt;UMainPlayerObject&gt;(<span class="keyword">this</span>,<span class="built_in">TEXT</span>(<span class="string">&quot;MainPlayerObject&quot;</span>));</span><br><span class="line"></span><br><span class="line">TArray&lt;UObject*&gt; ObjectArray;</span><br><span class="line"><span class="built_in">GetObjectOfClass</span>(UMainPlayerObject::<span class="built_in">StaticClass</span>(),ObjectArray,<span class="literal">false</span>);</span><br><span class="line"><span class="keyword">for</span>(UObject* MainPlayerObject:ObjectArray)&#123;</span><br><span class="line">    <span class="keyword">if</span>(MainPlayerObject)&#123;</span><br><span class="line">        FString MainPlayerObjectName=MainPlayerObject-&gt;<span class="built_in">GetName</span>();</span><br><span class="line">        <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The UMainPlayerObject&#x27;s instance&#x27;s name is :%s&quot;</span>),*MainPlayerObjectName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行后便可在日志中看到输出：”The UMainPlayerObject’s instance’s name is :MainPlayerObject”</p>
+<h1 id="查找功能"><a href="#查找功能" class="headerlink" title="查找功能"></a>查找功能</h1><p>可以通过字符串查找某一类是否存在，通过FindObeject函数实现<br>来查找UMainPlayerObject类是否存在：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//类名称不加前缀，不需要写成UMainPlayerObject</span></span><br><span class="line">UClass* FindedClass=<span class="built_in">FindObject</span>&lt;UClass&gt;(ANY_PACKAGE,<span class="built_in">TEXT</span>(<span class="string">&quot;MainPlayerObject&quot;</span>),<span class="literal">true</span>);</span><br><span class="line"><span class="keyword">if</span>(FindedClass)&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The UMainPlayerObject class is exist&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行后便可在日志中看到输出：”The UMainPlayerObject class is exist”</p>
+<p>对于蓝图类的查找也是一样的，先新建一个蓝图，并命名为BP_Actor</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">UBlueprint* FindedBlueprint=<span class="built_in">FindObject</span>&lt;UBlueprint&gt;(ANY_PACKAGE,<span class="built_in">TEXT</span>(<span class="string">&quot;BP_Actor&quot;</span>),<span class="literal">true</span>);</span><br><span class="line"><span class="keyword">if</span>(FindedBlueprint)&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The BP_Actor blueprint is exist&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样执行后可以在日志中看到：”The BP_Actor blueprint is exist”</p>
+<p>还可以进一步操作，比如想知道查找到的这个类是否为Native类，可以通过FindedClass-&gt;IsNative()来判断<br>通过FindFunctionByName来查找某个类的方法</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/11/08/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-note/设计模式8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -526,8 +687,10 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>待更新…</p>
-
+    <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>虚幻容器时对同质资源进行管理的容器，包括TArray、TMap和TSet三种，均使用泛型进行创建，且不可创建在堆区，即不能使用new进行创建。<br>三种容器的操作与C++中的STL操作类似，提供的接口略有不同，但实现的功能几乎是相同的。</p>
+    
+    <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/#more">more >></a>
+    
     
 
     
@@ -640,49 +803,9 @@
 <li>渐进式：同样不需要终端程序执行，与实时式的区别在于不会立即回收对象，而是到达一定条件时才进行回收。</li>
 <li>非渐进式：与渐进式的区别在于立即回收对象。</li>
 </ul>
-<h2 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h2><h3 id="引用计数式"><a href="#引用计数式" class="headerlink" title="引用计数式"></a>引用计数式</h3><p>引用计数是即时且渐进式的</p>
-<ul>
-<li><p>优点：</p>
-<ol>
-<li>能够及时回收不需要的对象。</li>
-</ol>
-</li>
-<li><p>缺点</p>
-<ol>
-<li>修改对象时要更新旧对象的计数，增加则外的性能开销。</li>
-<li>要使用额外的空间来保存计数值。</li>
-<li>对于短生命周期的对象，频繁的分配和回收对象会导致内存碎片化严重。</li>
-<li>可能会出现环形引用的问题（不能正确调用析构对象造成内存泄漏）。</li>
-</ol>
-</li>
-</ul>
-<h3 id="标记清扫式"><a href="#标记清扫式" class="headerlink" title="标记清扫式"></a>标记清扫式</h3><p>通过扫描整个系统中对象的引用来判定对象的可达性，来判断对象是否需要回收。</p>
-<ul>
-<li><p>优点</p>
-<ol>
-<li>不会出现环形引用问题。</li>
-<li>不会有额外的性能开销。</li>
-<li>与用户程序分离。</li>
-</ol>
-</li>
-<li><p>缺点</p>
-<ol>
-<li>非实时式，需要用户停止程序才能进行垃圾回收。</li>
-<li>同样可能会增加内存碎片的数量。</li>
-<li>可能会对某些无用对象产生误判导致内存泄漏。</li>
-</ol>
-</li>
-</ul>
-<h3 id="虚幻的垃圾回收方式"><a href="#虚幻的垃圾回收方式" class="headerlink" title="虚幻的垃圾回收方式"></a>虚幻的垃圾回收方式</h3><p>虚幻主要采用的是标记-清扫式，主要分为以下几个阶段：</p>
-<ol>
-<li>第一阶段从根集合出发遍历所有可达对象，标记出可达对象和不可达对象。</li>
-<li>第二阶段渐进式清理不可达对象，UE会分帧清理它们避免卡顿。</li>
-</ol>
-<h1 id="虚幻垃圾回收的原理"><a href="#虚幻垃圾回收的原理" class="headerlink" title="虚幻垃圾回收的原理"></a>虚幻垃圾回收的原理</h1><h2 id="进行标记-清扫"><a href="#进行标记-清扫" class="headerlink" title="进行标记-清扫"></a>进行标记-清扫</h2><p>从根节点集合开始递归所有可达对象，并将其标记为可达；随后将没有标记的对象（不可达对象）进行清扫。</p>
-<h2 id="引发方式"><a href="#引发方式" class="headerlink" title="引发方式"></a>引发方式</h2><h3 id="主动引发"><a href="#主动引发" class="headerlink" title="主动引发"></a>主动引发</h3><p>在卸载一个资源后会立即调用一次垃圾回收，也可以调用ForceGarbageCollection()函数主动进行垃圾回收，或直接调用CollectGarbage()函数进行垃圾回收。</p>
-<h3 id="自动引发"><a href="#自动引发" class="headerlink" title="自动引发"></a>自动引发</h3><p>大部分情况下垃圾回收都是由虚幻自动引发的。<br>在world进行tick时，会调用UEngine::ConditionalGarbageCollect()函数对垃圾回收的条件进行判断，若满足回收条件则会进行垃圾回收。</p>
-<p>后续待更新…</p>
-
+    
+    <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/#more">more >></a>
+    
     
 
     
@@ -1158,114 +1281,6 @@
 
 
   
-    <article id="post-计算机网络基础" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/10/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" target="_blank">计算机网络基础</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/10/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="archive-article-date">
-        <time datetime="2023-10-09T12:54:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-09</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="TCP的三次握手"><a href="#TCP的三次握手" class="headerlink" title="TCP的三次握手"></a>TCP的三次握手</h1><ol>
-<li>客户端向服务器发送一个connect请求</li>
-<li>服务器收到请求后，会向客户端发送一个connect确认</li>
-<li>客户端收到connect确认后，会向服务器发送一个connect确认</li>
-</ol>
-<h1 id="TCP的四次挥手"><a href="#TCP的四次挥手" class="headerlink" title="TCP的四次挥手"></a>TCP的四次挥手</h1><p>哪一方发起结束请求都是可以的，我们假设客户端发出close请求</p>
-<ol>
-<li>客户端向服务器发送一个close请求</li>
-<li>服务器针对客户端的FIN确认应答</li>
-<li>服务端请求断开连接</li>
-<li>客户端针对服务器的请求确认应答</li>
-</ol>
-<h1 id="为什么建立连接需要三次握手，关闭连接需要四次挥手？"><a href="#为什么建立连接需要三次握手，关闭连接需要四次挥手？" class="headerlink" title="为什么建立连接需要三次握手，关闭连接需要四次挥手？"></a>为什么建立连接需要三次握手，关闭连接需要四次挥手？</h1>
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">计算机网络</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/10/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1399,6 +1414,10 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
@@ -1411,11 +1430,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1424,14 +1447,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">

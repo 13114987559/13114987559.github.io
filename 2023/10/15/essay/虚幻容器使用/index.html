@@ -10,15 +10,15 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="待更新…">
+  <meta name="description" content="简介虚幻容器时对同质资源进行管理的容器，包括TArray、TMap和TSet三种，均使用泛型进行创建，且不可创建在堆区，即不能使用new进行创建。三种容器的操作与C++中的STL操作类似，提供的接口略有不同，但实现的功能几乎是相同的。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="虚幻容器使用">
 <meta property="og:url" content="https://13114987559.github.io/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="KongXinQing~">
-<meta property="og:description" content="待更新…">
+<meta property="og:description" content="简介虚幻容器时对同质资源进行管理的容器，包括TArray、TMap和TSet三种，均使用泛型进行创建，且不可创建在堆区，即不能使用new进行创建。三种容器的操作与C++中的STL操作类似，提供的接口略有不同，但实现的功能几乎是相同的。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-10-15T08:34:59.000Z">
-<meta property="article:modified_time" content="2023-11-04T09:46:30.439Z">
+<meta property="article:modified_time" content="2023-11-13T14:05:48.453Z">
 <meta property="article:author" content="KongXinQing">
 <meta property="article:tag" content="Cpp">
 <meta property="article:tag" content="虚幻">
@@ -224,7 +224,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">3字</span>
+      <span class="post-count">1.3k字</span>
     </span>
   </span>
 
@@ -233,7 +233,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">5分</span>
     </span>
   </span>
 </div>
@@ -244,7 +244,70 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>待更新…</p>
+    <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>虚幻容器时对同质资源进行管理的容器，包括TArray、TMap和TSet三种，均使用泛型进行创建，且不可创建在堆区，即不能使用new进行创建。<br>三种容器的操作与C++中的STL操作类似，提供的接口略有不同，但实现的功能几乎是相同的。</p>
+<span id="more"></span>
+
+<h1 id="TArray"><a href="#TArray" class="headerlink" title="TArray"></a>TArray</h1><p>TArray是UE中的数组，也是最常用的容器，其速度快，内存消耗小，安全性高。</p>
+<!--more-->
+
+<h2 id="TArray创建"><a href="#TArray创建" class="headerlink" title="TArray创建"></a>TArray创建</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先声明一个容器，类型为int32</span></span><br><span class="line">TArray&lt;int32&gt; Array;</span><br><span class="line"></span><br><span class="line"><span class="comment">//对容器进行初始化，可以使用Init函数</span></span><br><span class="line">Array.<span class="built_in">Init</span>(<span class="number">10</span>，<span class="number">5</span>);</span><br><span class="line"><span class="comment">//其等价于Array=&#123;10,10,10,10,10&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//也可以像原生C++那样使用赋值运算或直接初始化</span></span><br><span class="line">Array = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;;</span><br><span class="line"><span class="function">TArray&lt;int32&gt; <span class="title">Array2</span><span class="params">(<span class="number">0</span>,<span class="number">2</span>,<span class="number">3</span>)</span></span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="向数组中添加元素"><a href="#向数组中添加元素" class="headerlink" title="向数组中添加元素"></a>向数组中添加元素</h2><p>添加可以使用Add和Emplace函数，二者的区别在于：</p>
+<ol>
+<li>Add将元素类型的实例复制到数组中。</li>
+<li>Emplace将元素类型的实例直接构造到数组中。</li>
+<li>Emplace可以避免创建临时对象，效率会更高些，但最终结果与Add是相同的。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TArray&lt;int32&gt; Array;</span><br><span class="line"></span><br><span class="line"><span class="comment">//向Array中添加几个元素</span></span><br><span class="line">Array.<span class="built_in">Add</span>(<span class="number">1</span>);</span><br><span class="line">Array.<span class="built_in">Add</span>(<span class="number">2</span>);</span><br><span class="line">Array.<span class="built_in">Emplace</span>(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<p>除此之外，还可以使用AddUnique和Append来添加，AddUnique会检查数组中是否已经存在该元素，不存在则添加；Append优势在于可以一次添加多个元素。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Array.<span class="built_in">AddUnique</span>(<span class="number">4</span>); <span class="comment">//添加成功</span></span><br><span class="line">Array.<span class="built_in">AddUnique</span>(<span class="number">4</span>); <span class="comment">//添加失败，因为4已经存在</span></span><br><span class="line">Array.<span class="built_in">Append</span>(&#123;<span class="number">5</span>,<span class="number">6</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//也可以使用如下方法Apped</span></span><br><span class="line">TArray&lt;itn32&gt; Temp&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,&#125;;</span><br><span class="line">Array.<span class="built_in">Append</span>(Temp,Temp.<span class="built_in">Num</span>());</span><br></pre></td></tr></table></figure>
+
+<p>以上都是在末尾添加元素，但如果想在指定位置添加元素，则可以使用Insert函数，用法与Add类似，只不过要加上插入位置。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Array.<span class="built_in">Insert</span>(<span class="number">0</span>,<span class="number">2</span>); <span class="comment">//在第二个位置添加元素0</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="TArray的访问"><a href="#TArray的访问" class="headerlink" title="TArray的访问"></a>TArray的访问</h2><p>TArray既可以通过原生的for循环遍历访问(UE重载了[]运算符)，也可以使用迭代器进行访问。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(int32 i=<span class="number">0</span>;i &lt; Array.<span class="built_in">Num</span>();i++)&#123;</span><br><span class="line">    Array[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者使用auto</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span>&amp; Element : Array)&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用迭代器</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span>&amp; It=Array.<span class="built_in">CreateIterator</span>();It;++It)&#123;</span><br><span class="line">    <span class="comment">//对it进行解引用，操作与STL中操作类似</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="TArray的移除"><a href="#TArray的移除" class="headerlink" title="TArray的移除"></a>TArray的移除</h2><p>UE中提供了几种移除的方法：</p>
+<ol>
+<li>Remove，直接移除某个元素，会移除所有匹配的元素</li>
+<li>RemoveAt，移除指定位置的元素</li>
+<li>RemoveSingle，移除首个匹配元素</li>
+<li>RemoveAll，用于移除与谓词匹配的元素</li>
+<li>也可以使用Empty移除所有元素</li>
+</ol>
+<h2 id="TArray的其它操作"><a href="#TArray的其它操作" class="headerlink" title="TArray的其它操作"></a>TArray的其它操作</h2><ol>
+<li>获取数组大小：Num()</li>
+<li>重新设置数组大小：SetNum()</li>
+<li>查找某个元素：Array.Find(Element)</li>
+<li>是否包含某个元素：Array.Contains(Element)</li>
+<li>对数组进行排序：Array.Sort()</li>
+</ol>
+<h2 id="对数组进行堆操作"><a href="#对数组进行堆操作" class="headerlink" title="对数组进行堆操作"></a>对数组进行堆操作</h2><p>UE中对数组的堆操作进行了实现，并提供了以下接口：</p>
+<ol>
+<li>Heapify，可以将一个数组调整为堆，默认为小顶堆</li>
+<li>HeapPush，将新元素添加到堆</li>
+<li>HeapTop(Elem)，获取堆顶元素</li>
+<li>HeapRemoveAt，移除堆中某个索引位置的元素</li>
+</ol>
+<h1 id="TMap"><a href="#TMap" class="headerlink" title="TMap"></a>TMap</h1><p>与原生C++的map类似，TMap也是键值对的形式，并且键是唯一的，当有重复的键时，新的值将会替换旧值；在TMultiMap中，键可以重复，但值必须唯一。</p>
+<h2 id="TMap的创建与访问"><a href="#TMap的创建与访问" class="headerlink" title="TMap的创建与访问"></a>TMap的创建与访问</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建与原生C++类似，都是&lt;KeyType,ValueType&gt;的形式</span></span><br><span class="line">TMap&lt;int32,FString&gt; Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">//增加也是用Add来实现</span></span><br><span class="line">Map.<span class="built_in">Add</span>(<span class="number">0</span>,<span class="string">&quot;Zero&quot;</span>);</span><br><span class="line">Map.<span class="built_in">Add</span>(<span class="number">1</span>,<span class="string">&quot;One&quot;</span>);</span><br><span class="line">Map.<span class="built_in">Add</span>(<span class="number">2</span>,<span class="string">&quot;Two&quot;</span>);</span><br><span class="line"></span><br><span class="line">Map.<span class="built_in">Add</span>(<span class="number">0</span>,<span class="string">&quot;zero&quot;</span>); <span class="comment">//zero将替换Zero</span></span><br><span class="line">Map.<span class="built_in">Add</span>(<span class="number">4</span>); <span class="comment">//此时将产生一个键为4，值为空字符串的键值对</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//TMap同样可以使用Emplace来替代Add进行增加操作来避免临时对象产生</span></span><br><span class="line">Map.<span class="built_in">Emplace</span>(<span class="number">0</span>,<span class="string">&quot;Zero&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//TMap同样支持使用Append来追加内容，以此来一次性嵌入多个键值对</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="对TMap进行迭代"><a href="#对TMap进行迭代" class="headerlink" title="对TMap进行迭代"></a>对TMap进行迭代</h2><p>迭代方法有两种，可以直接使用auto，也可以使用迭代器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span>&amp; Elem:Map)&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> It=Map.<span class="built_in">CreateIterator</span>();It;++It)&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="TMap的查找与移除"><a href="#TMap的查找与移除" class="headerlink" title="TMap的查找与移除"></a>TMap的查找与移除</h2><p>TMap对[]实现了重载，可以直接使用Map[Key]进行查询，或者使用FindKey来查询Map中是否含有某个键，如果找到则会返回该键。</p>
+<p>对于TMap的移除，最直接的便是使用Remove(Key)来实现。<br>此外还提供了FindAndRemoveChecked和RemoveAndCopyValue两个函数，它们都可以移除某个键，但区别在于：</p>
+<ol>
+<li>FindAndRemoveChecked会返回被移除键所对应的值</li>
+<li>RemoveAndCopyValue的参数为(Key,RemovedValue),Key为要移除的键，RemovedValue为被移除键所对应的值，会通过参数的形式返回，而这个函数的返回值为bool，为true时表示移除成功，反之</li>
+</ol>
+<h2 id="TMap的补充操作"><a href="#TMap的补充操作" class="headerlink" title="TMap的补充操作"></a>TMap的补充操作</h2><p>TMap也可以向TArray那样进行排序，并且使用二元谓词进行排序，使用与STL类似</p>
+<p>TMap还重载了赋值操作，可以直接将一个Map赋值给新的Map，还可以使用Map[Key]&#x3D;Value来赋值</p>
+<h1 id="TSet"><a href="#TSet" class="headerlink" title="TSet"></a>TSet</h1><p>TSet将Value直接作为键来使用，作为一种快速容器，可以在不要求元素顺序的情况下用来存储唯一元素</p>
+<p>对TSet的操作基本都与TArray和TMap类似，就不再过不叙述</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/TArrays/">https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/TArrays/</a><br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/TMap/">https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/TMap/</a><br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/TSet/">https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWithCPP/UnrealArchitecture/TSet/</a></p>
 
     
 
@@ -405,7 +468,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TArray"><span class="toc-number">2.</span> <span class="toc-text">TArray</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TArray%E5%88%9B%E5%BB%BA"><span class="toc-number">2.1.</span> <span class="toc-text">TArray创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%91%E6%95%B0%E7%BB%84%E4%B8%AD%E6%B7%BB%E5%8A%A0%E5%85%83%E7%B4%A0"><span class="toc-number">2.2.</span> <span class="toc-text">向数组中添加元素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TArray%E7%9A%84%E8%AE%BF%E9%97%AE"><span class="toc-number">2.3.</span> <span class="toc-text">TArray的访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TArray%E7%9A%84%E7%A7%BB%E9%99%A4"><span class="toc-number">2.4.</span> <span class="toc-text">TArray的移除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TArray%E7%9A%84%E5%85%B6%E5%AE%83%E6%93%8D%E4%BD%9C"><span class="toc-number">2.5.</span> <span class="toc-text">TArray的其它操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E6%95%B0%E7%BB%84%E8%BF%9B%E8%A1%8C%E5%A0%86%E6%93%8D%E4%BD%9C"><span class="toc-number">2.6.</span> <span class="toc-text">对数组进行堆操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TMap"><span class="toc-number">3.</span> <span class="toc-text">TMap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TMap%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E8%AE%BF%E9%97%AE"><span class="toc-number">3.1.</span> <span class="toc-text">TMap的创建与访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9TMap%E8%BF%9B%E8%A1%8C%E8%BF%AD%E4%BB%A3"><span class="toc-number">3.2.</span> <span class="toc-text">对TMap进行迭代</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TMap%E7%9A%84%E6%9F%A5%E6%89%BE%E4%B8%8E%E7%A7%BB%E9%99%A4"><span class="toc-number">3.3.</span> <span class="toc-text">TMap的查找与移除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TMap%E7%9A%84%E8%A1%A5%E5%85%85%E6%93%8D%E4%BD%9C"><span class="toc-number">3.4.</span> <span class="toc-text">TMap的补充操作</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TSet"><span class="toc-number">4.</span> <span class="toc-text">TSet</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-number">5.</span> <span class="toc-text">参考文档</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -553,6 +616,10 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
@@ -565,11 +632,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -578,14 +649,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">树</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">
