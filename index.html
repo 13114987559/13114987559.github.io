@@ -197,6 +197,161 @@
             
 
   
+    <article id="post-虚幻增强输入系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/" target="_blank">虚幻增强输入系统</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/" class="archive-article-date">
+        <time datetime="2023-11-17T14:07:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-17</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="增强输入系统"><a href="#增强输入系统" class="headerlink" title="增强输入系统"></a>增强输入系统</h1><p>增强输入系统与旧的虚幻输入系统相比，对触发传入的参数进行了升级，可以实现组合，长按等功能，用于处理复杂的输入逻辑。</p>
+<p>要启用增强输入系统，则首先在Pulgins中启用EnhancedInputPlugin插件，随后重新打开项目，在Project Settings-Input中找到Default Class，其中可以找到两个类设置，两者均选择Enhanced类。完成使用增强输入系统的初步设置。</p>
+<p>要在C++中使用，还需要一些额外的工作，在项目的Build.cs文件中的AddRange中添加*”EnhancedInput”*。</p>
+<p>完成所有的前置工作后，就可以在C++中使用增强输入系统了。</p>
+<h1 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h1><p>首先在内容浏览器中新建一个名为Input的文件夹用于保存所有输入，右键可以看到Input选项，在里面有Input Action和Input Mapping Context两个资产，这两个资产用于保存输入动作和输入映射上下文。</p>
+<h2 id="完成跳跃逻辑"><a href="#完成跳跃逻辑" class="headerlink" title="完成跳跃逻辑"></a>完成跳跃逻辑</h2><p>新建一个Input Action，命名为IA_Jump，并打开，我们主要关心面板中的Value Type和Triggers两个选项。</p>
+<p>在Value Type中可以选择值类型，分别为bool、float、Vector2D、Vector四个，分别代表瞬间动作，一维轴向输入，二维轴向输入以及三维轴向输入。</p>
+<p>在Triggers中选择触发方式，分别为Chorded Action（组合）、Combo、Down等等，意如其名。</p>
+<p>对于跳跃逻辑，选择bool作为值类型，Pressed和Released作为触发类型。</p>
+<p>进入VS中，在角色类（需要Input的类）中做如下声明：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加所需头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;EnhancedInputComponent.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;EnhancedInputSubsystems.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;InputActionValue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ENhancedInputLibrary.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//只做简短声明，主要为privateh和protected部分</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AMainCharacter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputAction* JumpAction;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* ActionContext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在绑定之前仍需要一些准备工作，进入到BeginPlay中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::BeginPlay</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Super::<span class="built_in">BeginPlay</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//添加Context的绑定，创建增强输入子系统，也可以在SetPlayerInputComponent中完成创建</span></span><br><span class="line">    <span class="keyword">if</span> (APlayerController* PlayerController = <span class="built_in">Cast</span>&lt;APlayerController&gt;(Controller))&#123;</span><br><span class="line">		<span class="keyword">if</span> (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::<span class="built_in">GetSubsystem</span>&lt;UEnhancedInputLocalPlayerSubsystem&gt;(PlayerController-&gt;<span class="built_in">GetLocalPlayer</span>()))&#123;</span><br><span class="line">			Subsystem-&gt;<span class="built_in">AddMappingContext</span>(ActionContext, <span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>正式进入绑定，在SetPlayerInputComponent中进行绑定：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::SetPlayerInputComponent</span><span class="params">(UInputComponent* PlayerInputComponent)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(UEnhancedInputComponent* EnhancedInputComponent=<span class="built_in">Cast</span>&lt;UEnhancedInputComponent&gt;(PlayerInputComponent))&#123;</span><br><span class="line">        <span class="comment">//进行绑定</span></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(JumpAction,ETriggerEvent::Started,<span class="keyword">this</span>,&amp;AMainCharacter::OnJump);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>OnJump的实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//因为不需要使用值，所以直接调用Jump函数即可</span></span><br><span class="line">    <span class="built_in">Jump</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>都完成后回到编辑器，打开创建的Context，对按键进行绑定，选择JumpAction并设置相应的按键。</p>
+<p>完成后编译，在蓝图中对暴露的Action和Context进行赋值，编译，运行后按下绑定的跳跃键角色就可以跳跃了。</p>
+<h2 id="绑定角色的移动和视角旋转"><a href="#绑定角色的移动和视角旋转" class="headerlink" title="绑定角色的移动和视角旋转"></a>绑定角色的移动和视角旋转</h2><p>过程与上述大致相同，不同在于对两个方法的实现上有差异。</p>
+<p>同样在类中添加新的成员：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AMainCharacter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">CharacterMove</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">CharacterLook</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputAction* JumpAction;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    <span class="function">UInputAction* MoveActionl</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="title">UPROPERTY</span><span class="params">(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span></span></span><br><span class="line"><span class="function">    UInputAction* LookAction</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* ActionContext;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* AxisContext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在BeginPlay中添加新的绑定：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Subsystem-&gt;<span class="built_in">AddMappingContext</span>(AxisContext, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在AxisContext中添加新的绑定：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::SetPlayerInputComponent</span><span class="params">(UInputComponent* PlayerInputComponent)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(UEnhancedInputComponent* EnhancedInputComponent=<span class="built_in">Cast</span>&lt;UEnhancedInputComponent&gt;(PlayerInputComponent))&#123;</span><br><span class="line">        <span class="comment">//进行绑定</span></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(JumpAction,ETriggerEvent::Started,<span class="keyword">this</span>,&amp;AMainCharacter::OnJump);</span><br><span class="line"></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(MoveAction,ETriggerEvent::Triggered,<span class="keyword">this</span>,&amp;AMainCharacter::CharacterMove);</span><br><span class="line"></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(LookAction,ETriggerEvent::Triggered,<span class="keyword">this</span>,&amp;AMainCharacter::CharacterLook);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Move和Look的实现，不同之处在于对输入值得获取：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::CharacterMove</span><span class="params">(<span class="type">const</span> FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FVector2D MoveValue=InputValue.<span class="built_in">Get</span>&lt;FVector2D&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//ForwardDir和RightDir为自定义的方向向量，根据不同的需求设置不同的方向</span></span><br><span class="line">    <span class="comment">//输入值可以直接使用InputValue.Get&lt;FVector2D&gt;().X和InputValue.Get&lt;FVector2D&gt;().Y;</span></span><br><span class="line">    <span class="built_in">AddMovementInput</span>(ForwardDir,MoveValue.X);</span><br><span class="line">    <span class="built_in">AddMovementInput</span>(RightDir,MoveValue.Y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::CharacterLook</span><span class="params">(<span class="type">const</span> FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">AddControllerYawInput</span>(InputValue.<span class="built_in">Get</span>&lt;FVector&gt;().X);</span><br><span class="line">	<span class="built_in">AddControllerPitchInput</span>(InputValue.<span class="built_in">Get</span>&lt;FVector&gt;().Y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样回到编辑器中对Action和Context进行绑定。</p>
+<p>将Action的Value Type设置为FVector2D。</p>
+<p>在Context中，设置两个Action，以Move举例：<br>分别设置四个按键（键盘）WASD，我们希望W前进，S后退，A向左，D向右，当实际按下的时候值为1，未按下时为0，为此我们需要做一些修改。</p>
+<p>在四个键的Modifiers中，添加一个元素并选择SWizzle Input Axis Values表示这是个轴向输入；对于AS两个键，额外增加Negate，用来反转输入，这样WASD就可以实现前后左右的输入。</p>
+<p>对于Look来说，我们选择鼠标，这与旧的虚幻输入事件类似，如果使用的是手柄，因为本身就是轴向的，所以考虑是否将值反转即可。</p>
+<p>至此就完成了基本的输入事件绑定。</p>
+<h1 id="增强输入的一些参数解释"><a href="#增强输入的一些参数解释" class="headerlink" title="增强输入的一些参数解释"></a>增强输入的一些参数解释</h1><p>在Action中已经对Value Type和Triggers做出了一些解释，就不在说明。</p>
+<p>在Action和Context中，都有一个Modifiers选择，Modifiers是对输入数据进行处理，就像上面的一样，我们需要对一些按键进行反转操作，就可以用Modifiers来处理。</p>
+<p>此外Modifiers来包含一些其他的处理方法：Dead Zone用来过滤无效的输入数据，对于手柄一些来说，摇杆可能会自己触发导致角色运动，为了解决这一问题可以选择一个Dead Zone来限制输入值。还有Negate用来反转输入，Scaler用于放大输入值等等。</p>
+<p>对于触发方式，在绑定时看到是ETriggerEvent的枚举类型，直接查看它的定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">ETriggerEvent</span> : uint8</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// No significant trigger state changes occurred and there are no active device inputs</span></span><br><span class="line">	None		= (<span class="number">0x0</span>)		<span class="built_in">UMETA</span>(Hidden),</span><br><span class="line">	<span class="comment">// Triggering occurred after one or more processing ticks</span></span><br><span class="line">	Triggered	= (<span class="number">1</span> &lt;&lt; <span class="number">0</span>),	<span class="comment">// ETriggerState (None -&gt; Triggered, Ongoing -&gt; Triggered, Triggered -&gt; Triggered)</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// An event has occurred that has begun Trigger evaluation. Note: Triggered may also occur this frame, but this event will always be fired first.</span></span><br><span class="line">	Started		= (<span class="number">1</span> &lt;&lt; <span class="number">1</span>),	<span class="comment">// ETriggerState (None -&gt; Ongoing, None -&gt; Triggered)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Triggering is still being processed. For example, an action with a &quot;Press and Hold&quot; trigger</span></span><br><span class="line">	<span class="comment">// will be &quot;Ongoing&quot; while the user is holding down the key but the time threshold has not been met yet. </span></span><br><span class="line">	Ongoing		= (<span class="number">1</span> &lt;&lt; <span class="number">2</span>),	<span class="comment">// ETriggerState (Ongoing -&gt; Ongoing)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Triggering has been canceled. For example,  the user has let go of a key before the &quot;Press and Hold&quot; time threshold.</span></span><br><span class="line">	<span class="comment">// The action has started to be evaluated, but never completed. </span></span><br><span class="line">	Canceled	= (<span class="number">1</span> &lt;&lt; <span class="number">3</span>),	<span class="comment">// ETriggerState (Ongoing -&gt; None)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// The trigger state has transitioned from Triggered to None this frame, i.e. Triggering has finished.</span></span><br><span class="line">	<span class="comment">// Note: Using this event restricts you to one set of triggers for Started/Completed events. You may prefer two actions, each with its own trigger rules.</span></span><br><span class="line">	<span class="comment">// Completed will not fire if any trigger reports Ongoing on the same frame, but both should fire. e.g. Tick 2 of Hold (= Ongoing) + Pressed (= None) combo will raise Ongoing event only.</span></span><br><span class="line">	Completed	= (<span class="number">1</span> &lt;&lt; <span class="number">4</span>),	<span class="comment">// ETriggerState (Triggered -&gt; None)</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Triggered表示事件触发，是一个连续事件；Started表示只触发一次，在按下时执行；Ongoing表示持续的动作；Canceled表示取消操作；Completed表示完成操作。</p>
+<p>对于FInputActionValue，是用于储存输入的值，在使用是可以通过Get<DateType>()来获取所用的值。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>关于增强输入的官方参考文档：<a target="_blank" rel="noopener" href="https://docs.unrealengine.com/5.3/zh-CN/enhanced-input-in-unreal-engine/">https://docs.unrealengine.com/5.3/zh-CN/enhanced-input-in-unreal-engine/</a><br>其中实现是使用蓝图实现，这里使用C++实现，使用蓝图实现直接参照官方文档即可。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">增强输入</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-essay/虚幻反射的基础应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -233,61 +388,9 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AProjectGameMode::<span class="built_in">AProjectGameMode</span>()</span><br><span class="line">&#123;</span><br><span class="line">    UPlayer* Player=<span class="built_in">NewObject</span>&lt;UPlayer&gt;();</span><br><span class="line">    UClass* PlayerClass=Player-&gt;<span class="built_in">GetClass</span>();</span><br><span class="line">    FName PlayerName=PlayerClass-&gt;<span class="built_in">GetFName</span>();</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Player Name is :%s&quot;</span>), *PlayerName.<span class="built_in">ToString</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>选择GameMode即可看到日志输出：Player Name is :UPlayer</p>
-<h1 id="获取与设置类字符串属性"><a href="#获取与设置类字符串属性" class="headerlink" title="获取与设置类字符串属性"></a>获取与设置类字符串属性</h1><p>现在UPlayer类中声明一个FString,UPROPERTY宏是必要的:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UPROPERTY</span>()</span><br><span class="line">FString TestName=<span class="string">&quot;MyName&quot;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>同样在GameMode中进行操作：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (FProperty* Property = PlayerClass-&gt;PropertyLink; Property; Property = Property-&gt;PropertyLinkNext) &#123;</span><br><span class="line">    FString PropertyName=Property-&gt;<span class="built_in">GetName</span>();</span><br><span class="line">    FString PropertyType=Property-&gt;<span class="built_in">GetCPPType</span>();</span><br><span class="line">    <span class="keyword">if</span> (PropertyType == <span class="string">&quot;FString&quot;</span>) &#123;</span><br><span class="line">        <span class="comment">//类型转化</span></span><br><span class="line">        FStrProperty* StringProperty=<span class="built_in">CastField</span>&lt;FStrProperty&gt;(Property);</span><br><span class="line">        <span class="comment">//声明一个无类型的指针，ContainerPtrToValuePtr函数将返回一个指向属性的指针</span></span><br><span class="line">        <span class="comment">//Player是实例化对象，可以有多个，填入需要的那一个</span></span><br><span class="line">        <span class="type">void</span>* Addr=StringProperty-&gt;<span class="built_in">ContainerPtrToValuePtr</span>&lt;<span class="type">void</span>&gt;(Player);</span><br><span class="line">        <span class="comment">//获取属性值，已经假定为FString类型</span></span><br><span class="line">        FString PropertyValue=StringProperty-&gt;<span class="built_in">GetPropertyValue</span>(Addr);</span><br><span class="line">        <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The PlayerClass&#x27;s Name is :%s ,Type is :%s ,Value is :%s&quot;</span>),*PropertyName,*PropertyType,*PropertyValue);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>便能在日志中看到：”The PlayerClass’s Name is :TestName ,Type is :FString ,Value is :MyName”</p>
-<p>现在来设置这个属性,只需将Get改为Set，并赋入新值：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">StringProperty-&gt;<span class="built_in">SetPropertyValue</span>(Addr,<span class="built_in">TEXT</span>(<span class="string">&quot;NewName&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<p>同样可以在日志中看到：”The PlayerClass’s Name is :TestName ,Type is :FString ,Value is :NewName”</p>
-<h1 id="获取类的函数"><a href="#获取类的函数" class="headerlink" title="获取类的函数"></a>获取类的函数</h1><p>操作方法类似，需要一个迭代器来获取类的成员函数：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(TFieldIterator&lt;UFuntion&gt; <span class="built_in">FunctionIterator</span>(PlayerClass);FunctionIterator;++FunctionIterator)&#123;</span><br><span class="line">    FString FunctionName=FunctionIterator-&gt;<span class="built_in">GetName</span>();</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The PlayerClass&#x27;s Functions&#x27; name is :%s&quot;</span>),*FunctionName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行后在日志中可以看到：”The PlayerClass’s Functions’ name is :ExecuteUbergraph”<br>这是UE为类默认添加的一个方法，我们在类中添加一个自己的函数：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UFUNCTION</span>()</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestFunction</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>随后再次执行，便可以看到一条额外的日志：”The PlayerClass’s Functions’ name is :TestFunction”</p>
-<p>除了能够获取名称外，还可以获取参数与返回值类型，首先对TestFunction进行修改：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UFUNCTION</span>()</span><br><span class="line"><span class="function">int32 <span class="title">TestFunction</span><span class="params">(int32 PassParam)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>随后嵌套一个迭代器进行访问：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(TFieldIterator&lt;FProperty&gt; <span class="built_in">ParamIterator</span>(*FunctionIterator);ParamIterator;++ParamIterator)&#123;</span><br><span class="line">    FString ParamType=ParamIterator-&gt;<span class="built_in">GetCPPType</span>();</span><br><span class="line">    FString ParamName=ParamIterator-&gt;<span class="built_in">GetName</span>();</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The PlayerClass&#x27;s Functions&#x27; Parameter&#x27;s type is :%s ,Name is :%s&quot;</span>),*ParamType,*ParamName);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>在日志中可以看到函数的返回值被作为参数信息获取到，类型为int32，名称为ReturnValue。</p>
-<p>还可以获取到参数的标记(Flags),标记是一个枚举类型，以十六进制表示，并且可以由多个枚举组合而成，可以将得到的十六进制数按位数拆分查找即可知道参数的类型，</p>
-<p>在内层循环中添加如下代码来查看参数类型：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">EPropertyFlags ParamFlags=ParamIterator-&gt;<span class="built_in">GetPropertyFlags</span>();</span><br><span class="line"><span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The PlayerClass&#x27;s Functions&#x27; Parameter&#x27;s Flags is :%d&quot;</span>),ParamFlags);</span><br></pre></td></tr></table></figure>
-
-<h1 id="获取父类名称"><a href="#获取父类名称" class="headerlink" title="获取父类名称"></a>获取父类名称</h1><p>首先新建一个类，继承自PlayerObject，并命名为MainPlayerObject，同样在GameMode中进行操作，不同的是，要通过GetSuperClass获取父类名称：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">UMainPlayerObject* MainPlayer=<span class="built_in">NewObject</span>&lt;UMainPlayerObject&gt;();</span><br><span class="line">UClass* MainPlayerClass=MainPlayer-&gt;<span class="built_in">GetClass</span>()-&gt;<span class="built_in">GetSuperClass</span>();</span><br><span class="line">FName MainPlayerClassName=MainPlayerClass-&gt;<span class="built_in">GetFName</span>();</span><br><span class="line"><span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The MainPlayerObject&#x27;s SuperClass&#x27;s name is :%s&quot;</span>),*MainPlayerClassName.<span class="built_in">ToString</span>());</span><br></pre></td></tr></table></figure>
-
-<p>执行后便可在日志中看到：”The MainPlayerObject’s SuperClass’s name is :PlayerObject”</p>
-<h1 id="判断子类关系"><a href="#判断子类关系" class="headerlink" title="判断子类关系"></a>判断子类关系</h1><p>在虚幻中可以判断一个类是否为另一个类的子类，通过AClass.IsChildOf(BClass)即可判断：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(MainPlayerClass-&gt;<span class="built_in">IsChildOf</span>(PlayerObject))&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;MainPlayerObject is a Child of PlayerObject&quot;</span>));</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;MainPlayerObject is not a Child of PlayerObject&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行后可以在日志中看到输出：”MainPlayerObject is a Child of PlayerObject”</p>
-<p>此外还可以查看一个类的所有子类，通过GetDerivedClasses()实现<br>函数声明为：void GetDerivedClasses(const UClass* ClassToLookFor, TArray&lt;UClass*&gt;&amp; Results, bool bRecursive)<br>第一个参数为需要查找的类，第二个参数为查找结果，第三个参数为是否递归查找子类，即是否查找子类的子类<br>假如要查找PlayerObject类的所有子类，则可以写成：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">TArray&lt;UClass*&gt; DerivedClasses;</span><br><span class="line"><span class="built_in">GetDerivedClasses</span>(PlayerObject::<span class="built_in">StaticClass</span>(),DerivedClasses,<span class="literal">false</span>);</span><br><span class="line"><span class="keyword">for</span>(int32 i=<span class="number">0</span>;i&lt;DerivedClasses.<span class="built_in">Num</span>();i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(DerivedClasses[i])&#123;</span><br><span class="line">        FName DerivedClassName=DerivedClasses[i]-&gt;<span class="built_in">GetFName</span>();</span><br><span class="line">        <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The DerivedClass&#x27;s name is :%s&quot;</span>),*DerivedClassName.<span class="built_in">ToString</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行后便可在日志中看到：”The DerivedClass’s name is :MainPlayerObject”</p>
-<h1 id="查找类生成的对象"><a href="#查找类生成的对象" class="headerlink" title="查找类生成的对象"></a>查找类生成的对象</h1><p>操作方法与查找子类的方法类似，将UClass<em>改为UObject</em>即可:<br>我们去查找UMainPlayerObject的实例化对象</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">UMainPlayerObject* MainPlayer=<span class="built_in">NewObject</span>&lt;UMainPlayerObject&gt;(<span class="keyword">this</span>,<span class="built_in">TEXT</span>(<span class="string">&quot;MainPlayerObject&quot;</span>));</span><br><span class="line"></span><br><span class="line">TArray&lt;UObject*&gt; ObjectArray;</span><br><span class="line"><span class="built_in">GetObjectOfClass</span>(UMainPlayerObject::<span class="built_in">StaticClass</span>(),ObjectArray,<span class="literal">false</span>);</span><br><span class="line"><span class="keyword">for</span>(UObject* MainPlayerObject:ObjectArray)&#123;</span><br><span class="line">    <span class="keyword">if</span>(MainPlayerObject)&#123;</span><br><span class="line">        FString MainPlayerObjectName=MainPlayerObject-&gt;<span class="built_in">GetName</span>();</span><br><span class="line">        <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The UMainPlayerObject&#x27;s instance&#x27;s name is :%s&quot;</span>),*MainPlayerObjectName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行后便可在日志中看到输出：”The UMainPlayerObject’s instance’s name is :MainPlayerObject”</p>
-<h1 id="查找功能"><a href="#查找功能" class="headerlink" title="查找功能"></a>查找功能</h1><p>可以通过字符串查找某一类是否存在，通过FindObeject函数实现<br>来查找UMainPlayerObject类是否存在：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//类名称不加前缀，不需要写成UMainPlayerObject</span></span><br><span class="line">UClass* FindedClass=<span class="built_in">FindObject</span>&lt;UClass&gt;(ANY_PACKAGE,<span class="built_in">TEXT</span>(<span class="string">&quot;MainPlayerObject&quot;</span>),<span class="literal">true</span>);</span><br><span class="line"><span class="keyword">if</span>(FindedClass)&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The UMainPlayerObject class is exist&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行后便可在日志中看到输出：”The UMainPlayerObject class is exist”</p>
-<p>对于蓝图类的查找也是一样的，先新建一个蓝图，并命名为BP_Actor</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">UBlueprint* FindedBlueprint=<span class="built_in">FindObject</span>&lt;UBlueprint&gt;(ANY_PACKAGE,<span class="built_in">TEXT</span>(<span class="string">&quot;BP_Actor&quot;</span>),<span class="literal">true</span>);</span><br><span class="line"><span class="keyword">if</span>(FindedBlueprint)&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;The BP_Actor blueprint is exist&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>同样执行后可以在日志中看到：”The BP_Actor blueprint is exist”</p>
-<p>还可以进一步操作，比如想知道查找到的这个类是否为Native类，可以通过FindedClass-&gt;IsNative()来判断<br>通过FindFunctionByName来查找某个类的方法</p>
-
+    
+    <a class="article-more-a" href="/2023/11/08/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/#more">more >></a>
+    
     
 
     
@@ -303,11 +406,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		
 		</ul>
@@ -688,6 +791,7 @@
   <div class="article-entry" itemprop="articleBody">
     
     <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>虚幻容器时对同质资源进行管理的容器，包括TArray、TMap和TSet三种，均使用泛型进行创建，且不可创建在堆区，即不能使用new进行创建。<br>三种容器的操作与C++中的STL操作类似，提供的接口略有不同，但实现的功能几乎是相同的。</p>
+<h1 id="TArray"><a href="#TArray" class="headerlink" title="TArray"></a>TArray</h1><p>TArray是UE中的数组，也是最常用的容器，其速度快，内存消耗小，安全性高。</p>
     
     <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/#more">more >></a>
     
@@ -1181,106 +1285,6 @@
 
 
   
-    <article id="post-note/设计模式2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/10/11/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F2/" target="_blank">设计模式（二）</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/10/11/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F2/" class="archive-article-date">
-        <time datetime="2023-10-11T08:39:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-11</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>单一职责模式：包括装饰器模式和桥模式</p>
-<h1 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h1><p>过度的使用继承会导致类膨胀，而使用组合则可以避免类膨胀，但是组合的缺点在于无法复用父类的方法，而装饰器模式可以实现复用父类的方法，同时也可以扩展功能。</p>
-    
-    <a class="article-more-a" href="/2023/10/11/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F2/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/10/11/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F2/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1402,7 +1406,7 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+                <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1410,11 +1414,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+                <a href="javascript:void(0)" class="js-tag color5">增强输入</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1422,7 +1430,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">UE</a>
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1430,23 +1438,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1458,7 +1454,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">图</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1466,15 +1470,19 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">散列表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
             
             <div class="clearfix"></div>

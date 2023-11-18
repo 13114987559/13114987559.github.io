@@ -6,27 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://13114987559.github.io">
-  <title>数据结构与算法：拓扑排序 | KongXinQing~</title>
+  <title>虚幻增强输入系统 | KongXinQing~</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="拓扑排序一些概念 有向无环图：有向说明图的路径是有方向的，无环说明图的路径不能成环。 拓扑序列：设一个具有n个顶点的有向图，其中顶点序列V1—Vn满足一条路径，若Vi必须在Vj之前，则称这个顶点序列为拓扑序列。 拓扑排序：按照顶点的依赖关系进行排序，使得没有前驱的顶点排在最前，没有后继的顶点排在后面，直到所有节点都被移除。  算法思想它的思路总结起来只有两步：  在有向图中选择一个没有前驱的顶点并">
+  <meta name="description" content="增强输入系统增强输入系统与旧的虚幻输入系统相比，对触发传入的参数进行了升级，可以实现组合，长按等功能，用于处理复杂的输入逻辑。 要启用增强输入系统，则首先在Pulgins中启用EnhancedInputPlugin插件，随后重新打开项目，在Project Settings-Input中找到Default Class，其中可以找到两个类设置，两者均选择Enhanced类。完成使用增强输入系统的初步设">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据结构与算法：拓扑排序">
-<meta property="og:url" content="https://13114987559.github.io/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/index.html">
+<meta property="og:title" content="虚幻增强输入系统">
+<meta property="og:url" content="https://13114987559.github.io/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="KongXinQing~">
-<meta property="og:description" content="拓扑排序一些概念 有向无环图：有向说明图的路径是有方向的，无环说明图的路径不能成环。 拓扑序列：设一个具有n个顶点的有向图，其中顶点序列V1—Vn满足一条路径，若Vi必须在Vj之前，则称这个顶点序列为拓扑序列。 拓扑排序：按照顶点的依赖关系进行排序，使得没有前驱的顶点排在最前，没有后继的顶点排在后面，直到所有节点都被移除。  算法思想它的思路总结起来只有两步：  在有向图中选择一个没有前驱的顶点并">
+<meta property="og:description" content="增强输入系统增强输入系统与旧的虚幻输入系统相比，对触发传入的参数进行了升级，可以实现组合，长按等功能，用于处理复杂的输入逻辑。 要启用增强输入系统，则首先在Pulgins中启用EnhancedInputPlugin插件，随后重新打开项目，在Project Settings-Input中找到Default Class，其中可以找到两个类设置，两者均选择Enhanced类。完成使用增强输入系统的初步设">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://13114987559.github.io/Pic/Graph/%E6%8B%93%E6%89%91.jpg">
-<meta property="article:published_time" content="2023-09-20T09:16:36.000Z">
-<meta property="article:modified_time" content="2023-10-16T14:56:06.359Z">
+<meta property="article:published_time" content="2023-11-17T14:07:55.000Z">
+<meta property="article:modified_time" content="2023-11-18T15:27:37.213Z">
 <meta property="article:author" content="KongXinQing">
+<meta property="article:tag" content="UE">
 <meta property="article:tag" content="Cpp">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="排序">
-<meta property="article:tag" content="图">
+<meta property="article:tag" content="增强输入">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://13114987559.github.io/Pic/Graph/%E6%8B%93%E6%89%91.jpg">
   
     <link rel="alternative" href="/atom.xml" title="KongXinQing~" type="application/atom+xml">
   
@@ -200,22 +197,22 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-note/数据结构与算法-拓扑排序" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-虚幻增强输入系统" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
   
   
     <h1 class="article-title" itemprop="name">
-      数据结构与算法：拓扑排序
+      虚幻增强输入系统
     </h1>
   
 
 
   
   
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:16:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
+<a href="/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/" class="archive-article-date">
+        <time datetime="2023-11-17T14:07:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-17</time>
 </a>
 
   
@@ -228,7 +225,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">698字</span>
+      <span class="post-count">1.9k字</span>
     </span>
   </span>
 
@@ -237,7 +234,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">2分</span>
+      <span class="post-count">8分</span>
     </span>
   </span>
 </div>
@@ -248,30 +245,57 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="拓扑排序"><a href="#拓扑排序" class="headerlink" title="拓扑排序"></a>拓扑排序</h1><h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><ol>
-<li>有向无环图：有向说明图的路径是有方向的，无环说明图的路径不能成环。</li>
-<li>拓扑序列：设一个具有n个顶点的有向图，其中顶点序列V1—Vn满足一条路径，若Vi必须在Vj之前，则称这个顶点序列为拓扑序列。</li>
-<li>拓扑排序：按照顶点的依赖关系进行排序，使得没有前驱的顶点排在最前，没有后继的顶点排在后面，直到所有节点都被移除。</li>
-</ol>
-<h2 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h2><p>它的思路总结起来只有两步：</p>
-<ol>
-<li>在有向图中选择一个没有前驱的顶点并输出。</li>
-<li>删除该顶点和以它为尾的弧。</li>
-<li>重复上述两步直到所有顶点都被输出，或者当前图中不存在无前驱的顶点为止。</li>
-</ol>
-<span id="more"></span>
+    <h1 id="增强输入系统"><a href="#增强输入系统" class="headerlink" title="增强输入系统"></a>增强输入系统</h1><p>增强输入系统与旧的虚幻输入系统相比，对触发传入的参数进行了升级，可以实现组合，长按等功能，用于处理复杂的输入逻辑。</p>
+<p>要启用增强输入系统，则首先在Pulgins中启用EnhancedInputPlugin插件，随后重新打开项目，在Project Settings-Input中找到Default Class，其中可以找到两个类设置，两者均选择Enhanced类。完成使用增强输入系统的初步设置。</p>
+<p>要在C++中使用，还需要一些额外的工作，在项目的Build.cs文件中的AddRange中添加*”EnhancedInput”*。</p>
+<p>完成所有的前置工作后，就可以在C++中使用增强输入系统了。</p>
+<h1 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h1><p>首先在内容浏览器中新建一个名为Input的文件夹用于保存所有输入，右键可以看到Input选项，在里面有Input Action和Input Mapping Context两个资产，这两个资产用于保存输入动作和输入映射上下文。</p>
+<h2 id="完成跳跃逻辑"><a href="#完成跳跃逻辑" class="headerlink" title="完成跳跃逻辑"></a>完成跳跃逻辑</h2><p>新建一个Input Action，命名为IA_Jump，并打开，我们主要关心面板中的Value Type和Triggers两个选项。</p>
+<p>在Value Type中可以选择值类型，分别为bool、float、Vector2D、Vector四个，分别代表瞬间动作，一维轴向输入，二维轴向输入以及三维轴向输入。</p>
+<p>在Triggers中选择触发方式，分别为Chorded Action（组合）、Combo、Down等等，意如其名。</p>
+<p>对于跳跃逻辑，选择bool作为值类型，Pressed和Released作为触发类型。</p>
+<p>进入VS中，在角色类（需要Input的类）中做如下声明：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加所需头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;EnhancedInputComponent.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;EnhancedInputSubsystems.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;InputActionValue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ENhancedInputLibrary.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//只做简短声明，主要为privateh和protected部分</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AMainCharacter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputAction* JumpAction;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* ActionContext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h1 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h1><h2 id="模拟实现"><a href="#模拟实现" class="headerlink" title="模拟实现"></a>模拟实现</h2><p>以下图中的图为例<br><img src="/Pic/Graph/%E6%8B%93%E6%89%91.jpg"></p>
-<p>我们按照上述步骤进行模拟。</p>
-<p>首先遍历寻找入度为0的顶点，即V1，输出V1，并删除以V1为尾的弧。<br>并再次遍历寻找入度为0的顶点，即V6，输出V6，并删除以V6为尾的弧。<br>遍历，找到V4的入度为0，输出V4，并删除以V4为尾的弧。<br>遍历，找到V5的入度为0，输出V5，并删除以V5为尾的弧。<br>遍历，找到V4的入度为0，输出V4，并删除以V4为尾的弧。<br>最后输出V2。<br>再次寻找发现所有顶点都被输出，完成排序。</p>
-<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>定义以下结构：<br>为了方便实现选用邻接表<br>Arr作为输出数组<br>Edge表示以Vi为弧尾的顶点组成的数组</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> MaxVertex 100</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Graph</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> Data;</span><br><span class="line">    <span class="type">int</span> InDegree;</span><br><span class="line">    <span class="type">int</span>* Edge;</span><br><span class="line">    <span class="type">int</span> Size;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Graph G[MaxVertex];</span><br><span class="line"><span class="type">int</span> Arr[MaxVertex];</span><br></pre></td></tr></table></figure>
+<p>在绑定之前仍需要一些准备工作，进入到BeginPlay中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::BeginPlay</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Super::<span class="built_in">BeginPlay</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//添加Context的绑定，创建增强输入子系统，也可以在SetPlayerInputComponent中完成创建</span></span><br><span class="line">    <span class="keyword">if</span> (APlayerController* PlayerController = <span class="built_in">Cast</span>&lt;APlayerController&gt;(Controller))&#123;</span><br><span class="line">		<span class="keyword">if</span> (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::<span class="built_in">GetSubsystem</span>&lt;UEnhancedInputLocalPlayerSubsystem&gt;(PlayerController-&gt;<span class="built_in">GetLocalPlayer</span>()))&#123;</span><br><span class="line">			Subsystem-&gt;<span class="built_in">AddMappingContext</span>(ActionContext, <span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>实现：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">TopologicalSort</span><span class="params">(Graph&amp; G)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> Count=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(Count&lt;MaxVertex)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;MaxVertex;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(G[i].InDegree==<span class="number">0</span>)&#123;</span><br><span class="line">                Arr[Count++]=G[i].Data;</span><br><span class="line">                <span class="keyword">for</span>(<span class="type">int</span> j=<span class="number">0</span>;j&lt;G[i].Size;j++)&#123;</span><br><span class="line">                    G[G[i].Edge[j]].InDegree--;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>正式进入绑定，在SetPlayerInputComponent中进行绑定：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::SetPlayerInputComponent</span><span class="params">(UInputComponent* PlayerInputComponent)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(UEnhancedInputComponent* EnhancedInputComponent=<span class="built_in">Cast</span>&lt;UEnhancedInputComponent&gt;(PlayerInputComponent))&#123;</span><br><span class="line">        <span class="comment">//进行绑定</span></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(JumpAction,ETriggerEvent::Started,<span class="keyword">this</span>,&amp;AMainCharacter::OnJump);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>使用栈实现：<br>与上述实现相似，先遍历寻找所有入度为0的顶点，输出栈顶元素，并移除以该顶点为尾的弧，然后再次遍历寻找所有入度为0的顶点，继续输出栈顶元素，直到所有元素都被输出，或者当前图中不存在无前驱的顶点为止。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">vodi <span class="title">TopologicalSort</span><span class="params">(Graph&amp; G)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> Count=<span class="number">0</span>;</span><br><span class="line">    stack&lt;<span class="type">int</span>&gt; s;</span><br><span class="line">    <span class="keyword">while</span>(Count&lt;MaxVertex)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;MaxVertex;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(G[i].InDegree==<span class="number">0</span>)&#123;</span><br><span class="line">                s.<span class="built_in">push</span>(G[i].Data);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(!s.<span class="built_in">empty</span>())&#123;</span><br><span class="line">            Arr[Count++]=s.<span class="built_in">top</span>();</span><br><span class="line">            <span class="type">int</span> v=s.<span class="built_in">top</span>();</span><br><span class="line">            s.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;G[v].Size;i++)&#123;</span><br><span class="line">                G[G[v].Edge[i]].InDegree--;</span><br><span class="line">                <span class="keyword">if</span>(G[G[v].Edge[i]].InDegree==<span class="number">0</span>)&#123;</span><br><span class="line">                    s.<span class="built_in">push</span>(G[v].Edge[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>OnJump的实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//因为不需要使用值，所以直接调用Jump函数即可</span></span><br><span class="line">    <span class="built_in">Jump</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>都完成后回到编辑器，打开创建的Context，对按键进行绑定，选择JumpAction并设置相应的按键。</p>
+<p>完成后编译，在蓝图中对暴露的Action和Context进行赋值，编译，运行后按下绑定的跳跃键角色就可以跳跃了。</p>
+<h2 id="绑定角色的移动和视角旋转"><a href="#绑定角色的移动和视角旋转" class="headerlink" title="绑定角色的移动和视角旋转"></a>绑定角色的移动和视角旋转</h2><p>过程与上述大致相同，不同在于对两个方法的实现上有差异。</p>
+<p>同样在类中添加新的成员：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AMainCharacter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">CharacterMove</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">CharacterLook</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputAction* JumpAction;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    <span class="function">UInputAction* MoveActionl</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="title">UPROPERTY</span><span class="params">(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span></span></span><br><span class="line"><span class="function">    UInputAction* LookAction</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* ActionContext;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* AxisContext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在BeginPlay中添加新的绑定：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Subsystem-&gt;<span class="built_in">AddMappingContext</span>(AxisContext, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在AxisContext中添加新的绑定：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::SetPlayerInputComponent</span><span class="params">(UInputComponent* PlayerInputComponent)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(UEnhancedInputComponent* EnhancedInputComponent=<span class="built_in">Cast</span>&lt;UEnhancedInputComponent&gt;(PlayerInputComponent))&#123;</span><br><span class="line">        <span class="comment">//进行绑定</span></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(JumpAction,ETriggerEvent::Started,<span class="keyword">this</span>,&amp;AMainCharacter::OnJump);</span><br><span class="line"></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(MoveAction,ETriggerEvent::Triggered,<span class="keyword">this</span>,&amp;AMainCharacter::CharacterMove);</span><br><span class="line"></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(LookAction,ETriggerEvent::Triggered,<span class="keyword">this</span>,&amp;AMainCharacter::CharacterLook);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Move和Look的实现，不同之处在于对输入值得获取：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::CharacterMove</span><span class="params">(<span class="type">const</span> FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FVector2D MoveValue=InputValue.<span class="built_in">Get</span>&lt;FVector2D&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//ForwardDir和RightDir为自定义的方向向量，根据不同的需求设置不同的方向</span></span><br><span class="line">    <span class="comment">//输入值可以直接使用InputValue.Get&lt;FVector2D&gt;().X和InputValue.Get&lt;FVector2D&gt;().Y;</span></span><br><span class="line">    <span class="built_in">AddMovementInput</span>(ForwardDir,MoveValue.X);</span><br><span class="line">    <span class="built_in">AddMovementInput</span>(RightDir,MoveValue.Y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::CharacterLook</span><span class="params">(<span class="type">const</span> FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">AddControllerYawInput</span>(InputValue.<span class="built_in">Get</span>&lt;FVector&gt;().X);</span><br><span class="line">	<span class="built_in">AddControllerPitchInput</span>(InputValue.<span class="built_in">Get</span>&lt;FVector&gt;().Y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样回到编辑器中对Action和Context进行绑定。</p>
+<p>将Action的Value Type设置为FVector2D。</p>
+<p>在Context中，设置两个Action，以Move举例：<br>分别设置四个按键（键盘）WASD，我们希望W前进，S后退，A向左，D向右，当实际按下的时候值为1，未按下时为0，为此我们需要做一些修改。</p>
+<p>在四个键的Modifiers中，添加一个元素并选择SWizzle Input Axis Values表示这是个轴向输入；对于AS两个键，额外增加Negate，用来反转输入，这样WASD就可以实现前后左右的输入。</p>
+<p>对于Look来说，我们选择鼠标，这与旧的虚幻输入事件类似，如果使用的是手柄，因为本身就是轴向的，所以考虑是否将值反转即可。</p>
+<p>至此就完成了基本的输入事件绑定。</p>
+<h1 id="增强输入的一些参数解释"><a href="#增强输入的一些参数解释" class="headerlink" title="增强输入的一些参数解释"></a>增强输入的一些参数解释</h1><p>在Action中已经对Value Type和Triggers做出了一些解释，就不在说明。</p>
+<p>在Action和Context中，都有一个Modifiers选择，Modifiers是对输入数据进行处理，就像上面的一样，我们需要对一些按键进行反转操作，就可以用Modifiers来处理。</p>
+<p>此外Modifiers来包含一些其他的处理方法：Dead Zone用来过滤无效的输入数据，对于手柄一些来说，摇杆可能会自己触发导致角色运动，为了解决这一问题可以选择一个Dead Zone来限制输入值。还有Negate用来反转输入，Scaler用于放大输入值等等。</p>
+<p>对于触发方式，在绑定时看到是ETriggerEvent的枚举类型，直接查看它的定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">ETriggerEvent</span> : uint8</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// No significant trigger state changes occurred and there are no active device inputs</span></span><br><span class="line">	None		= (<span class="number">0x0</span>)		<span class="built_in">UMETA</span>(Hidden),</span><br><span class="line">	<span class="comment">// Triggering occurred after one or more processing ticks</span></span><br><span class="line">	Triggered	= (<span class="number">1</span> &lt;&lt; <span class="number">0</span>),	<span class="comment">// ETriggerState (None -&gt; Triggered, Ongoing -&gt; Triggered, Triggered -&gt; Triggered)</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// An event has occurred that has begun Trigger evaluation. Note: Triggered may also occur this frame, but this event will always be fired first.</span></span><br><span class="line">	Started		= (<span class="number">1</span> &lt;&lt; <span class="number">1</span>),	<span class="comment">// ETriggerState (None -&gt; Ongoing, None -&gt; Triggered)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Triggering is still being processed. For example, an action with a &quot;Press and Hold&quot; trigger</span></span><br><span class="line">	<span class="comment">// will be &quot;Ongoing&quot; while the user is holding down the key but the time threshold has not been met yet. </span></span><br><span class="line">	Ongoing		= (<span class="number">1</span> &lt;&lt; <span class="number">2</span>),	<span class="comment">// ETriggerState (Ongoing -&gt; Ongoing)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Triggering has been canceled. For example,  the user has let go of a key before the &quot;Press and Hold&quot; time threshold.</span></span><br><span class="line">	<span class="comment">// The action has started to be evaluated, but never completed. </span></span><br><span class="line">	Canceled	= (<span class="number">1</span> &lt;&lt; <span class="number">3</span>),	<span class="comment">// ETriggerState (Ongoing -&gt; None)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// The trigger state has transitioned from Triggered to None this frame, i.e. Triggering has finished.</span></span><br><span class="line">	<span class="comment">// Note: Using this event restricts you to one set of triggers for Started/Completed events. You may prefer two actions, each with its own trigger rules.</span></span><br><span class="line">	<span class="comment">// Completed will not fire if any trigger reports Ongoing on the same frame, but both should fire. e.g. Tick 2 of Hold (= Ongoing) + Pressed (= None) combo will raise Ongoing event only.</span></span><br><span class="line">	Completed	= (<span class="number">1</span> &lt;&lt; <span class="number">4</span>),	<span class="comment">// ETriggerState (Triggered -&gt; None)</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Triggered表示事件触发，是一个连续事件；Started表示只触发一次，在按下时执行；Ongoing表示持续的动作；Canceled表示取消操作；Completed表示完成操作。</p>
+<p>对于FInputActionValue，是用于储存输入的值，在使用是可以通过Get<DateType>()来获取所用的值。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>关于增强输入的官方参考文档：<a target="_blank" rel="noopener" href="https://docs.unrealengine.com/5.3/zh-CN/enhanced-input-in-unreal-engine/">https://docs.unrealengine.com/5.3/zh-CN/enhanced-input-in-unreal-engine/</a><br>其中实现是使用蓝图实现，这里使用C++实现，使用蓝图实现直接参照官方文档即可。</p>
 
     
 
@@ -286,7 +310,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://13114987559.github.io/2023/09/20/note/数据结构与算法-拓扑排序/" title="数据结构与算法：拓扑排序" target="_blank">https://13114987559.github.io/2023/09/20/note/数据结构与算法-拓扑排序/</a>
+          <a href="https://13114987559.github.io/2023/11/17/虚幻增强输入系统/" title="虚幻增强输入系统" target="_blank">https://13114987559.github.io/2023/11/17/虚幻增强输入系统/</a>
         </li>
         
         <li>
@@ -308,19 +332,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">图</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">增强输入</a>
         		</li>
       		
 		</ul>
@@ -332,7 +352,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
         		</li>
       		
 		</ul>
@@ -387,7 +407,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" alt="微信分享二维码"> -->
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/" alt="微信分享二维码"> -->
     </div>
 </div>
 
@@ -402,18 +422,9 @@
 
 <nav id="article-nav">
   
-    <a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          数据结构与算法：插入排序
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">虚幻：蒙太奇与混合动画</div>
+    <a href="/2023/11/08/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E7%9A%84%E5%9F%BA%E7%A1%80%E5%BA%94%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">虚幻反射的基础应用</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -440,7 +451,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">拓扑排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">一些概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3"><span class="toc-number">1.2.</span> <span class="toc-text">算法思想</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">算法实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.1.</span> <span class="toc-text">模拟实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">增强输入系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">基础使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E6%88%90%E8%B7%B3%E8%B7%83%E9%80%BB%E8%BE%91"><span class="toc-number">2.1.</span> <span class="toc-text">完成跳跃逻辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%91%E5%AE%9A%E8%A7%92%E8%89%B2%E7%9A%84%E7%A7%BB%E5%8A%A8%E5%92%8C%E8%A7%86%E8%A7%92%E6%97%8B%E8%BD%AC"><span class="toc-number">2.2.</span> <span class="toc-text">绑定角色的移动和视角旋转</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8F%82%E6%95%B0%E8%A7%A3%E9%87%8A"><span class="toc-number">3.</span> <span class="toc-text">增强输入的一些参数解释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol>
                     </div>
                 </span>
             </div>
