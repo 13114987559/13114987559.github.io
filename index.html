@@ -197,7 +197,7 @@
             
 
   
-    <article id="post-虚幻增强输入系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-essay/使用Spine动画" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -205,7 +205,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/" target="_blank">虚幻增强输入系统</a>
+	  <a class="article-title" href="/2024/01/23/essay/%E4%BD%BF%E7%94%A8Spine%E5%8A%A8%E7%94%BB/" target="_blank">使用Spine动画</a>
   
     </h1>
   
@@ -213,8 +213,8 @@
 
   
   
-<a href="/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/" class="archive-article-date">
-        <time datetime="2023-11-17T14:07:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-17</time>
+<a href="/2024/01/23/essay/%E4%BD%BF%E7%94%A8Spine%E5%8A%A8%E7%94%BB/" class="archive-article-date">
+        <time datetime="2024-01-23T06:42:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-23</time>
 </a>
 
   
@@ -226,57 +226,31 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="增强输入系统"><a href="#增强输入系统" class="headerlink" title="增强输入系统"></a>增强输入系统</h1><p>增强输入系统与旧的虚幻输入系统相比，对触发传入的参数进行了升级，可以实现组合，长按等功能，用于处理复杂的输入逻辑。</p>
-<p>要启用增强输入系统，则首先在Pulgins中启用EnhancedInputPlugin插件，随后重新打开项目，在Project Settings-Input中找到Default Class，其中可以找到两个类设置，两者均选择Enhanced类。完成使用增强输入系统的初步设置。</p>
-<p>要在C++中使用，还需要一些额外的工作，在项目的Build.cs文件中的AddRange中添加*”EnhancedInput”*。</p>
-<p>完成所有的前置工作后，就可以在C++中使用增强输入系统了。</p>
-<h1 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h1><p>首先在内容浏览器中新建一个名为Input的文件夹用于保存所有输入，右键可以看到Input选项，在里面有Input Action和Input Mapping Context两个资产，这两个资产用于保存输入动作和输入映射上下文。</p>
-<h2 id="完成跳跃逻辑"><a href="#完成跳跃逻辑" class="headerlink" title="完成跳跃逻辑"></a>完成跳跃逻辑</h2><p>新建一个Input Action，命名为IA_Jump，并打开，我们主要关心面板中的Value Type和Triggers两个选项。</p>
-<p>在Value Type中可以选择值类型，分别为bool、float、Vector2D、Vector四个，分别代表瞬间动作，一维轴向输入，二维轴向输入以及三维轴向输入。</p>
-<p>在Triggers中选择触发方式，分别为Chorded Action（组合）、Combo、Down等等，意如其名。</p>
-<p>对于跳跃逻辑，选择bool作为值类型，Pressed和Released作为触发类型。</p>
-<p>进入VS中，在角色类（需要Input的类）中做如下声明：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加所需头文件</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;EnhancedInputComponent.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;EnhancedInputSubsystems.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;InputActionValue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ENhancedInputLibrary.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//只做简短声明，主要为privateh和protected部分</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AMainCharacter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputAction* JumpAction;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* ActionContext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+    <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>使用UE版本为4.27，Vs为2022。</p>
+<p>在官网下载Spine插件，下载链接：<a target="_blank" rel="noopener" href="https://github.com/EsotericSoftware/spine-runtimes">https://github.com/EsotericSoftware/spine-runtimes</a><br>在EpieGame中安装PaperZD插件<br>安装PaperZDForSpine2D插件以在PaperZD中使用Spine动画，下载链接：<a target="_blank" rel="noopener" href="https://github.com/heavybullets/PaperZDForSpine2D">https://github.com/heavybullets/PaperZDForSpine2D</a></p>
+<p>在Build.cs中添加”Paper2D”以后续编译可以通过。</p>
+<h1 id="使用Spine动画"><a href="#使用Spine动画" class="headerlink" title="使用Spine动画"></a>使用Spine动画</h1><h2 id="创建Spine动画"><a href="#创建Spine动画" class="headerlink" title="创建Spine动画"></a>创建Spine动画</h2><p>导入Spine动画，要注意安装插件版本和动画版本要保持一致。</p>
+<p>在所有的插件都安装完成以后在内容浏览器中右键可以看到PaperZD选项，选择AnimSource，就可以看到由Spine动画的额外选项（PaperZD默认的为Flipbook动画，安装插件后可以选择spine动画）。</p>
+<p>选择AnimSource后，进入选择碎图集和骨骼信息，随后新建动画(AddNew)，可以在细节面板中预览和选择动画。</p>
+<p>此外在动画下方还有时间轴，可以在这里添加事件通知。</p>
+<h2 id="使用Spine动画-1"><a href="#使用Spine动画-1" class="headerlink" title="使用Spine动画"></a>使用Spine动画</h2><p>新建一个C++类，在选择父类时选择PaperZDCharacter或者PaperZDCharacter_Spine2D，两者都可以，以后者为父类创建一个新的类（命名为Hero），跳转到PaperZDCharacter_Spine2D中可以看到为我们提供了两个组件，为了后续方便使用可以新增两个函数来获取这两个组件，添加完成后类如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PAPERZDFORSPINE2D_API</span> APaperZDCharacter_Spine2D : <span class="keyword">public</span> APaperZDCharacter</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Spine renderer component. */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(VisibleAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Spine2D&quot;</span>, meta = (AllowPrivateAccess = <span class="string">&quot;true&quot;</span>))</span><br><span class="line">	USpineSkeletonRendererComponent* SpineRenderer;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Skeleton animation component. */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(VisibleAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Spine2D&quot;</span>, meta = (AllowPrivateAccess = <span class="string">&quot;true&quot;</span>))</span><br><span class="line">	USpineSkeletonAnimationComponent* SpineAnimationComponent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">APaperZDCharacter_Spine2D</span>();</span><br><span class="line"></span><br><span class="line">	<span class="function">FORCEINLINE USpineSkeletonAnimationComponent* <span class="title">GetSpineSkeletonComponent</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> SpineAnimationComponent; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">FORCEINLINE USpineSkeletonRendererComponent* <span class="title">GetSpineRenderComponent</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> SpineRenderer; &#125;</span><br><span class="line">	   	</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>在绑定之前仍需要一些准备工作，进入到BeginPlay中：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::BeginPlay</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Super::<span class="built_in">BeginPlay</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//添加Context的绑定，创建增强输入子系统，也可以在SetPlayerInputComponent中完成创建</span></span><br><span class="line">    <span class="keyword">if</span> (APlayerController* PlayerController = <span class="built_in">Cast</span>&lt;APlayerController&gt;(Controller))&#123;</span><br><span class="line">		<span class="keyword">if</span> (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::<span class="built_in">GetSubsystem</span>&lt;UEnhancedInputLocalPlayerSubsystem&gt;(PlayerController-&gt;<span class="built_in">GetLocalPlayer</span>()))&#123;</span><br><span class="line">			Subsystem-&gt;<span class="built_in">AddMappingContext</span>(ActionContext, <span class="number">0</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>回到Hero类中，添加摄象机吊臂和摄象机组件并初始化，在编辑器中以Hero类新建一个蓝图类BP_Hero，其中主要包括：胶囊体。摄象机以吊臂、两个渲染组件、两个动画组件、Movement组件。<br>在SpineAnimation组件中选择碎图集和骨骼，并调整到合适大小。</p>
+<h2 id="使用Spine动画状态机"><a href="#使用Spine动画状态机" class="headerlink" title="使用Spine动画状态机"></a>使用Spine动画状态机</h2><p>回到内容浏览器，在PaperZD中选中AnimBP来构建我们的状态机，2D状态机的使用与普通的状态机类似，基本功能都有。</p>
+<p>在AnimBP的事件图表中有EventOnInit和EventOnTick两个事件，对应可以理解为BeginPlay和UpdateAnimation；在类默认设置中可以选择ParentClass。</p>
+<p>我们要使用自己的AnimInstance，所以新建一个C++类，继承自PaperZDAnimInstance，跳转到PaperZDAnimInstance中可以找到OnInit和OnTick两个函数，我们需要重写这两个函数，并添加我们自定义的角色：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>(Blueprintable)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SPINE_API</span> UHeroPaperZDAnimInstance : <span class="keyword">public</span> UPaperZDAnimInstance</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">OnInit_Implementation</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">OnTick_Implementation</span><span class="params">(<span class="type">float</span> DeltaTime)</span></span>;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">UPROPERTY</span>()</span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">AHeroPaperZDCharacter_Spine2D</span>* Hero;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>正式进入绑定，在SetPlayerInputComponent中进行绑定：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::SetPlayerInputComponent</span><span class="params">(UInputComponent* PlayerInputComponent)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(UEnhancedInputComponent* EnhancedInputComponent=<span class="built_in">Cast</span>&lt;UEnhancedInputComponent&gt;(PlayerInputComponent))&#123;</span><br><span class="line">        <span class="comment">//进行绑定</span></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(JumpAction,ETriggerEvent::Started,<span class="keyword">this</span>,&amp;AMainCharacter::OnJump);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>OnJump的实现：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//因为不需要使用值，所以直接调用Jump函数即可</span></span><br><span class="line">    <span class="built_in">Jump</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>都完成后回到编辑器，打开创建的Context，对按键进行绑定，选择JumpAction并设置相应的按键。</p>
-<p>完成后编译，在蓝图中对暴露的Action和Context进行赋值，编译，运行后按下绑定的跳跃键角色就可以跳跃了。</p>
-<h2 id="绑定角色的移动和视角旋转"><a href="#绑定角色的移动和视角旋转" class="headerlink" title="绑定角色的移动和视角旋转"></a>绑定角色的移动和视角旋转</h2><p>过程与上述大致相同，不同在于对两个方法的实现上有差异。</p>
-<p>同样在类中添加新的成员：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AMainCharacter</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">OnJump</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">CharacterMove</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">CharacterLook</span><span class="params">(FInputActionValue&amp; InputValue)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputAction* JumpAction;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    <span class="function">UInputAction* MoveActionl</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="title">UPROPERTY</span><span class="params">(EditDefaultOnly,Category=<span class="string">&quot;Input|Action&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span></span></span><br><span class="line"><span class="function">    UInputAction* LookAction</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* ActionContext;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditDefaultOnly,Category=<span class="string">&quot;Input|Context&quot;</span>,meta=(AllowPrivateAccess=<span class="string">&quot;true&quot;</span>))</span><br><span class="line">    UInputMappingContext* AxisContext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>在BeginPlay中添加新的绑定：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Subsystem-&gt;<span class="built_in">AddMappingContext</span>(AxisContext, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
-<p>在AxisContext中添加新的绑定：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::SetPlayerInputComponent</span><span class="params">(UInputComponent* PlayerInputComponent)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(UEnhancedInputComponent* EnhancedInputComponent=<span class="built_in">Cast</span>&lt;UEnhancedInputComponent&gt;(PlayerInputComponent))&#123;</span><br><span class="line">        <span class="comment">//进行绑定</span></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(JumpAction,ETriggerEvent::Started,<span class="keyword">this</span>,&amp;AMainCharacter::OnJump);</span><br><span class="line"></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(MoveAction,ETriggerEvent::Triggered,<span class="keyword">this</span>,&amp;AMainCharacter::CharacterMove);</span><br><span class="line"></span><br><span class="line">        EnhancedInputComponent-&gt;<span class="built_in">BindAction</span>(LookAction,ETriggerEvent::Triggered,<span class="keyword">this</span>,&amp;AMainCharacter::CharacterLook);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Move和Look的实现，不同之处在于对输入值得获取：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::CharacterMove</span><span class="params">(<span class="type">const</span> FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    FVector2D MoveValue=InputValue.<span class="built_in">Get</span>&lt;FVector2D&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//ForwardDir和RightDir为自定义的方向向量，根据不同的需求设置不同的方向</span></span><br><span class="line">    <span class="comment">//输入值可以直接使用InputValue.Get&lt;FVector2D&gt;().X和InputValue.Get&lt;FVector2D&gt;().Y;</span></span><br><span class="line">    <span class="built_in">AddMovementInput</span>(ForwardDir,MoveValue.X);</span><br><span class="line">    <span class="built_in">AddMovementInput</span>(RightDir,MoveValue.Y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMainCharacter::CharacterLook</span><span class="params">(<span class="type">const</span> FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">AddControllerYawInput</span>(InputValue.<span class="built_in">Get</span>&lt;FVector&gt;().X);</span><br><span class="line">	<span class="built_in">AddControllerPitchInput</span>(InputValue.<span class="built_in">Get</span>&lt;FVector&gt;().Y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>同样回到编辑器中对Action和Context进行绑定。</p>
-<p>将Action的Value Type设置为FVector2D。</p>
-<p>在Context中，设置两个Action，以Move举例：<br>分别设置四个按键（键盘）WASD，我们希望W前进，S后退，A向左，D向右，当实际按下的时候值为1，未按下时为0，为此我们需要做一些修改。</p>
-<p>在四个键的Modifiers中，添加一个元素并选择SWizzle Input Axis Values表示这是个轴向输入；对于AS两个键，额外增加Negate，用来反转输入，这样WASD就可以实现前后左右的输入。</p>
-<p>对于Look来说，我们选择鼠标，这与旧的虚幻输入事件类似，如果使用的是手柄，因为本身就是轴向的，所以考虑是否将值反转即可。</p>
-<p>至此就完成了基本的输入事件绑定。</p>
-<h1 id="增强输入的一些参数解释"><a href="#增强输入的一些参数解释" class="headerlink" title="增强输入的一些参数解释"></a>增强输入的一些参数解释</h1><p>在Action中已经对Value Type和Triggers做出了一些解释，就不在说明。</p>
-<p>在Action和Context中，都有一个Modifiers选择，Modifiers是对输入数据进行处理，就像上面的一样，我们需要对一些按键进行反转操作，就可以用Modifiers来处理。</p>
-<p>此外Modifiers来包含一些其他的处理方法：Dead Zone用来过滤无效的输入数据，对于手柄一些来说，摇杆可能会自己触发导致角色运动，为了解决这一问题可以选择一个Dead Zone来限制输入值。还有Negate用来反转输入，Scaler用于放大输入值等等。</p>
-<p>对于触发方式，在绑定时看到是ETriggerEvent的枚举类型，直接查看它的定义：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">ETriggerEvent</span> : uint8</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// No significant trigger state changes occurred and there are no active device inputs</span></span><br><span class="line">	None		= (<span class="number">0x0</span>)		<span class="built_in">UMETA</span>(Hidden),</span><br><span class="line">	<span class="comment">// Triggering occurred after one or more processing ticks</span></span><br><span class="line">	Triggered	= (<span class="number">1</span> &lt;&lt; <span class="number">0</span>),	<span class="comment">// ETriggerState (None -&gt; Triggered, Ongoing -&gt; Triggered, Triggered -&gt; Triggered)</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// An event has occurred that has begun Trigger evaluation. Note: Triggered may also occur this frame, but this event will always be fired first.</span></span><br><span class="line">	Started		= (<span class="number">1</span> &lt;&lt; <span class="number">1</span>),	<span class="comment">// ETriggerState (None -&gt; Ongoing, None -&gt; Triggered)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Triggering is still being processed. For example, an action with a &quot;Press and Hold&quot; trigger</span></span><br><span class="line">	<span class="comment">// will be &quot;Ongoing&quot; while the user is holding down the key but the time threshold has not been met yet. </span></span><br><span class="line">	Ongoing		= (<span class="number">1</span> &lt;&lt; <span class="number">2</span>),	<span class="comment">// ETriggerState (Ongoing -&gt; Ongoing)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Triggering has been canceled. For example,  the user has let go of a key before the &quot;Press and Hold&quot; time threshold.</span></span><br><span class="line">	<span class="comment">// The action has started to be evaluated, but never completed. </span></span><br><span class="line">	Canceled	= (<span class="number">1</span> &lt;&lt; <span class="number">3</span>),	<span class="comment">// ETriggerState (Ongoing -&gt; None)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// The trigger state has transitioned from Triggered to None this frame, i.e. Triggering has finished.</span></span><br><span class="line">	<span class="comment">// Note: Using this event restricts you to one set of triggers for Started/Completed events. You may prefer two actions, each with its own trigger rules.</span></span><br><span class="line">	<span class="comment">// Completed will not fire if any trigger reports Ongoing on the same frame, but both should fire. e.g. Tick 2 of Hold (= Ongoing) + Pressed (= None) combo will raise Ongoing event only.</span></span><br><span class="line">	Completed	= (<span class="number">1</span> &lt;&lt; <span class="number">4</span>),	<span class="comment">// ETriggerState (Triggered -&gt; None)</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>Triggered表示事件触发，是一个连续事件；Started表示只触发一次，在按下时执行；Ongoing表示持续的动作；Canceled表示取消操作；Completed表示完成操作。</p>
-<p>对于FInputActionValue，是用于储存输入的值，在使用是可以通过Get<DateType>()来获取所用的值。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>关于增强输入的官方参考文档：<a target="_blank" rel="noopener" href="https://docs.unrealengine.com/5.3/zh-CN/enhanced-input-in-unreal-engine/">https://docs.unrealengine.com/5.3/zh-CN/enhanced-input-in-unreal-engine/</a><br>其中实现是使用蓝图实现，这里使用C++实现，使用蓝图实现直接参照官方文档即可。</p>
+<p>PaperZD为我们提供了一些获取属性的接口，可以通过GetPaperCharacter来获取到角色。</p>
+<p>回到编辑器，继承自AnimBP类创建一个蓝图ABP_Hero，并在AnimBP中的ParentClass选择该类，这样就可以获取到该类中的各种自定义属性；在BP_Hero中的AnimatinComponent中的AnimInstanceClass选择ABP_Hero。</p>
+<p><em>UCLASS中必须加Blueprintablue，否则无法被设置为父类</em></p>
+<h2 id="一些方法"><a href="#一些方法" class="headerlink" title="一些方法"></a>一些方法</h2><p>在动画轨道中可以直接新建通知，使用时转到AnimBP中，可以看到左侧的Functions中有新建的通知，可以在其中编写逻辑。<br>但使用AnimState在需要新建一个state，才能在轨道中选择。新建一个蓝图类，继承自PaperZDAnimNotifyState，其中包含3个重载函数：Begin、End、Tick，可以在其中完成不同的逻辑。</p>
+<p>JumpToNode节点，在动画图表中有Jump节点可以用于跳转，可以用来从一个状态强制跳转到另一个状态。<br>Hero-&gt;GetAnimInstance-&gt;JumpToNode</p>
+<p>使用Playbacks，Playbacks是PaperZD在UE5中新增的功能，功能与蒙太奇类似，可以用于播放插槽内的动画。<br>Hero-&gt;GetAnimInstance-&gt;PlayAnimationplaybacks，使用时指定插槽的名称，并在动画图表中新增一个插槽（AddNewSlot）</p>
+<p>使用Muti-Directional Sequence，是一个多角度动画集合，可以根据不同的角度播放不同的动画，使用时选择SetDirectionality节点来选择不同角度的动画</p>
+<p>使用骨骼插槽，Spine动画是骨骼动画，同样可以使用骨骼插槽来实现一些功能。在导入的骨骼资源中可以看到Bones、Slots、Skins、Animations四个选项，在创建完成角色后，可以给Bones上添加一些碰撞框等。<br>例如在root上增加一个box，在蓝图的BeginPlay里选择box-&gt;AttachComponentToComponent，Parent选择SpineRender组件，Socket在骨骼资产中选择，这里选择root，如果添加成功，我们可以打印一句AttachOK，失败的话打印AttackFilded，并把box的HiddenInGame设置为false。这就在开始游戏后就可以看到屏幕上打印AttachOK并且能在角色脚底看到box的跟随角色移动。<br>这可以用来完成一些角色的攻击判定，利用动画通知来决定何时开启和关闭检测，这与一般的攻击响应是类似的。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>PaperZD的官方文档：<a target="_blank" rel="noopener" href="https://www.criticalfailure-studio.com/paperzd-documentation/">https://www.criticalfailure-studio.com/paperzd-documentation/</a></p>
 
     
 
@@ -293,11 +267,191 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spine</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2024/01/23/essay/%E4%BD%BF%E7%94%A8Spine%E5%8A%A8%E7%94%BB/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-essay/虚幻动画优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/11/28/essay/%E8%99%9A%E5%B9%BB%E5%8A%A8%E7%94%BB%E4%BC%98%E5%8C%96/" target="_blank">虚幻动画优化</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/11/28/essay/%E8%99%9A%E5%B9%BB%E5%8A%A8%E7%94%BB%E4%BC%98%E5%8C%96/" class="archive-article-date">
+        <time datetime="2023-11-28T02:07:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-28</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/11/28/essay/%E8%99%9A%E5%B9%BB%E5%8A%A8%E7%94%BB%E4%BC%98%E5%8C%96/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-essay/虚幻增强输入系统" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/11/17/essay/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/" target="_blank">虚幻增强输入系统</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/11/17/essay/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/" class="archive-article-date">
+        <time datetime="2023-11-17T14:07:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-17</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="增强输入系统"><a href="#增强输入系统" class="headerlink" title="增强输入系统"></a>增强输入系统</h1><p>增强输入系统与旧的虚幻输入系统相比，对触发传入的参数进行了升级，可以实现组合，长按等功能，用于处理复杂的输入逻辑。</p>
+<p>要启用增强输入系统，则首先在Pulgins中启用EnhancedInputPlugin插件，随后重新打开项目，在Project Settings-Input中找到Default Class，其中可以找到两个类设置，两者均选择Enhanced类。完成使用增强输入系统的初步设置。</p>
+<p>要在C++中使用，还需要一些额外的工作，在项目的Build.cs文件中的AddRange中添加*”EnhancedInput”*。</p>
+<p>完成所有的前置工作后，就可以在C++中使用增强输入系统了。</p>
+    
+    <a class="article-more-a" href="/2023/11/17/essay/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -322,7 +476,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2023/11/17/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/">展开全文 >></a>
+      <a class="article-more-a" href="/2023/11/17/essay/%E8%99%9A%E5%B9%BB%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F/">展开全文 >></a>
     </p>
     
 
@@ -406,11 +560,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		
 		</ul>
@@ -1086,205 +1240,6 @@
 
 
   
-    <article id="post-note/设计模式4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/10/13/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F4/" target="_blank">设计模式（四）</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/10/13/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F4/" class="archive-article-date">
-        <time datetime="2023-10-13T08:15:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-13</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><p>有些情况下需要保证一个类在系统中只有一个实例，才能保证它的正确性。</p>
-    
-    <a class="article-more-a" href="/2023/10/13/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F4/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/10/13/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F4/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/设计模式3" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/10/12/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F3/" target="_blank">设计模式（三）</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/10/12/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F3/" class="archive-article-date">
-        <time datetime="2023-10-12T12:28:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-12</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>对象创建，绕开new来避免对象创建。</p>
-<h1 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h1><p>定义：定义一个创建对象的接口，让子类决定实例化哪一个类，工厂将这个类的实例化延迟。</p>
-    
-    <a class="article-more-a" href="/2023/10/12/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F3/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/10/12/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F3/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1299,7 +1254,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2023 <a href="https://13114987559.github.io/" target="_blank">KongXinQing</a>
+    		&copy; 2023-2024 <a href="https://13114987559.github.io/" target="_blank">KongXinQing</a>
     	</div>
       	<div class="footer-right">
 			
@@ -1406,19 +1361,7 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">UE</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">增强输入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1430,7 +1373,19 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1438,19 +1393,19 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">排序</a>
+                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">增强输入</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1462,11 +1417,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">堆</a>
+                <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1474,15 +1429,19 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">堆</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">散列表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
             
             <div class="clearfix"></div>
