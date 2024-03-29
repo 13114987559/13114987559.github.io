@@ -197,6 +197,350 @@
             
 
   
+    <article id="post-note/C++多线程入门：多线程通信与同步" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2024/03/27/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1%E4%B8%8E%E5%90%8C%E6%AD%A5/" target="_blank">C++多线程入门：多线程通信与同步</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2024/03/27/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1%E4%B8%8E%E5%90%8C%E6%AD%A5/" class="archive-article-date">
+        <time datetime="2024-03-27T12:55:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-03-27</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h1><p>线程拥有的状态：</p>
+<ol>
+<li>初始化：准备创建线程。</li>
+<li>就绪：等待线程执行。</li>
+<li>运行：调用该线程，执行逻辑。</li>
+<li>阻塞：该线程被挂起，等待重新唤醒，阻塞包括锁、事件、信号量阻塞，延迟等。</li>
+<li>退出：结束线程并释放资源。</li>
+</ol>
+<p>线程的竞争状态：</p>
+<ul>
+<li>竞争状态：包括读写状态的竞争</li>
+<li>临界区：读写数据的代码片段</li>
+</ul>
+<p>为了保护临界区的状态，一般使用锁来控制。</p>
+<h1 id="使用锁"><a href="#使用锁" class="headerlink" title="使用锁"></a>使用锁</h1><h2 id="一般锁"><a href="#一般锁" class="headerlink" title="一般锁"></a>一般锁</h2><p>一般可以使用锁来保证对临界区的控制：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> mutex mtx;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadMutex</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(;;)&#123;</span><br><span class="line">        mtx.<span class="built_in">lock</span>();</span><br><span class="line">        <span class="comment">// 执行逻辑</span></span><br><span class="line">        mtx.<span class="built_in">unlock</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是锁最普通的用法，但上述逻辑存在bug：当锁使用完成后释放锁，在for中跳转到下一个逻辑是相当快的，就可能导致unlock后还未来得及释放就再次上锁，导致下一个循环逻辑阻塞。<br>因此可以延后来确保锁被释放：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//...</span></span><br><span class="line">mtx.<span class="built_in">unlock</span>();</span><br><span class="line">this_thread::<span class="built_in">sleep_for</span>(<span class="number">1</span>ms);</span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="超时锁"><a href="#超时锁" class="headerlink" title="超时锁"></a>超时锁</h2><p>超时锁可以记录锁的获取情况，如果获取到锁则返回true，大致使用如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"></span><br><span class="line">timed_thread tmtx;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadTimedMutex</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(;;)&#123;</span><br><span class="line">        <span class="keyword">if</span>(!tmtx.<span class="built_in">try_lock_for</span>(<span class="number">300</span>ms))&#123;</span><br><span class="line">            <span class="comment">// 进行日记记录</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">// 获取锁会消耗资源，等待一段时间重新获取以节省资源</span></span><br><span class="line">            this_thread::<span class="built_in">sleep_for</span>(<span class="number">200</span>ms);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 执行逻辑代码</span></span><br><span class="line"></span><br><span class="line">        tmtx.<span class="built_in">unlock</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    
+    <a class="article-more-a" href="/2024/03/27/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1%E4%B8%8E%E5%90%8C%E6%AD%A5/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2024/03/27/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%80%9A%E4%BF%A1%E4%B8%8E%E5%90%8C%E6%AD%A5/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-note/C++多线程入门：第一个多线程程序" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2024/03/25/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F/" target="_blank">C++多线程入门：第一个多线程程序</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2024/03/25/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F/" class="archive-article-date">
+        <time datetime="2024-03-25T02:13:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-03-25</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="使用C-多线程"><a href="#使用C-多线程" class="headerlink" title="使用C++多线程"></a>使用C++多线程</h1><p>使用平台为Windows，使用多线程时需要包含thread头文件。</p>
+<p>第一个多线程程序：循环打印一个话。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">FirstThread</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;first thread and the thread id = &quot;</span>  &lt;&lt; this_thread::get_id &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;thread sleep 100ms&quot;</span> &lt;&lt; endl;</span><br><span class="line">        this_thread::<span class="built_in">sleep_for</span>(<span class="number">100</span>ms);   </span><br><span class="line">        <span class="comment">//this_thread::sleep_for(chrono::seconds(time)) </span></span><br><span class="line">    &#125;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;thread end&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;the main thread id = &quot;</span> &lt;&lt; this_thread::get_id &lt;&lt; endl;</span><br><span class="line">    <span class="function">thread <span class="title">th</span><span class="params">(FirstThread)</span></span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;waitting sub thread over&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="comment">//th.join();  //main thread block join会在主线程执行</span></span><br><span class="line">    th.<span class="built_in">detach</span>();    <span class="comment">// 将子线程与主线程分离</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">getchar</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="built_in">test</span>();    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>欲要使用多线程，先声明了一个thread对象，并用FirstThread来进行初始化，当线程执行时就会执行FirstThread函数。<br>将线程启动有两种方式，第一种是使用join函数，join会阻塞当前线程的执行，当子线程执行完毕后才会继续执行；第二种是detach函数，他将函数的执行与主线程分离。</p>
+<p>本例的一些问题：</p>
+<ol>
+<li>使用detach时，当主线程退出后子线程不一定会退出，可能还在执行。</li>
+<li>main结束后清理空间，此时子线程可能会访问非法内存，本例中使用getchar阻塞线程来避免这种情况。</li>
+</ol>
+    
+    <a class="article-more-a" href="/2024/03/25/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2024/03/25/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%A8%8B%E5%BA%8F/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-essay/初步使用GAS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2024/03/17/essay/%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8GAS/" target="_blank">初步使用GAS</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2024/03/17/essay/%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8GAS/" class="archive-article-date">
+        <time datetime="2024-03-17T07:31:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-03-17</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>启动插件，在VS中增加相应模块</p>
+<h1 id="添加GAS组件"><a href="#添加GAS组件" class="headerlink" title="添加GAS组件"></a>添加GAS组件</h1><p>直接添加Ability组件—可以在蓝图中直接添加</p>
+<p>创建一个技能基类，派生出技能类</p>
+<p>通过compoent调用give ability获得技能 以及 try activate尝试激活技能</p>
+<p>需要一个Gameplay Tag Container的数组</p>
+<p>添加Tag Ability.AbilityName 随天添加到ini</p>
+<p>在GAB中的Event ActivateAbility中可以调用PlayMontageAndWait来使用蒙太奇</p>
+<p>在ClassDefault中CoolDowns中添加技能CD-通过添加来创建以恶GE_—-&gt;用GE来处理游戏数据</p>
+<p>在GE_CD中的类默认设置中添加Components，选择BlockAbilityTags，在Tag中添加要用的技能</p>
+<p>在GAB中提交GE</p>
+<p>属性继承自AttributeSet，使用define标记宏标记属性，使用数据表赋值</p>
+<p>摄象机缓慢跟随 Lag</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2024/03/17/essay/%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8GAS/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-essay/使用Spine动画" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -234,7 +578,7 @@
 <p>选择AnimSource后，进入选择碎图集和骨骼信息，随后新建动画(AddNew)，可以在细节面板中预览和选择动画。</p>
 <p>此外在动画下方还有时间轴，可以在这里添加事件通知。</p>
 <h2 id="使用Spine动画-1"><a href="#使用Spine动画-1" class="headerlink" title="使用Spine动画"></a>使用Spine动画</h2><p>新建一个C++类，在选择父类时选择PaperZDCharacter或者PaperZDCharacter_Spine2D，两者都可以，以后者为父类创建一个新的类（命名为Hero），跳转到PaperZDCharacter_Spine2D中可以看到为我们提供了两个组件，为了后续方便使用可以新增两个函数来获取这两个组件，添加完成后类如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PAPERZDFORSPINE2D_API</span> APaperZDCharacter_Spine2D : <span class="keyword">public</span> APaperZDCharacter</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Spine renderer component. */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(VisibleAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Spine2D&quot;</span>, meta = (AllowPrivateAccess = <span class="string">&quot;true&quot;</span>))</span><br><span class="line">	USpineSkeletonRendererComponent* SpineRenderer;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Skeleton animation component. */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(VisibleAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Spine2D&quot;</span>, meta = (AllowPrivateAccess = <span class="string">&quot;true&quot;</span>))</span><br><span class="line">	USpineSkeletonAnimationComponent* SpineAnimationComponent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">APaperZDCharacter_Spine2D</span>();</span><br><span class="line"></span><br><span class="line">	<span class="function">FORCEINLINE USpineSkeletonAnimationComponent* <span class="title">GetSpineSkeletonComponent</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> SpineAnimationComponent; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">FORCEINLINE USpineSkeletonRendererComponent* <span class="title">GetSpineRenderComponent</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> SpineRenderer; &#125;</span><br><span class="line">	   	</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PAPERZDFORSPINE2D_API</span> APaperZDCharacter_Spine2D : <span class="keyword">public</span> APaperZDCharacter</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Spine renderer component. */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(VisibleAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Spine2D&quot;</span>, meta = (AllowPrivateAccess = <span class="string">&quot;true&quot;</span>))</span><br><span class="line">	USpineSkeletonRendererComponent* SpineRenderer;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Skeleton animation component. */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(VisibleAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Spine2D&quot;</span>, meta = (AllowPrivateAccess = <span class="string">&quot;true&quot;</span>))</span><br><span class="line">	USpineSkeletonAnimationComponent* SpineAnimationComponent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">APaperZDCharacter_Spine2D</span>();</span><br><span class="line"></span><br><span class="line">	<span class="function">FORCEINLINE USpineSkeletonAnimationComponent* <span class="title">GetSpineSkeletonAnimationComponent</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> SpineAnimationComponent; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">FORCEINLINE USpineSkeletonRendererComponent* <span class="title">GetSpineSkeletonRenderComponent</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> SpineRenderer; &#125;</span><br><span class="line">	   	</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>回到Hero类中，添加摄象机吊臂和摄象机组件并初始化，在编辑器中以Hero类新建一个蓝图类BP_Hero，其中主要包括：胶囊体。摄象机以吊臂、两个渲染组件、两个动画组件、Movement组件。<br>在SpineAnimation组件中选择碎图集和骨骼，并调整到合适大小。</p>
 <h2 id="使用Spine动画状态机"><a href="#使用Spine动画状态机" class="headerlink" title="使用Spine动画状态机"></a>使用Spine动画状态机</h2><p>回到内容浏览器，在PaperZD中选中AnimBP来构建我们的状态机，2D状态机的使用与普通的状态机类似，基本功能都有。</p>
@@ -244,12 +588,14 @@
 
 <p>PaperZD为我们提供了一些获取属性的接口，可以通过GetPaperCharacter来获取到角色。</p>
 <p>回到编辑器，继承自AnimBP类创建一个蓝图ABP_Hero，并在AnimBP中的ParentClass选择该类，这样就可以获取到该类中的各种自定义属性；在BP_Hero中的AnimatinComponent中的AnimInstanceClass选择ABP_Hero。</p>
-<p><em>UCLASS中必须加Blueprintablue，否则无法被设置为父类</em></p>
+<p><em>UCLASS中必须加Blueprintable，否则无法被设置为父类</em></p>
 <h2 id="一些方法"><a href="#一些方法" class="headerlink" title="一些方法"></a>一些方法</h2><p>在动画轨道中可以直接新建通知，使用时转到AnimBP中，可以看到左侧的Functions中有新建的通知，可以在其中编写逻辑。<br>但使用AnimState在需要新建一个state，才能在轨道中选择。新建一个蓝图类，继承自PaperZDAnimNotifyState，其中包含3个重载函数：Begin、End、Tick，可以在其中完成不同的逻辑。</p>
 <p>JumpToNode节点，在动画图表中有Jump节点可以用于跳转，可以用来从一个状态强制跳转到另一个状态。<br>Hero-&gt;GetAnimInstance-&gt;JumpToNode</p>
 <p>使用Playbacks，Playbacks是PaperZD在UE5中新增的功能，功能与蒙太奇类似，可以用于播放插槽内的动画。<br>Hero-&gt;GetAnimInstance-&gt;PlayAnimationplaybacks，使用时指定插槽的名称，并在动画图表中新增一个插槽（AddNewSlot）</p>
-<p>使用Muti-Directional Sequence，是一个多角度动画集合，可以根据不同的角度播放不同的动画，使用时选择SetDirectionality节点来选择不同角度的动画</p>
+<p>使用Muti-Directional Sequence，是一个多角度动画集合，可以根据不同的角度播放不同的动画，使用时选择SetDirectionality节点来选择不同角度的动画。</p>
+<p>让角色翻转，可以使用SetScaleX或SetScaleY来设置：<br>GetSpineSkeletonAnimationComponent()-&gt;SetScaleX(ScaleValue)</p>
 <p>使用骨骼插槽，Spine动画是骨骼动画，同样可以使用骨骼插槽来实现一些功能。在导入的骨骼资源中可以看到Bones、Slots、Skins、Animations四个选项，在创建完成角色后，可以给Bones上添加一些碰撞框等。<br>例如在root上增加一个box，在蓝图的BeginPlay里选择box-&gt;AttachComponentToComponent，Parent选择SpineRender组件，Socket在骨骼资产中选择，这里选择root，如果添加成功，我们可以打印一句AttachOK，失败的话打印AttackFilded，并把box的HiddenInGame设置为false。这就在开始游戏后就可以看到屏幕上打印AttachOK并且能在角色脚底看到box的跟随角色移动。<br>这可以用来完成一些角色的攻击判定，利用动画通知来决定何时开启和关闭检测，这与一般的攻击响应是类似的。</p>
+<p>让Spine动画称为原地动画。如果导入的Spine动画带有位移，但是并不想使用自带的位移动画，可以去Bone的源码中改变WorldX&#x2F;Y。<br>对于UE，在安装完成插件后，可以在Plugins&#x2F;SpinePlugin&#x2F;Source&#x2F;SpinePlugin&#x2F;Public&#x2F;Spine-cpp&#x2F;src&#x2F;spine&#x2F;Bone.cpp中找到：<br>void Bone::updateWorldTransform(float x, float y, float rotation, float scaleX, float scaleY, float shearX, float shearY)，在if(!parent)中将_worldX与_worldY注释掉<br>Unity也是类似逻辑，找到该函数后将worldX与worldY注射掉。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>PaperZD的官方文档：<a target="_blank" rel="noopener" href="https://www.criticalfailure-studio.com/paperzd-documentation/">https://www.criticalfailure-studio.com/paperzd-documentation/</a></p>
 
     
@@ -267,11 +613,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spine</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spine</a>
         		</li>
       		
 		</ul>
@@ -447,11 +793,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -560,11 +906,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		
 		</ul>
@@ -915,331 +1261,6 @@
 
 
   
-    <article id="post-essay/虚幻容器使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/" target="_blank">虚幻容器使用</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/" class="archive-article-date">
-        <time datetime="2023-10-15T08:34:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-15</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>虚幻容器时对同质资源进行管理的容器，包括TArray、TMap和TSet三种，均使用泛型进行创建，且不可创建在堆区，即不能使用new进行创建。<br>三种容器的操作与C++中的STL操作类似，提供的接口略有不同，但实现的功能几乎是相同的。</p>
-<h1 id="TArray"><a href="#TArray" class="headerlink" title="TArray"></a>TArray</h1><p>TArray是UE中的数组，也是最常用的容器，其速度快，内存消耗小，安全性高。</p>
-    
-    <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">虚幻</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-essay/虚幻垃圾回收" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" target="_blank">虚幻垃圾回收</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" class="archive-article-date">
-        <time datetime="2023-10-15T08:32:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-15</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="虚幻的垃圾回收"><a href="#虚幻的垃圾回收" class="headerlink" title="虚幻的垃圾回收"></a>虚幻的垃圾回收</h1><h2 id="垃圾回收定义"><a href="#垃圾回收定义" class="headerlink" title="垃圾回收定义"></a>垃圾回收定义</h2><p>垃圾回收是一种自动的内存管理机制，当程序的动态内存不再需要时，会自动予以回收，这种机制称为垃圾回收。垃圾回收可以减少程序员的负担和犯错的机会。</p>
-<h2 id="垃圾回收算法大致分类"><a href="#垃圾回收算法大致分类" class="headerlink" title="垃圾回收算法大致分类"></a>垃圾回收算法大致分类</h2><ul>
-<li>引用计数式：通过额外的计数来实时计算单个对象的引用次数，当计数减少到0时就将对象回收。</li>
-<li>追踪式：当对象达到垃圾回收条件时（内存不够或到达回收时间时）通过扫描系统中是否有对象的引用来盘对对象是否存活，然后回收对象。</li>
-<li>保守式：并不能准确判断每一个对象是否存活，但是能保证在不回收存活对象的情况下回收尽可能多的无用对象。</li>
-<li>精确式：在回收过程中能够准确识别每一个无用对象，通常需要额外的数据消耗（UE中的UPROPERTY）</li>
-<li>搬迁式：在对象回收过程中需要移动对象在内存中的位置。</li>
-<li>非搬迁式：在对象回收过程中不需要移动对象在内存中的位置。</li>
-<li>实时式：不需要用户停止程序，就可以进行垃圾回收。</li>
-<li>非实时式：与实时式相反，需要用户停止程序，才能进行垃圾回收。</li>
-<li>渐进式：同样不需要终端程序执行，与实时式的区别在于不会立即回收对象，而是到达一定条件时才进行回收。</li>
-<li>非渐进式：与渐进式的区别在于立即回收对象。</li>
-</ul>
-    
-    <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">垃圾回收</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/10/15/essay/%E8%99%9A%E5%B9%BB%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/设计模式5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/10/15/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F5/" target="_blank">设计模式（五）</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/10/15/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F5/" class="archive-article-date">
-        <time datetime="2023-10-15T01:11:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-15</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>接口隔离模式：某些接口之间的依赖会带来一些问题甚至无法实现，采用隔离互相紧密关联的接口是一种解决方法。</p>
-<h1 id="门面模式"><a href="#门面模式" class="headerlink" title="门面模式"></a>门面模式</h1><p>定义：为子系统中的一组接口提供一个一致的界面，此模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。</p>
-<p>门面模式包含两个部分：</p>
-<ul>
-<li>门面类：为子系统中的一组接口提供一个一致的界面，门面类将客户端与子系统内部的通信ptr，负责协调各子系统，使子系统之间相互协作，为客户端提供统一服务。</li>
-<li>子系统类：实现子系统的功能，各个子系统可以相互独立，子系统之间松散耦合。</li>
-</ul>
-<h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1><p>定义：为其他对象提供一种代理以控制对这个对象的访问。</p>
-    
-    <a class="article-more-a" href="/2023/10/15/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F5/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TachNotes//" class="article-tag-list-link color5">TachNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/10/15/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F5/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1361,27 +1382,7 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">计算机网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1389,11 +1390,23 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1401,11 +1414,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
+                <a href="javascript:void(0)" class="js-tag color5">增强输入</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">增强输入</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1551,7 +1568,7 @@
     	<section class="tools-section tools-section-me" q-show="aboutme">
         
           
-  	  		<div class="aboutme-wrap" id="aboutme"><br>个人简介:<br>大学生一枚，想要从事游戏开发,<br>希望能做出自己的游戏<br><br>主要涉及技术：<br>UE4、Unity2D、C++后端</div>
+  	  		<div class="aboutme-wrap" id="aboutme"><br>个人简介:<br>大学生一枚，想要从事游戏开发,<br>希望能做出自己的游戏<br><br>主要涉及技术：<br>UE4、Unity2D、C++</div>
   	  	
     	</section>
     
