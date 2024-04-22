@@ -6,16 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://13114987559.github.io">
-  <title>Category: TechNotes | KongXinQing~</title>
+  <title>虚幻多线程浅析 | KongXinQing~</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="KongXinQing~">
-<meta property="og:url" content="https://13114987559.github.io/categories/TechNotes/page/3/index.html">
+  <meta name="description" content="虚幻多线程简介虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。 虚幻多线程的使用创建线程我们创建一个类并继承FRunnable，重写Init、Ru">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚幻多线程浅析">
+<meta property="og:url" content="https://13114987559.github.io/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C/index.html">
 <meta property="og:site_name" content="KongXinQing~">
+<meta property="og:description" content="虚幻多线程简介虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。 虚幻多线程的使用创建线程我们创建一个类并继承FRunnable，重写Init、Ru">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-09-25T14:27:35.000Z">
+<meta property="article:modified_time" content="2024-04-17T14:08:05.478Z">
 <meta property="article:author" content="KongXinQing">
+<meta property="article:tag" content="UE">
+<meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="多线程">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="KongXinQing~" type="application/atom+xml">
@@ -184,398 +191,320 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-essay/虚幻多线程与异步操作" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2023" class="archive-year">2023</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/11/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%95%A3%E5%88%97%E8%A1%A8/" class="archive-article-date">
-        <time datetime="2023-09-11T10:38:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-11</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/11/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%95%A3%E5%88%97%E8%A1%A8/" target="_blank">数据结构与算法：散列表</a>
   
+    <h1 class="article-title" itemprop="name">
+      虚幻多线程浅析
     </h1>
   
 
 
-        <div class="article-info info-on-right">
+  
+  
+<a href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C/" class="archive-article-date">
+        <time datetime="2023-09-25T14:27:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-25</time>
+</a>
+
+  
+  
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">2.3k字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">8分</span>
+    </span>
+  </span>
+</div>
+
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="虚幻多线程简介"><a href="#虚幻多线程简介" class="headerlink" title="虚幻多线程简介"></a>虚幻多线程简介</h1><p>虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。<br>Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。</p>
+<h1 id="虚幻多线程的使用"><a href="#虚幻多线程的使用" class="headerlink" title="虚幻多线程的使用"></a>虚幻多线程的使用</h1><h2 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h2><p>我们创建一个类并继承FRunnable，重写Init、Run、Exit函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">UMyThread</span> : <span class="keyword">public</span> FRunnable</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UMyThread</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">UMyThread</span>();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">Init</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> uint32 <span class="title">Run</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Exit</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>::</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">AMyActor</span>* TestActor;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h2 id="添加功能"><a href="#添加功能" class="headerlink" title="添加功能"></a>添加功能</h2><p>完成线程类的创建，假设现在需要在线程中控制一个Actor的移动，那么我们就创建一个Actor</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AMyActor</span> : <span class="keyword">public</span> AActor</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">AMyActor</span>();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Tick</span><span class="params">(<span class="type">float</span> DeltaTime)</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">BeginPlay</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadWrite, Category = <span class="string">&quot;MyActor&quot;</span>)</span><br><span class="line">    UStaticMeshComponent* MeshComponent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>并添加定义</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AMyActor::<span class="built_in">AMyActor</span>()</span><br><span class="line">&#123;</span><br><span class="line">    PrimaryActorTick.bCanEverTick = <span class="literal">true</span>;</span><br><span class="line">    MeshComponent = <span class="built_in">CreateDefaultSubobject</span>&lt;UStaticMeshComponent&gt;(<span class="built_in">TEXT</span>(<span class="string">&quot;MeshComponent&quot;</span>));</span><br><span class="line">    MeshComponent-&gt;<span class="built_in">SetupAttachment</span>(RootComponent);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>为了实现Actor的移动，我们需要将Actor作为构造函数参数传入线程类中,并实现线程类中函数声明。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//UMyThread()-&gt;UMyThread(AMyActor* MyActor)</span></span><br><span class="line"></span><br><span class="line">UMyThread::<span class="built_in">UMyThread</span>(AMyActor* MyActor):<span class="built_in">TestActor</span>(MyActor)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">UMyThread::~<span class="built_in">UMyThread</span>()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">MMyThread::Init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;Init&quot;</span>));</span><br><span class="line">    <span class="keyword">if</span>(!TestActor)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">int32 <span class="title">UMyThread::Run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;Run&quot;</span>));</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        TestActor-&gt;<span class="built_in">SetActorLocation</span>(TestActor-&gt;<span class="built_in">GetActorLocation</span>() + <span class="built_in">FVector</span>(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>));</span><br><span class="line">        <span class="comment">//FPlatformProcess::Sleep(0.1f);  </span></span><br><span class="line">        <span class="comment">//对线程进行阻隔</span></span><br><span class="line">        <span class="keyword">if</span>(TestActor-&gt;<span class="built_in">GetActorLocation</span>().X &gt; <span class="number">1000</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">UMyThread::Exit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;Exit&quot;</span>));</span><br><span class="line">    <span class="keyword">delete</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h2><p>我们在AMyACtor中实现启动线程的功能<br>首先在引擎中添加输入事件并绑定，在Actor类中添加如下代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BeginThread</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>对BeginThread函数进行实现</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMyActor::BeginThread</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    UMyThread* MyThread = <span class="keyword">new</span> <span class="built_in">UMyThread</span>(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//FRunnableThread* RunnableThread=FRunnableThread::Create(MyThread, TEXT(&quot;MyThread&quot;), 0, TPri_Normal);</span></span><br><span class="line">    <span class="comment">//第一个参数为线程类，第二个参数为线程名，第三个参数为线程优先级，第四个参数为线程堆栈大小</span></span><br><span class="line"></span><br><span class="line">    FRunnableThread* RunnableThread=FRunnableThread::<span class="built_in">Create</span>(MyThread, <span class="built_in">TEXT</span>(<span class="string">&quot;MyThread&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将Actor拖入场景中，此时运行游戏，按下输入事件，如果看到打印消息并且物体移动，则说明线程创建并运行成功。</p>
+<h2 id="增加暂停功能"><a href="#增加暂停功能" class="headerlink" title="增加暂停功能"></a>增加暂停功能</h2><p>希望给线程增加暂停和退出功能，所以提供bPause和bExit两个变量，并将Run逻辑更改为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whlie</span>(!bExit)&#123;</span><br><span class="line">    <span class="keyword">if</span>(bPause)&#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同时对外提供两个函数用于修改bPause和bExit的值，但Run并没有被真正的挂起，while依然在执行，所以提供另一种方法。</p>
+<p>为了阻塞线程，我们增加一个FEvent变量并在构造函数中获取ThreadEvent：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FEvent* ThreadEvent;</span><br><span class="line">ThreadEvent=FPlatformProcess::<span class="built_in">GetSynchEventFromPool</span>();</span><br></pre></td></tr></table></figure>
+
+<p>随后对暂停逻辑进行修改：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(!bExit)&#123;</span><br><span class="line">    <span class="keyword">if</span>(bPause)&#123;</span><br><span class="line">        <span class="comment">// 使用Wait来阻塞线程</span></span><br><span class="line">        ThreadEvent-&gt;<span class="built_in">Wait</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了重新唤醒线程，我们需要用到Trigger函数，现提供一个WakeUpThread函数用来唤醒线程：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">WakeUpThread</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    bPause=<span class="literal">false</span>;</span><br><span class="line">    <span class="comment">// 通过Trigger来重新唤起</span></span><br><span class="line">    ThreadEvent-&gt;<span class="built_in">Trigger</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此外还可以通过UE提供给我们的方法来挂起线程，在之前我们使用FRunnableThread::Create来创建了一个可执行线程，它提供了一个名为Suspend(bool) 的方法用于直接控制线程的暂停与唤醒：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Suspend的源码，可以比较方便的控制线程的挂起与唤醒</span></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Suspend</span><span class="params">(<span class="type">bool</span> bShouldPause = <span class="number">1</span>)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">check</span>(Thread);</span><br><span class="line">    <span class="keyword">if</span> (bShouldPause == <span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">SuspendThread</span>(Thread);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">ResumeThread</span>(Thread);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式虽然便捷但是是直接挂起线程，有时候我们希望当前线程能够执行完当前一次循环的内容后再将线程挂起，使用时需要考虑不同情况。</p>
+<h2 id="另一种启动线程的方式"><a href="#另一种启动线程的方式" class="headerlink" title="另一种启动线程的方式"></a>另一种启动线程的方式</h2><p>上述是再外部创建了一个线程实例，现在在类内提供一个线程实例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FRunnableThread* ThreadInstance;</span><br><span class="line">ThreadInstance=FRunnableThread::<span class="built_in">Create</span>(<span class="keyword">this</span>,<span class="built_in">TEXT</span>(<span class="string">&quot;ThreadInstance&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>这时大部分操作就都在类内完成，在外部创建时需要提供相应的接口来完成对应的操作。</p>
+<h2 id="归还资源"><a href="#归还资源" class="headerlink" title="归还资源"></a>归还资源</h2><p>FRunnable类本身，以及FEvent和ThreadInstance都是我们申请来的，需要进行相应的归还，否则就会造成内存泄漏。</p>
+<p>对于类本身，在线程结束时，即Exit被调用时，我们便不再需要这个类了，所以可以在Exit中调用delete来删除自身</p>
+<p>对于FEvent并不能直接删除，而是要归还给线程池，所以在析构函数中进行如下操作：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">UMyThread::~<span class="built_in">UMyThread</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(ThreadEvent)&#123;</span><br><span class="line">        FRunnableThread::<span class="built_in">ReturnSynchEventToPool</span>(ThreadEvent);</span><br><span class="line">        ThreadEvent=<span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(ThreadInstance)&#123;</span><br><span class="line">        <span class="keyword">delete</span> ThreadInstance;</span><br><span class="line">        ThreadInstance=<span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="单个线程与多个线程"><a href="#单个线程与多个线程" class="headerlink" title="单个线程与多个线程"></a>单个线程与多个线程</h2><p>当希望该线程类只有一个实例时，可以考虑将构造函数声明为私有，并在需要时创建并返回，这是一种方法，更推荐的做法时使用static来做，利用static构造函数只调用一次的特性来创建一个实例并在需要时将其返回。&lt;—单例模式的创建方法</p>
+<p>当希望有多个线程并方便管理时，可以使用虚幻提供的TMap来存储FRunnable。</p>
+<h1 id="虚幻多线程的锁"><a href="#虚幻多线程的锁" class="headerlink" title="虚幻多线程的锁"></a>虚幻多线程的锁</h1><p>在原生的C++中为了保证多个线程对数据的读写操作的唯一性一般会使用原子变量或者锁来操作，在UE中同样可以使用原子变量或锁。</p>
+<h2 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h2><p>直接使用TAtomic的模板类</p>
+<h2 id="使用锁"><a href="#使用锁" class="headerlink" title="使用锁"></a>使用锁</h2><p>虚幻提供了三种锁：自旋锁、读写锁、临界区</p>
+<ul>
+<li>自旋锁（FSpinLock）：是忙-等待的一种锁，当一个线程尝试获取锁失败后会一直请求获取直到获取锁。因为会占用较多CPU资源而造成性能损失</li>
+<li>读写锁（FRWLock）：用于保护读写的共享资源，允许多个线程对资源进行度操作，但只能有一个线程进行写的操作与C++中的共享锁类似</li>
+<li>临界区（FCriticalSection）：采用互斥变量来保护临界区，确保同时只有一个线程访问临界区，并且提供较低的竞争代价</li>
+</ul>
+<p>使用方法都与原生C++类似，不再过描述。</p>
+<h2 id="死锁问题"><a href="#死锁问题" class="headerlink" title="死锁问题"></a>死锁问题</h2><p>在原生C++中锁使用不当（由于多次上锁或者忘记解锁）会造成死锁，而在UE中同样会存在着这样的问题，为了减少这一问题，可以考虑使用FScopeLock。</p>
+<p>该锁利用RAII机制在获取锁时加锁，离开作用域时自动解锁，使用时便不用过多担心重复上锁以及忘记解锁。</p>
+<h1 id="虚幻异步与AsyncTask"><a href="#虚幻异步与AsyncTask" class="headerlink" title="虚幻异步与AsyncTask"></a>虚幻异步与AsyncTask</h1><h2 id="AsyncTask系统"><a href="#AsyncTask系统" class="headerlink" title="AsyncTask系统"></a>AsyncTask系统</h2><p>AsyncTask系统是一套基于线程池的异步处理系统，同样是使用Runnable实现的，只不过UE对其作了封装使其更加易用。<br>使用异步时需要继承FNonAbandonableTask。</p>
+<p>官方的使用样例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ExampleAysncTask</span>:<span class="keyword">public</span> FNonAbandonableTask</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">FAsyncTask</span>&lt;ExampleAysncTask&gt;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">ExampleAsyncTask</span>(int32 InExampleData):<span class="built_in">ExampleData</span>(InExampleData)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">DoWork</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">FORCEINLINE TStatId <span class="title">GetStatId</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">RETURN_QUICK_DECLARE_CYCLE_STAT</span>(ExampleAsyncTask,STATGROUP_ThreadPoolAsyncTasks);</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    int32 ExampleData;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>案例中需声明一个友元类便于线程池访问，DoWork里面执行具体的逻辑。</p>
+<p>AsyncTask同时包含以下特点：</p>
+<ol>
+<li>FAsyncTask是一个模板类，真正的AsyncTask需要手动完成构建并实现DoWork函数，随后将自己构建的类作为模板参数传递</li>
+<li>FAsyncTask默认使用UE提供的线程池</li>
+<li>FAsyncTask并不一定新开线程执行，也可以在当前线程执行，使用StartSynchronousTask直接在当前线程执行任务</li>
+<li>FAsyncTask包含一个DoneEvent，任务完成后会自动激活该事件，可以调用EnsureCompletion等待任务完成时做一些其它操作</li>
+<li>完成后需要手动delete</li>
+<li>此外还有AutoDeleteAsyncTask，只能使用UE提供的线程池并且会在执行完成后自动删除</li>
+</ol>
+<p>关于NonAbandonableTask，如果手动调用Abandon函数，也会执行DoWork函数。</p>
+<h2 id="UE的线程池与任务队列"><a href="#UE的线程池与任务队列" class="headerlink" title="UE的线程池与任务队列"></a>UE的线程池与任务队列</h2><p>UE中的线程池为FQueueThreadPool，线程池中维护了多个线程FQueueThread和多个任务队列IQueuedWork。</p>
+<p>相比于一般的线程，FQueueThread里面多了一个FEvent* DoWorkEvent成员，与一般的线程池类似，在没有任务的时候将线程挂起，在添加并分配任务时将线程激活，使用AddQueuedWork并执行了DoWorkEvent的Trigger函数后会被激活。</p>
+<p>线程池任务IQueuedWork本身是一个接口，所以得有具体实现，而AsyncTask就是对IQueuedTask的一个具体实现。</p>
+<h1 id="TaskGraph系统"><a href="#TaskGraph系统" class="headerlink" title="TaskGraph系统"></a>TaskGraph系统</h1><p>TaskGraph是UE的一套抽象异步处理系统，可以创建多个多线程任务同时指定各个任务之间的依赖关系，按照一定的顺序依次处理任务</p>
+<p>后续待更新…</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p>更多详细信息可以查看官方文档：<a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/HAL/">https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/HAL/</a> 在其中的FRunnable和FRunnableThread等文档中可以找到更多的信息。<br>在知乎文章可以学习比较详细的使用：<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/133921916">https://zhuanlan.zhihu.com/p/133921916</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/38881269">https://zhuanlan.zhihu.com/p/38881269</a></p>
+
+    
+
+    
+
+    
+    <div class="declare"> 
+      <ul class="post-copyright">
+        <li>
+          <strong>本文作者：</strong>
+          KongXinQing
+        </li>
+        <li>
+          <strong>本文链接：</strong>
+          <a href="https://13114987559.github.io/2023/09/25/essay/虚幻多线程与异步操作/" title="虚幻多线程浅析" target="_blank">https://13114987559.github.io/2023/09/25/essay/虚幻多线程与异步操作/</a>
+        </li>
+        
+        <li>
+          <strong>版权声明： </strong>
           
+          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
+        </li>
+        
+      </ul>
+    </div>
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
         		</li>
       		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">散列表</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/" class="archive-article-date">
-        <time datetime="2023-09-09T09:22:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-09</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84/" target="_blank">数据结构与算法：最短路径</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">图</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+    
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+    
+
+    
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+
+    
+    <div class="clearfix"></div>
+  </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" class="archive-article-date">
-        <time datetime="2023-09-09T09:21:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-09</time>
-</a>
 
+
+<nav id="article-nav">
+  
+    <a href="/2023/10/08/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          设计模式（一）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数据结构与算法-堆与优先队列</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/09/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91/" target="_blank">数据结构与算法：最小生成树</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">图</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">虚幻多线程简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">虚幻多线程的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">创建线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%8A%9F%E8%83%BD"><span class="toc-number">2.2.</span> <span class="toc-text">添加功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E7%BA%BF%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">启动线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E6%9A%82%E5%81%9C%E5%8A%9F%E8%83%BD"><span class="toc-number">2.4.</span> <span class="toc-text">增加暂停功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%A6%E4%B8%80%E7%A7%8D%E5%90%AF%E5%8A%A8%E7%BA%BF%E7%A8%8B%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-number">2.5.</span> <span class="toc-text">另一种启动线程的方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%92%E8%BF%98%E8%B5%84%E6%BA%90"><span class="toc-number">2.6.</span> <span class="toc-text">归还资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%B8%AA%E7%BA%BF%E7%A8%8B%E4%B8%8E%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B"><span class="toc-number">2.7.</span> <span class="toc-text">单个线程与多个线程</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E9%94%81"><span class="toc-number">3.</span> <span class="toc-text">虚幻多线程的锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E5%8F%98%E9%87%8F"><span class="toc-number">3.1.</span> <span class="toc-text">原子变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E9%94%81"><span class="toc-number">3.2.</span> <span class="toc-text">使用锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98"><span class="toc-number">3.3.</span> <span class="toc-text">死锁问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%B9%BB%E5%BC%82%E6%AD%A5%E4%B8%8EAsyncTask"><span class="toc-number">4.</span> <span class="toc-text">虚幻异步与AsyncTask</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AsyncTask%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.1.</span> <span class="toc-text">AsyncTask系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UE%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B8%8E%E4%BB%BB%E5%8A%A1%E9%98%9F%E5%88%97"><span class="toc-number">4.2.</span> <span class="toc-text">UE的线程池与任务队列</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TaskGraph%E7%B3%BB%E7%BB%9F"><span class="toc-number">5.</span> <span class="toc-text">TaskGraph系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-number">6.</span> <span class="toc-text">参考文档</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/" class="archive-article-date">
-        <time datetime="2023-09-06T09:35:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-06</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/06/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%9B%BE/" target="_blank">数据结构与算法：图</a>
-  
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">图</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/" class="archive-article-date">
-        <time datetime="2023-08-23T11:40:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-23</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/08/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%8F%89%E6%A0%91/" target="_blank">数据结构与算法：二叉树</a>
-  
-    </h1>
-  
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">树</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="archive-article-date">
-        <time datetime="2023-08-10T04:53:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-08-10</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/08/10/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E7%BA%BF%E6%80%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" target="_blank">数据结构与算法-线性数据结构</a>
-  
-    </h1>
-  
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">线性表</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/categories/TechNotes/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/categories/TechNotes/">1</a><a class="page-number" href="/categories/TechNotes/page/2/">2</a><span class="page-number current">3</span>
-    </nav>
-  
 
 
           </div>
@@ -604,10 +533,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",

@@ -10,13 +10,15 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="article">
+  <meta name="description" content="很多时候我们并不会频繁的申请线程，而是采用线程池的方式，将任务加入到线程池中等待线程池中的空闲线程去处理该任务。 声明线程池基类一个线程池应包括如下几个基本功能：  线程池初始化 启动所有线程 线程池入口  稍后为其增加添加任务的功能。 对于上述3个功能，提供如下实现：直接将文件声明为hpp 12345678910111213141516171819202122232425262728293031">
+<meta property="og:type" content="article">
 <meta property="og:title" content="C++多线程入门：简单的线程池">
 <meta property="og:url" content="https://13114987559.github.io/2024/04/07/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AE%80%E5%8D%95%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html">
 <meta property="og:site_name" content="KongXinQing~">
+<meta property="og:description" content="很多时候我们并不会频繁的申请线程，而是采用线程池的方式，将任务加入到线程池中等待线程池中的空闲线程去处理该任务。 声明线程池基类一个线程池应包括如下几个基本功能：  线程池初始化 启动所有线程 线程池入口  稍后为其增加添加任务的功能。 对于上述3个功能，提供如下实现：直接将文件声明为hpp 12345678910111213141516171819202122232425262728293031">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-04-07T11:37:00.000Z">
-<meta property="article:modified_time" content="2024-04-07T11:40:54.417Z">
+<meta property="article:modified_time" content="2024-04-10T08:47:44.850Z">
 <meta property="article:author" content="KongXinQing">
 <meta property="article:tag" content="Cpp">
 <meta property="article:tag" content="多线程">
@@ -82,8 +84,6 @@
 			
 				<li><a href="/categories/Essay/" >随笔</a></li>
 			
-				<li><a href="/Resume/" >简历</a></li>
-			
 			</ul>
 		</nav>
 		<nav class="header-smart-menu">
@@ -148,8 +148,6 @@
 			
 				
 			
-				
-			
 			
 			
 			<nav class="header-nav">
@@ -172,13 +170,11 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 25%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 25%"><a href="/categories/TechNotes/">技术笔记</a></li>
+					<li style="width: 33.333333333333336%"><a href="/categories/TechNotes/">技术笔记</a></li>
 		        
-					<li style="width: 25%"><a href="/categories/Essay/">随笔</a></li>
-		        
-					<li style="width: 25%"><a href="/Resume/">简历</a></li>
+					<li style="width: 33.333333333333336%"><a href="/categories/Essay/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -222,7 +218,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">0字</span>
+      <span class="post-count">1.3k字</span>
     </span>
   </span>
 
@@ -231,7 +227,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">5分</span>
     </span>
   </span>
 </div>
@@ -242,7 +238,51 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    
+    <p>很多时候我们并不会频繁的申请线程，而是采用线程池的方式，将任务加入到线程池中等待线程池中的空闲线程去处理该任务。</p>
+<h1 id="声明线程池基类"><a href="#声明线程池基类" class="headerlink" title="声明线程池基类"></a>声明线程池基类</h1><p>一个线程池应包括如下几个基本功能：</p>
+<ol>
+<li>线程池初始化</li>
+<li>启动所有线程</li>
+<li>线程池入口</li>
+</ol>
+<p>稍后为其增加添加任务的功能。</p>
+<p>对于上述3个功能，提供如下实现：<br>直接将文件声明为hpp</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BaseThreadPool</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">int</span> Num)</span>；</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="type">void</span> <span class="title">Start</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Run</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> ThreadNum;</span><br><span class="line">    std::mutex mtx;</span><br><span class="line">    std::vector&lt;Thread*&gt; ThreadPool;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseThreadPool::Init</span><span class="params">(<span class="type">int</span> Num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">    ThreadNum=Num;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseThreadPool::Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(ThreadNum&lt;=<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(!ThreadPool.<span class="built_in">empty</span>())&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;ThreadNum;i++)&#123;</span><br><span class="line">        <span class="keyword">auto</span> th = <span class="keyword">new</span> std::<span class="built_in">thread</span>(&amp;BaseThreadPool::Run,<span class="keyword">this</span>);</span><br><span class="line">        ThreadPool.<span class="built_in">push_back</span>(th);</span><br><span class="line">        th-&gt;<span class="built_in">detach</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseThreadPool::Run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Thread Run&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Thread Exit&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此完成了线程池的基本框架。<br>在Start函数中对线程数为0和线程池为空两种情况进行了处理，为了方便这里直接返回。</p>
+<h1 id="提供任务基类"><a href="#提供任务基类" class="headerlink" title="提供任务基类"></a>提供任务基类</h1><p>提供一个任务基类，所有需要多线程调用的任务都需要继承自该类，由于该类并不需要实例，所以将其声明为抽象类。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BaseTask</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">TaskRun</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">BaseTask</span>()</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在需要继承的类中重写TaskRun以完成相应逻辑。</p>
+<h1 id="对线程池基类稍加改进"><a href="#对线程池基类稍加改进" class="headerlink" title="对线程池基类稍加改进"></a>对线程池基类稍加改进</h1><p>有了相应的任务类后为线程池类增加AddTask和GetTask方法：<br>使用list来存储所有任务，std::list&lt;BaseTask*&gt; TaskList<br>同时希望在增加一个任务后线程能立刻做出回应，所以再使用一个条件变量</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;BaseTask.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_vatiable&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddTask</span><span class="params">(BaseTask* Task)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">	TaskList.<span class="built_in">push_back</span>(Task);</span><br><span class="line">	Lock.<span class="built_in">unlock</span>();</span><br><span class="line">	cv.<span class="built_in">notify_one</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">BaseTask* <span class="title">GetTask</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">	<span class="keyword">if</span> (TaskList.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">		cv.<span class="built_in">wait</span>(Lock);;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 防止多次通知导致为空</span></span><br><span class="line">	<span class="keyword">if</span> (TaskList.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">auto</span> task = TaskList.<span class="built_in">front</span>();</span><br><span class="line">	TaskList.<span class="built_in">pop_front</span>();</span><br><span class="line">	<span class="keyword">return</span> task;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在完成对任务的添加和获取后需要对Run进行一些修改以便能够执行相应任务：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseThreadPool::Run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Thread Run&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="keyword">auto</span> Task=<span class="built_in">GetTask</span>();</span><br><span class="line">		<span class="keyword">if</span> (!Task) &#123;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			Task-&gt;<span class="built_in">TaskRun</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">catch</span> (...)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// 处理异常，防止一个线程运行错误导致整个线程退出</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Thread Exit&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="简单测试"><a href="#简单测试" class="headerlink" title="简单测试"></a>简单测试</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;BaseThreadPool.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestTask</span>:<span class="keyword">public</span> BaseTask</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">TaskRun</span><span class="params">()</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::cout &lt;&lt; name &lt;&lt; <span class="string">&quot; Task Run&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	std::string name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	BaseThreadPool pool;</span><br><span class="line">	pool.<span class="built_in">Init</span>(<span class="number">4</span>);</span><br><span class="line">	pool.<span class="built_in">Start</span>();</span><br><span class="line"></span><br><span class="line">	TestTask t;</span><br><span class="line">	t.name=<span class="string">&quot;Name01&quot;</span>;</span><br><span class="line">	pool.<span class="built_in">AddTask</span>(&amp;t);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">getchar</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="更进一步完善线程池的功能"><a href="#更进一步完善线程池的功能" class="headerlink" title="更进一步完善线程池的功能"></a>更进一步完善线程池的功能</h1><p>线程池不会一直运行下去，有时候需要结束并清空线程池，这时就需要未线程池增加一个退出功能。<br>未线程池增加bool变量bExit和设置bExit的函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Exit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	bExit=<span class="literal">true</span>;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Exit&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">	cv.<span class="built_in">notify_all</span>();</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span>&amp; th:ThreadPool)&#123;</span><br><span class="line">		<span class="keyword">if</span>(th.<span class="built_in">joinable</span>())&#123;</span><br><span class="line">			th-&gt;<span class="built_in">join</span>();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span>&amp; th : ThreadPool) &#123;</span><br><span class="line">		<span class="keyword">delete</span> th;</span><br><span class="line">		th=<span class="literal">nullptr</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> bExit;</span><br></pre></td></tr></table></figure>
+
+<p>先设置bExit为true并通知所有线程退出，让线程去处理相应逻辑。<br>遍历所有线程池中的线程处理待办的任务<br>随后清空线程池</p>
+<p>主要退出逻辑完成后还需要完善其它逻辑</p>
+<p>首先当设置线程池退出后就不应该再有新的任务增加进来，所以我们对AddTask做出处理：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddTask</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 加锁逻辑</span></span><br><span class="line">	<span class="keyword">if</span>(bExit)&#123;</span><br><span class="line">		<span class="comment">// 额外处理，比如直接抛弃任务</span></span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改GetTask和Run</p>
+<p>GetTask修改与AddTask类似：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">GetTask</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 这里是wait逻辑，Exit后进行了一次通知</span></span><br><span class="line">	<span class="keyword">if</span>(TaskList.<span class="built_in">empty</span>())&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 这里有一个相同的逻辑，可以公用一个</span></span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之前Run是一个死循环，这里将循环条件改为bExit即可</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">	<span class="keyword">while</span>(bExit)&#123;</span><br><span class="line">		<span class="comment">//...</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="获取正在运行的线程数量"><a href="#获取正在运行的线程数量" class="headerlink" title="获取正在运行的线程数量"></a>获取正在运行的线程数量</h1><p>使用原子变量来存储正在运行的线程数量，原子变量本身就是线程安全的，所以可以直接改变值。<br>在使用时需要使用atomic头文件。<br>提供一个int类型原子变量和一个Get函数获取正在运行线程数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;atomic&gt;</span></span></span><br><span class="line"></span><br><span class="line">std::atomic&lt;<span class="type">int</span>&gt; RunningTaskNum&#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">GetRunningTaskNum</span><span class="params">()</span> </span>&#123; RunningTaskNum; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在线程Run函数中，在线程执行前令RunningTaskNum自增（前置自增），并在任务结束后自减。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>通过提供任务基类和线程池基类实现了一个简单的线程池，后面我们会使用智能指针等技术对已有的线程池进行优化。</p>
+
     
 
     
@@ -364,6 +404,15 @@
 
 <nav id="article-nav">
   
+    <a href="/2024/04/08/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%AE%8C%E5%96%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          C++多线程入门：完善线程池
+        
+      </div>
+    </a>
+  
   
     <a href="/2024/04/06/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">C++多线程入门：并行计算</div>
@@ -393,7 +442,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A3%B0%E6%98%8E%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%9F%BA%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">声明线程池基类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%90%E4%BE%9B%E4%BB%BB%E5%8A%A1%E5%9F%BA%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">提供任务基类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AF%B9%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%9F%BA%E7%B1%BB%E7%A8%8D%E5%8A%A0%E6%94%B9%E8%BF%9B"><span class="toc-number">3.</span> <span class="toc-text">对线程池基类稍加改进</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E6%B5%8B%E8%AF%95"><span class="toc-number">4.</span> <span class="toc-text">简单测试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9B%B4%E8%BF%9B%E4%B8%80%E6%AD%A5%E5%AE%8C%E5%96%84%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="toc-number">5.</span> <span class="toc-text">更进一步完善线程池的功能</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E6%AD%A3%E5%9C%A8%E8%BF%90%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%95%B0%E9%87%8F"><span class="toc-number">6.</span> <span class="toc-text">获取正在运行的线程数量</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -529,18 +578,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
              
@@ -549,11 +586,23 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -601,11 +650,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
             
             <div class="clearfix"></div>

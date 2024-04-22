@@ -6,22 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://13114987559.github.io">
-  <title>虚幻多线程浅析 | KongXinQing~</title>
+  <title>C++多线程入门：完善线程池 | KongXinQing~</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="虚幻多线程简介虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。 虚幻多线程的使用创建线程我们创建一个类并继承FRunnable，重写Init、Ru">
+  <meta name="description" content="上一章我们制作了一个简单的线程池，本次将使用智能指针来管理创建的对象：各种任务和创建的线程 使用shared_ptr来管理任务和线程首先对线程池中进行修改：  将BaseTask*替换为std::shared_ptr&lt; BaseTask &gt; 将线程池中的std::thread*替换为std::shared_ptr&lt; std::thread &gt; 对AddTask的逻辑稍加修改">
 <meta property="og:type" content="article">
-<meta property="og:title" content="虚幻多线程浅析">
-<meta property="og:url" content="https://13114987559.github.io/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:title" content="C++多线程入门：完善线程池">
+<meta property="og:url" content="https://13114987559.github.io/2024/04/08/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%AE%8C%E5%96%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/index.html">
 <meta property="og:site_name" content="KongXinQing~">
-<meta property="og:description" content="虚幻多线程简介虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。 虚幻多线程的使用创建线程我们创建一个类并继承FRunnable，重写Init、Ru">
+<meta property="og:description" content="上一章我们制作了一个简单的线程池，本次将使用智能指针来管理创建的对象：各种任务和创建的线程 使用shared_ptr来管理任务和线程首先对线程池中进行修改：  将BaseTask*替换为std::shared_ptr&lt; BaseTask &gt; 将线程池中的std::thread*替换为std::shared_ptr&lt; std::thread &gt; 对AddTask的逻辑稍加修改">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-09-25T14:27:35.000Z">
-<meta property="article:modified_time" content="2023-11-04T09:47:16.687Z">
+<meta property="article:published_time" content="2024-04-08T02:56:26.000Z">
+<meta property="article:modified_time" content="2024-04-10T10:16:11.086Z">
 <meta property="article:author" content="KongXinQing">
 <meta property="article:tag" content="Cpp">
-<meta property="article:tag" content="UE">
 <meta property="article:tag" content="多线程">
 <meta name="twitter:card" content="summary">
   
@@ -84,8 +83,6 @@
 				<li><a href="/categories/TechNotes/" >技术笔记</a></li>
 			
 				<li><a href="/categories/Essay/" >随笔</a></li>
-			
-				<li><a href="/Resume/" >简历</a></li>
 			
 			</ul>
 		</nav>
@@ -151,8 +148,6 @@
 			
 				
 			
-				
-			
 			
 			
 			<nav class="header-nav">
@@ -175,13 +170,11 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 25%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 25%"><a href="/categories/TechNotes/">技术笔记</a></li>
+					<li style="width: 33.333333333333336%"><a href="/categories/TechNotes/">技术笔记</a></li>
 		        
-					<li style="width: 25%"><a href="/categories/Essay/">随笔</a></li>
-		        
-					<li style="width: 25%"><a href="/Resume/">简历</a></li>
+					<li style="width: 33.333333333333336%"><a href="/categories/Essay/">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -197,22 +190,22 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-essay/虚幻多线程" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-note/C++多线程入门：完善线程池" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
   
   
     <h1 class="article-title" itemprop="name">
-      虚幻多线程浅析
+      C++多线程入门：完善线程池
     </h1>
   
 
 
   
   
-<a href="/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="archive-article-date">
-        <time datetime="2023-09-25T14:27:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-25</time>
+<a href="/2024/04/08/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%AE%8C%E5%96%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="archive-article-date">
+        <time datetime="2024-04-08T02:56:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-08</time>
 </a>
 
   
@@ -225,7 +218,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">644字</span>
+      <span class="post-count">539字</span>
     </span>
   </span>
 
@@ -245,29 +238,23 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="虚幻多线程简介"><a href="#虚幻多线程简介" class="headerlink" title="虚幻多线程简介"></a>虚幻多线程简介</h1><p>虚幻引擎为了多平台的特性，对线程实现进行封装，抽象为FRunnable类，使用时需要继承FRunnable类，并重写Init、Run、Exit函数。<br>Init中执行所有内容的初始化，如果初始化失败将自行退出线程并返回错误代码，否则将会执行Run函数，Run函数中逻辑执行完毕后将调用Exit函数退出线程。</p>
-<h1 id="虚幻多线程的使用"><a href="#虚幻多线程的使用" class="headerlink" title="虚幻多线程的使用"></a>虚幻多线程的使用</h1><h2 id="创建线程"><a href="#创建线程" class="headerlink" title="创建线程"></a>创建线程</h2><p>我们创建一个类并继承FRunnable，重写Init、Run、Exit函数。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">UMyThread</span> : <span class="keyword">public</span> FRunnable</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UMyThread</span>();</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">UMyThread</span>();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">Init</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> uint32 <span class="title">Run</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Exit</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>::</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">AMyActor</span>* TestActor;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+    <p>上一章我们制作了一个简单的线程池，本次将使用智能指针来管理创建的对象：各种任务和创建的线程</p>
+<h1 id="使用shared-ptr来管理任务和线程"><a href="#使用shared-ptr来管理任务和线程" class="headerlink" title="使用shared_ptr来管理任务和线程"></a>使用shared_ptr来管理任务和线程</h1><p>首先对线程池中进行修改：</p>
+<ol>
+<li>将BaseTask*替换为std::shared_ptr&lt; BaseTask &gt;</li>
+<li>将线程池中的std::thread*替换为std::shared_ptr&lt; std::thread &gt;</li>
+<li>对AddTask的逻辑稍加修改</li>
+</ol>
+<p>具体改动：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//void AddTask(BaseTask* Task);</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddTask</span><span class="params">(std::shared_ptr&lt;BaseTask&gt; Task)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//BaseTask* GetTask();</span></span><br><span class="line"><span class="function">std::shared_ptr&lt;BaseTask&gt; <span class="title">GetTask</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//std::vector&lt;std::thread*&gt; ThreadPool;</span></span><br><span class="line">std::vector&lt;std::shared_ptr&lt;std::thread&gt;&gt; ThreadPool;</span><br><span class="line"></span><br><span class="line"><span class="comment">//std::list&lt;BaseTask*&gt; TaskList;</span></span><br><span class="line">std::list&lt;std::shared_ptr&lt;BaseTask&gt;&gt; TaskList;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="comment">//auto th = new std::thread(&amp;BaseThreadPool::Run,this);	</span></span><br><span class="line">    <span class="keyword">auto</span> th = std::<span class="built_in">make_shared</span>&lt;std::thread&gt;(&amp;BaseThreadPool::Run,<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Exit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="comment">//智能指针可以帮助我们自动释放资源，所以这里就不在需要我们手动释放</span></span><br><span class="line">    <span class="comment">//std::unique_lock&lt;std::mutex&gt; Lock(mtx);</span></span><br><span class="line">	<span class="comment">//for (auto&amp; th : ThreadPool) &#123;</span></span><br><span class="line">	<span class="comment">//	delete th;</span></span><br><span class="line">	<span class="comment">//	th=nullptr;</span></span><br><span class="line">	<span class="comment">//&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<span id="more"></span>
+<p>在其它地方因为我们使用了auto自动类型推导，所以并不需要有太大变化。</p>
+<h1 id="希望异步获取任务的运行结果"><a href="#希望异步获取任务的运行结果" class="headerlink" title="希望异步获取任务的运行结果"></a>希望异步获取任务的运行结果</h1><p>对BaseTask类做出修改，增加promise变量以及Set和Get函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;future&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BaseTask</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">SetValue</span><span class="params">(<span class="type">int</span> val)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        p.<span class="built_in">set_value</span>(val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">auto</span> <span class="title">GetValue</span><span class="params">()</span>-&gt;<span class="type">int</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> p.<span class="built_in">get_future</span>().<span class="built_in">get</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::promise&lt;<span class="type">int</span>&gt; p;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<h2 id="添加功能"><a href="#添加功能" class="headerlink" title="添加功能"></a>添加功能</h2><p>完成线程类的创建，假设现在需要在线程中控制一个Actor的移动，那么我们就创建一个Actor</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AMyActor</span> : <span class="keyword">public</span> AActor</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">AMyActor</span>();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Tick</span><span class="params">(<span class="type">float</span> DeltaTime)</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">BeginPlay</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadWrite, Category = <span class="string">&quot;MyActor&quot;</span>)</span><br><span class="line">    UStaticMeshComponent* MeshComponent;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="在main中进行测试"><a href="#在main中进行测试" class="headerlink" title="在main中进行测试"></a>在main中进行测试</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    BaseThreadPool pool;</span><br><span class="line">	pool.<span class="built_in">Init</span>(<span class="number">4</span>);</span><br><span class="line">	pool.<span class="built_in">Start</span>();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 使用智能指针管理对象</span></span><br><span class="line">	<span class="keyword">auto</span> t = <span class="built_in">make_shared</span>&lt;TestTask&gt;();</span><br><span class="line">	t-&gt;name=<span class="string">&quot;Name01&quot;</span>;</span><br><span class="line">	pool.<span class="built_in">AddTask</span>(t);</span><br><span class="line">	<span class="keyword">auto</span> t2 = <span class="built_in">make_shared</span>&lt;TestTask&gt;();</span><br><span class="line">	t2-&gt;name = <span class="string">&quot;Name02&quot;</span>;</span><br><span class="line">	pool.<span class="built_in">AddTask</span>(t2);</span><br><span class="line">	<span class="keyword">auto</span> t3 = <span class="built_in">make_shared</span>&lt;TestTask&gt;();</span><br><span class="line">	t3-&gt;name = <span class="string">&quot;Name03&quot;</span>;</span><br><span class="line">	pool.<span class="built_in">AddTask</span>(t3);</span><br><span class="line">	<span class="keyword">auto</span> t4 = <span class="built_in">make_shared</span>&lt;TestTask&gt;();</span><br><span class="line">	t4-&gt;name = <span class="string">&quot;Name04&quot;</span>;</span><br><span class="line">	pool.<span class="built_in">AddTask</span>(t4);</span><br><span class="line">	std::this_thread::<span class="built_in">sleep_for</span>(<span class="number">3000</span>ms);</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Task1 ret = &quot;</span> &lt;&lt; t.<span class="built_in">get</span>()-&gt;<span class="built_in">GetValue</span>() &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Task2 ret = &quot;</span> &lt;&lt; t2.<span class="built_in">get</span>()-&gt;<span class="built_in">GetValue</span>() &lt;&lt; endl;</span><br><span class="line">	</span><br><span class="line">	pool.<span class="built_in">Exit</span>();</span><br><span class="line"></span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Task3 ret = &quot;</span> &lt;&lt; t3.<span class="built_in">get</span>()-&gt;<span class="built_in">GetValue</span>() &lt;&lt; endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Task4 ret = &quot;</span> &lt;&lt; t4.<span class="built_in">get</span>()-&gt;<span class="built_in">GetValue</span>() &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">auto</span> t5 = <span class="built_in">make_shared</span>&lt;TestTask&gt;();</span><br><span class="line">	pool.<span class="built_in">AddTask</span>(t2);</span><br><span class="line">	<span class="built_in">getchar</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>并添加定义</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">AMyActor::<span class="built_in">AMyActor</span>()</span><br><span class="line">&#123;</span><br><span class="line">    PrimaryActorTick.bCanEverTick = <span class="literal">true</span>;</span><br><span class="line">    MeshComponent = <span class="built_in">CreateDefaultSubobject</span>&lt;UStaticMeshComponent&gt;(<span class="built_in">TEXT</span>(<span class="string">&quot;MeshComponent&quot;</span>));</span><br><span class="line">    MeshComponent-&gt;<span class="built_in">SetupAttachment</span>(RootComponent);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>为了实现Actor的移动，我们需要将Actor作为构造函数参数传入线程类中,并实现线程类中函数声明。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//UMyThread()-&gt;UMyThread(AMyActor* MyActor)</span></span><br><span class="line"></span><br><span class="line">UMyThread::<span class="built_in">UMyThread</span>(AMyActor* MyActor):<span class="built_in">TestActor</span>(MyActor)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">UMyThread::~<span class="built_in">UMyThread</span>()</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">MMyThread::Init</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;Init&quot;</span>));</span><br><span class="line">    <span class="keyword">if</span>(!TestActor)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">int32 <span class="title">UMyThread::Run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;Run&quot;</span>));</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        TestActor-&gt;<span class="built_in">SetActorLocation</span>(TestActor-&gt;<span class="built_in">GetActorLocation</span>() + <span class="built_in">FVector</span>(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>));</span><br><span class="line">        <span class="comment">//FPlatformProcess::Sleep(0.1f);  </span></span><br><span class="line">        <span class="comment">//对线程进行阻隔</span></span><br><span class="line">        <span class="keyword">if</span>(TestActor-&gt;<span class="built_in">GetActorLocation</span>().X &gt; <span class="number">1000</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">UMyThread::Exit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">UE_LOG</span>(LogTemp,Log,<span class="built_in">TEXT</span>(<span class="string">&quot;Exit&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h2><p>我们在AMyACtor中实现启动线程的功能<br>首先在引擎中添加输入事件并绑定，在Actor类中添加如下代码：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BeginThread</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>对BeginThread函数进行实现</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AMyActor::BeginThread</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    UMyThread* MyThread = <span class="keyword">new</span> <span class="built_in">UMyThread</span>(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//FRunnableThread* RunnableThread=FRunnableThread::Create(MyThread, TEXT(&quot;MyThread&quot;), 0, TPri_Normal);</span></span><br><span class="line">    <span class="comment">//第一个参数为线程类，第二个参数为线程名，第三个参数为线程优先级，第四个参数为线程堆栈大小</span></span><br><span class="line"></span><br><span class="line">    FRunnableThread* RunnableThread=FRunnableThread::<span class="built_in">Create</span>(MyThread, <span class="built_in">TEXT</span>(<span class="string">&quot;MyThread&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>将Actor拖入场景中，此时运行游戏，按下输入事件，如果看到打印消息并且物体移动，则说明线程创建并运行成功。<br>更多详细信息可以查看官方文档：<a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/HAL/">https://docs.unrealengine.com/4.27/en-US/API/Runtime/Core/HAL/</a> 在其中的FRunnable和FRunnableThread等文档中可以找到更多的信息。<br>在知乎中本篇文章可以学习比较详细的使用<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/133921916">https://zhuanlan.zhihu.com/p/133921916</a> </p>
-<p>后续待更新…</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>至此就完成了一个功能相对完善的线程池并尽可能的减少了内存泄漏的问题。</p>
 
     
 
@@ -282,7 +269,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="https://13114987559.github.io/2023/09/25/essay/虚幻多线程/" title="虚幻多线程浅析" target="_blank">https://13114987559.github.io/2023/09/25/essay/虚幻多线程/</a>
+          <a href="https://13114987559.github.io/2024/04/08/note/C++多线程入门：完善线程池/" title="C++多线程入门：完善线程池" target="_blank">https://13114987559.github.io/2024/04/08/note/C++多线程入门：完善线程池/</a>
         </li>
         
         <li>
@@ -308,10 +295,6 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
         		</li>
       		
@@ -324,7 +307,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
         		</li>
       		
 		</ul>
@@ -379,7 +362,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2023/09/25/essay/%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B/" alt="微信分享二维码"> -->
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2024/04/08/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%AE%8C%E5%96%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/" alt="微信分享二维码"> -->
     </div>
 </div>
 
@@ -394,18 +377,9 @@
 
 <nav id="article-nav">
   
-    <a href="/2023/10/08/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          设计模式（一）
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/09/23/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">数据结构与算法-堆与优先队列</div>
+    <a href="/2024/04/07/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AE%80%E5%8D%95%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">C++多线程入门：简单的线程池</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -432,7 +406,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">虚幻多线程简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E5%B9%BB%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">虚幻多线程的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">创建线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%8A%9F%E8%83%BD"><span class="toc-number">2.2.</span> <span class="toc-text">添加功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E7%BA%BF%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">启动线程</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8shared-ptr%E6%9D%A5%E7%AE%A1%E7%90%86%E4%BB%BB%E5%8A%A1%E5%92%8C%E7%BA%BF%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">使用shared_ptr来管理任务和线程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%8C%E6%9C%9B%E5%BC%82%E6%AD%A5%E8%8E%B7%E5%8F%96%E4%BB%BB%E5%8A%A1%E7%9A%84%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">2.</span> <span class="toc-text">希望异步获取任务的运行结果</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%A8main%E4%B8%AD%E8%BF%9B%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">在main中进行测试</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -568,18 +542,6 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
              
@@ -588,11 +550,23 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -640,11 +614,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
             
             <div class="clearfix"></div>
