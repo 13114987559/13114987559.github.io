@@ -191,6 +191,138 @@
             
 
   
+    <article id="post-常用的排序算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2024/04/29/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" target="_blank">常用的排序算法</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2024/04/29/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="archive-article-date">
+        <time datetime="2024-04-29T03:52:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-29</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="总结常用的排序算法"><a href="#总结常用的排序算法" class="headerlink" title="总结常用的排序算法"></a>总结常用的排序算法</h1><p>主要包括冒泡排序、堆排序、归并排序、快速排序四个。</p>
+<h1 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h1><p>冒泡排序是一种很简单的原地排序算法，在每一轮遍历都将最大的元素（或者最小）放在数组的末尾<br>过程为：</p>
+<ol>
+<li>比较相邻的元素，如果第一个比第二个大，就交换它们两个</li>
+<li>对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对，这样在最后的元素应该会是最大的数</li>
+<li>针对所有的元素重复以上的步骤，除了最后一个</li>
+<li>重复步骤1~3，直到排序完成<br>平均时间复杂度：O(n^2)</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BubbleSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> n = nums.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n ;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n - i - <span class="number">1</span>; j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(nums[j] &gt; nums[j + <span class="number">1</span>])&#123;</span><br><span class="line">                <span class="built_in">swap</span>(nums[j], nums[j + <span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h1><p>堆排序是一种原地排序算法，依赖于堆实现<br>过程为：</p>
+<ol>
+<li>将原数组调整为大顶堆（或小顶堆）</li>
+<li>交换堆顶与数组末尾元素，再将剩余元素调整为大顶堆</li>
+<li>不断重复步骤2直到数组有序<br>每次调整堆的时间复杂度位O(logn)，一共需要调整n次，总时间复杂度位O(nlogn)</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Heapfiy</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums,<span class="type">int</span> n,<span class="type">int</span> i)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> largest=i;</span><br><span class="line">    <span class="type">int</span> left=<span class="number">2</span>*i+<span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> right=<span class="number">2</span>*i+<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (left &lt; n &amp;&amp; nums[left] &gt; nums[largest]) &#123;</span><br><span class="line">            largest = left;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (right &lt; n &amp;&amp; nums[right] &gt; nums[largest]) &#123;</span><br><span class="line">            largest = right;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (largest == i) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">swap</span>(nums[i], nums[largest]);</span><br><span class="line">        i = largest;</span><br><span class="line">        left = <span class="number">2</span> * i + <span class="number">1</span>;</span><br><span class="line">        right = <span class="number">2</span> * i + <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">HeapSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> n=nums.<span class="built_in">size</span>();</span><br><span class="line">    <span class="comment">// 构造大顶堆</span></span><br><span class="line">    <span class="comment">// 从最后一个非叶子节点开始</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=n/<span class="number">2</span><span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">        <span class="built_in">Heapfiy</span>(nums,n,i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 交换堆顶元素并调整堆</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=n<span class="number">-1</span>;i&gt;=<span class="number">0</span>;i--)&#123;</span><br><span class="line">        <span class="built_in">swap</span>(nums[<span class="number">0</span>],nums[i]);</span><br><span class="line">        <span class="built_in">Heapfiy</span>(nums,i,<span class="number">0</span>);</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>归并依赖于递归操作<br>过程为：</p>
+<ol>
+<li>将原数组分为左右两个子数组</li>
+<li>将数组递归分为左右两个子数组</li>
+<li>将左右两个子数组合并有有序数组<br>评价时间复杂度为O(nlogn)</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Merge</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums,<span class="type">int</span> left,<span class="type">int</span> mid,<span class="type">int</span> right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">temp</span><span class="params">(right-left+<span class="number">1</span>)</span></span>;</span><br><span class="line">    <span class="type">int</span> i=left;</span><br><span class="line">    <span class="type">int</span> j=right;</span><br><span class="line">    <span class="type">int</span> k=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(i&lt;=left &amp;&amp; j&lt;=right)&#123;</span><br><span class="line">        <span class="comment">// 将两个数组合并为一个有序数组</span></span><br><span class="line">        <span class="keyword">if</span>(nums[i]&lt;=nums[j])&#123;</span><br><span class="line">            temp[k]=nums[i];</span><br><span class="line">            i++;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            temp[k]=nums[j];</span><br><span class="line">            j++;</span><br><span class="line">        &#125;</span><br><span class="line">        k++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(i&lt;=left)&#123;</span><br><span class="line">        temp[k++]=nums[i++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(j&lt;=right)&#123;</span><br><span class="line">        temp[k++]=nums[j++];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> t=<span class="number">0</span>;t&lt;k;t++)&#123;</span><br><span class="line">        nums[left+t]=temp[t];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MergeSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums,<span class="type">int</span> left,<span class="type">int</span> right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(left&gt;=right)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> mid=left+(right-left)/<span class="number">2</span>;</span><br><span class="line">    <span class="built_in">MergeSort</span>(nums,left,mid);</span><br><span class="line">    <span class="built_in">MergeSort</span>(nums,mid+<span class="number">1</span>,right);</span><br><span class="line">    <span class="built_in">Merge</span>(nums,left,mid,right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>快排是最常用的排序算法之一<br>过程为：</p>
+<ol>
+<li>选择一个基准值（一般为第一个或最后一个），将原数组分为两个数组</li>
+<li>比基准值小的元素放在基准值左边，比基准值大的元素放在右边</li>
+<li>递归调用左右两个子数组，重复上述步骤<br>平均时间复杂度为O(nlogn)</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">partition</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums,<span class="type">int</span> left,<span class="type">int</span> right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> base=nums[left];</span><br><span class="line">    <span class="keyword">while</span>(left&lt;right)&#123;</span><br><span class="line">        <span class="keyword">while</span>(left&lt;right &amp;&amp; nums[right]&gt;=base)&#123;</span><br><span class="line">            right--;</span><br><span class="line">        &#125;</span><br><span class="line">        nums[left]=nums[right];</span><br><span class="line">        <span class="keyword">while</span>(left&lt;right &amp;&amp; nums[left]&lt;=base)&#123;</span><br><span class="line">            left++;</span><br><span class="line">        &#125;</span><br><span class="line">        nums[right]=nums[left];</span><br><span class="line">    &#125;</span><br><span class="line">    nums[left]=base;</span><br><span class="line">    <span class="keyword">return</span> left;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">QuickSort</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; nums,<span class="type">int</span> left,<span class="type">int</span> right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(left&lt;right)&#123;</span><br><span class="line">        <span class="type">int</span> pos=<span class="built_in">partition</span>(nums,left,right);</span><br><span class="line">        <span class="built_in">QuickSort</span>(nums,left,pos<span class="number">-1</span>);</span><br><span class="line">        <span class="built_in">QuickSort</span>(nums,pos+<span class="number">1</span>,right);       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2024/04/29/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-note/C++多线程入门：完善线程池" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1301,133 +1433,6 @@
 
 
   
-    <article id="post-essay/使用Spine动画" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2024/01/23/essay/%E4%BD%BF%E7%94%A8Spine%E5%8A%A8%E7%94%BB/" target="_blank">使用Spine动画</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2024/01/23/essay/%E4%BD%BF%E7%94%A8Spine%E5%8A%A8%E7%94%BB/" class="archive-article-date">
-        <time datetime="2024-01-23T06:42:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-23</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>使用UE版本为4.27，Vs为2022。</p>
-<p>在官网下载Spine插件，下载链接：<a target="_blank" rel="noopener" href="https://github.com/EsotericSoftware/spine-runtimes">https://github.com/EsotericSoftware/spine-runtimes</a><br>在EpieGame中安装PaperZD插件<br>安装PaperZDForSpine2D插件以在PaperZD中使用Spine动画，下载链接：<a target="_blank" rel="noopener" href="https://github.com/heavybullets/PaperZDForSpine2D">https://github.com/heavybullets/PaperZDForSpine2D</a></p>
-<p>在Build.cs中添加”Paper2D”以后续编译可以通过。</p>
-<h1 id="使用Spine动画"><a href="#使用Spine动画" class="headerlink" title="使用Spine动画"></a>使用Spine动画</h1><h2 id="创建Spine动画"><a href="#创建Spine动画" class="headerlink" title="创建Spine动画"></a>创建Spine动画</h2><p>导入Spine动画，要注意安装插件版本和动画版本要保持一致。</p>
-<p>在所有的插件都安装完成以后在内容浏览器中右键可以看到PaperZD选项，选择AnimSource，就可以看到由Spine动画的额外选项（PaperZD默认的为Flipbook动画，安装插件后可以选择spine动画）。</p>
-<p>选择AnimSource后，进入选择碎图集和骨骼信息，随后新建动画(AddNew)，可以在细节面板中预览和选择动画。</p>
-<p>此外在动画下方还有时间轴，可以在这里添加事件通知。</p>
-<h2 id="使用Spine动画-1"><a href="#使用Spine动画-1" class="headerlink" title="使用Spine动画"></a>使用Spine动画</h2><p>新建一个C++类，在选择父类时选择PaperZDCharacter或者PaperZDCharacter_Spine2D，两者都可以，以后者为父类创建一个新的类（命名为Hero），跳转到PaperZDCharacter_Spine2D中可以看到为我们提供了两个组件，为了后续方便使用可以新增两个函数来获取这两个组件，添加完成后类如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PAPERZDFORSPINE2D_API</span> APaperZDCharacter_Spine2D : <span class="keyword">public</span> APaperZDCharacter</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Spine renderer component. */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(VisibleAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Spine2D&quot;</span>, meta = (AllowPrivateAccess = <span class="string">&quot;true&quot;</span>))</span><br><span class="line">	USpineSkeletonRendererComponent* SpineRenderer;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/* Skeleton animation component. */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(VisibleAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Spine2D&quot;</span>, meta = (AllowPrivateAccess = <span class="string">&quot;true&quot;</span>))</span><br><span class="line">	USpineSkeletonAnimationComponent* SpineAnimationComponent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">APaperZDCharacter_Spine2D</span>();</span><br><span class="line"></span><br><span class="line">	<span class="function">FORCEINLINE USpineSkeletonAnimationComponent* <span class="title">GetSpineSkeletonAnimationComponent</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> SpineAnimationComponent; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function">FORCEINLINE USpineSkeletonRendererComponent* <span class="title">GetSpineSkeletonRenderComponent</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> SpineRenderer; &#125;</span><br><span class="line">	   	</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>回到Hero类中，添加摄象机吊臂和摄象机组件并初始化，在编辑器中以Hero类新建一个蓝图类BP_Hero，其中主要包括：胶囊体。摄象机以吊臂、两个渲染组件、两个动画组件、Movement组件。<br>在SpineAnimation组件中选择碎图集和骨骼，并调整到合适大小。</p>
-<h2 id="使用Spine动画状态机"><a href="#使用Spine动画状态机" class="headerlink" title="使用Spine动画状态机"></a>使用Spine动画状态机</h2><p>回到内容浏览器，在PaperZD中选中AnimBP来构建我们的状态机，2D状态机的使用与普通的状态机类似，基本功能都有。</p>
-<p>在AnimBP的事件图表中有EventOnInit和EventOnTick两个事件，对应可以理解为BeginPlay和UpdateAnimation；在类默认设置中可以选择ParentClass。</p>
-<p>我们要使用自己的AnimInstance，所以新建一个C++类，继承自PaperZDAnimInstance，跳转到PaperZDAnimInstance中可以找到OnInit和OnTick两个函数，我们需要重写这两个函数，并添加我们自定义的角色：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>(Blueprintable)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SPINE_API</span> UHeroPaperZDAnimInstance : <span class="keyword">public</span> UPaperZDAnimInstance</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">OnInit_Implementation</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">OnTick_Implementation</span><span class="params">(<span class="type">float</span> DeltaTime)</span></span>;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	<span class="built_in">UPROPERTY</span>()</span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">AHeroPaperZDCharacter_Spine2D</span>* Hero;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>PaperZD为我们提供了一些获取属性的接口，可以通过GetPaperCharacter来获取到角色。</p>
-<p>回到编辑器，继承自AnimBP类创建一个蓝图ABP_Hero，并在AnimBP中的ParentClass选择该类，这样就可以获取到该类中的各种自定义属性；在BP_Hero中的AnimatinComponent中的AnimInstanceClass选择ABP_Hero。</p>
-<p><em>UCLASS中必须加Blueprintable，否则无法被设置为父类</em></p>
-<h2 id="一些方法"><a href="#一些方法" class="headerlink" title="一些方法"></a>一些方法</h2><p>在动画轨道中可以直接新建通知，使用时转到AnimBP中，可以看到左侧的Functions中有新建的通知，可以在其中编写逻辑。<br>但使用AnimState在需要新建一个state，才能在轨道中选择。新建一个蓝图类，继承自PaperZDAnimNotifyState，其中包含3个重载函数：Begin、End、Tick，可以在其中完成不同的逻辑。</p>
-<p>JumpToNode节点，在动画图表中有Jump节点可以用于跳转，可以用来从一个状态强制跳转到另一个状态。<br>Hero-&gt;GetAnimInstance-&gt;JumpToNode</p>
-<p>使用Playbacks，Playbacks是PaperZD在UE5中新增的功能，功能与蒙太奇类似，可以用于播放插槽内的动画。<br>Hero-&gt;GetAnimInstance-&gt;PlayAnimationplaybacks，使用时指定插槽的名称，并在动画图表中新增一个插槽（AddNewSlot）</p>
-<p>使用Muti-Directional Sequence，是一个多角度动画集合，可以根据不同的角度播放不同的动画，使用时选择SetDirectionality节点来选择不同角度的动画。</p>
-<p>让角色翻转，可以使用SetScaleX或SetScaleY来设置：<br>GetSpineSkeletonAnimationComponent()-&gt;SetScaleX(ScaleValue)</p>
-<p>使用骨骼插槽，Spine动画是骨骼动画，同样可以使用骨骼插槽来实现一些功能。在导入的骨骼资源中可以看到Bones、Slots、Skins、Animations四个选项，在创建完成角色后，可以给Bones上添加一些碰撞框等。<br>例如在root上增加一个box，在蓝图的BeginPlay里选择box-&gt;AttachComponentToComponent，Parent选择SpineRender组件，Socket在骨骼资产中选择，这里选择root，如果添加成功，我们可以打印一句AttachOK，失败的话打印AttackFilded，并把box的HiddenInGame设置为false。这就在开始游戏后就可以看到屏幕上打印AttachOK并且能在角色脚底看到box的跟随角色移动。<br>这可以用来完成一些角色的攻击判定，利用动画通知来决定何时开启和关闭检测，这与一般的攻击响应是类似的。</p>
-<p>让Spine动画称为原地动画。如果导入的Spine动画带有位移，但是并不想使用自带的位移动画，可以去Bone的源码中改变WorldX&#x2F;Y。<br>对于UE，在安装完成插件后，可以在Plugins&#x2F;SpinePlugin&#x2F;Source&#x2F;SpinePlugin&#x2F;Public&#x2F;Spine-cpp&#x2F;src&#x2F;spine&#x2F;Bone.cpp中找到：<br>void Bone::updateWorldTransform(float x, float y, float rotation, float scaleX, float scaleY, float shearX, float shearY)，在if(!parent)中将_worldX与_worldY注释掉<br>Unity也是类似逻辑，找到该函数后将worldX与worldY注射掉。</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>PaperZD的官方文档：<a target="_blank" rel="noopener" href="https://www.criticalfailure-studio.com/paperzd-documentation/">https://www.criticalfailure-studio.com/paperzd-documentation/</a></p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spine</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2024/01/23/essay/%E4%BD%BF%E7%94%A8Spine%E5%8A%A8%E7%94%BB/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1553,11 +1558,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+                <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1565,7 +1570,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1577,15 +1586,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">增强输入</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1605,10 +1614,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">排序</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">图</a>
               </li>
              
@@ -1617,11 +1622,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color4">散列表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">散列表</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
              
               <li class="article-tag-list-item">
