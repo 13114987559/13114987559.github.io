@@ -191,7 +191,7 @@
             
 
   
-    <article id="post-常用的排序算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-essay/常用的排序算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -199,7 +199,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2024/04/29/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" target="_blank">常用的排序算法</a>
+	  <a class="article-title" href="/2024/04/29/essay/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" target="_blank">常用的排序算法</a>
   
     </h1>
   
@@ -207,7 +207,7 @@
 
   
   
-<a href="/2024/04/29/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="archive-article-date">
+<a href="/2024/04/29/essay/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="archive-article-date">
         <time datetime="2024-04-29T03:52:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-29</time>
 </a>
 
@@ -293,7 +293,7 @@
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2024/04/29/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">展开全文 >></a>
+      <a class="article-more-a" href="/2024/04/29/essay/%E5%B8%B8%E7%94%A8%E7%9A%84%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">展开全文 >></a>
     </p>
     
 
@@ -1333,7 +1333,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2024/03/17/essay/%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8GAS/" target="_blank">初步使用GAS</a>
+	  <a class="article-title" href="/2024/03/17/essay/%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8GAS/" target="_blank">初步使用GAS制作连击动画</a>
   
     </h1>
   
@@ -1354,18 +1354,51 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>启动插件，在VS中增加相应模块</p>
-<h1 id="添加GAS组件"><a href="#添加GAS组件" class="headerlink" title="添加GAS组件"></a>添加GAS组件</h1><p>直接添加Ability组件—可以在蓝图中直接添加</p>
-<p>创建一个技能基类，派生出技能类</p>
-<p>通过compoent调用give ability获得技能 以及 try activate尝试激活技能</p>
-<p>需要一个Gameplay Tag Container的数组</p>
-<p>添加Tag Ability.AbilityName 随天添加到ini</p>
-<p>在GAB中的Event ActivateAbility中可以调用PlayMontageAndWait来使用蒙太奇</p>
-<p>在ClassDefault中CoolDowns中添加技能CD-通过添加来创建以恶GE_—-&gt;用GE来处理游戏数据</p>
-<p>在GE_CD中的类默认设置中添加Components，选择BlockAbilityTags，在Tag中添加要用的技能</p>
-<p>在GAB中提交GE</p>
-<p>属性继承自AttributeSet，使用define标记宏标记属性，使用数据表赋值</p>
-<p>摄象机缓慢跟随 Lag</p>
+    <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>使用UE5.2和Vs2022.</p>
+<p>GAS全名为Gameplay Ability System，是UE官方提供的一套技能系统，用于将角色的属性技能等于角色进行解耦方便扩展和修改，使用GAS要求为C++项目。</p>
+<p>新建一个C++的空项目，在编辑器中搜索Ability System启动插件，在Build.cs中添加”GameplayTasks”，”GameplayAbilities”和”GameplayTags”三个模块。</p>
+<p>重新启动项目，就可以使用GAS了。</p>
+<h1 id="GAS的一些基础知识"><a href="#GAS的一些基础知识" class="headerlink" title="GAS的一些基础知识"></a>GAS的一些基础知识</h1><p>GAS的一个核心组件是AbilitySystemComponent（ASC），绝大多数关于技能的操作都要依赖于它。</p>
+<p>使用各种技能需要GameplayAbility（GA），它是一个技能基类，可以用于派生处各种技能。</p>
+<p>关于技能的描述也触发，UE使用的是GameplayTag标签系统来完成，由GameplayTagContainer来存储，在连击的制作的同样使用不同的Tag来完成激活。</p>
+<p>GameplayEffect（GE）主要用于描述技能效果，如各种各样的Buff，在这里使用了一个名为CanCombo的GE作为连击的触发条件之一。</p>
+<p>AttributeSet用于存放角色的属性，用于计算技能伤害、消耗等。</p>
+<p>此外GAS还包括碰撞检测、音效、特效等等。</p>
+<h1 id="制作连击"><a href="#制作连击" class="headerlink" title="制作连击"></a>制作连击</h1><h2 id="创建技能组件"><a href="#创建技能组件" class="headerlink" title="创建技能组件"></a>创建技能组件</h2><p>因为只是制作连击动画，并不涉及人物的属性改变或音效特效等，所以直接将一个个的连击片段封装为多个GA，再由一个GA进行分发。</p>
+<p>先将角色和连击动画导入并创建角色，在角色类中继承IAbilitySystemInterface，随后添加一个UAbilitySystemComponent组件，并提供以下几个函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">YourCharacter</span>:<span class="keyword">public</span> ACharacter,<span class="keyword">public</span> IAbilitySystemInterface</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 主要用于服务端使用，因为这是单机项目，所以并不需要</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">PossessedBy</span><span class="params">(AController* NewController)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Super::<span class="built_in">PossessedBy</span>(NewController);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!NewController) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">SetOwner</span>(NewController);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">class</span> UAbilitySystemComponent* <span class="title">GetAbilitySystemComponent</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> AbilitySystemComponent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(EditAnywhere,BlueprintReadWrite)</span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">UAbilitySystemComponent</span>* AbilitySystemComponent;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在构造函数中创建技能组件，这与创建一般组件的方法相同：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AbilitySystemComponent = <span class="built_in">CreateDefaultSubobject</span>&lt;UAbilitySystemComponent&gt;(<span class="built_in">TEXT</span>(<span class="string">&quot;AbilitySystemComponent&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用技能的方法"><a href="#使用技能的方法" class="headerlink" title="使用技能的方法"></a>使用技能的方法</h2><p>技能是一个个的GA，并且使用前要先赋予，所以提供一个TAray来存放我们创建的技能，并在BeginPlay时进行赋予。</p>
+<p>代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">YourCharacter</span> <span class="comment">//...</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="comment">// 用于存储技能并赋予</span></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere,Category=<span class="string">&quot;Abilitiies&quot;</span>)</span><br><span class="line">    TArray&lt;TSubclassOf&lt;<span class="keyword">class</span> <span class="title class_">GameplayAbility</span>&gt;&gt; Abilities;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用枚举来触发技能</span></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere,Category=<span class="string">&quot;Abilities&quot;</span>)</span><br><span class="line">    TMap&lt;TEnumAsByte&lt;YourEnum&gt;,FGameplayTagContainer&gt; AbilityMap;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">InitAbility</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!AbilitySystemComponent)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        AbilitySystemComponent-&gt;<span class="built_in">InitAbilityActorInfo</span>(<span class="keyword">this</span>,<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(int32 i=<span class="number">0</span>;i&lt;Abilities.<span class="built_in">Num</span>();i++)&#123;</span><br><span class="line">            AbilitySystemComponent-&gt;<span class="built_in">GiveAbility</span>(<span class="built_in">FGameplayAbilitySpec</span>(Abilities[i]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="制作技能"><a href="#制作技能" class="headerlink" title="制作技能"></a>制作技能</h2><p>在C++中创建一个GA基类并继承自GameplayAbility，并在蓝图中创建两个子类，分别作为技能的基类和技能分发的基类。</p>
+<p>蓝图中由EventActivateAbility和EventOnEndAbility两个用于处理技能激活时和关闭时的逻辑。</p>
+<p>打开技能基类的蓝图，在类默认设置中有多种标签以供选择，其中主要用到的是AbilityTag、ActivationOwnedTag。前者是属于该技能的标签；而后者用于激活该技能，当技能持有该标签时可以由TriggerEvent进行激活，在基类中并不需要设置。</p>
+<p>在类默认设置中将NetExecutionPolicy设置为ServerInitiated，并添加一个动画变量，使用播放蒙太奇的方式进行播放。</p>
+<p>创建多个继承自技能基类的GA，并在类默认设置中将要播放的蒙太奇片段填入其中。</p>
+<p>接下来设置技能的标签，在AbilityTag中添加Character.Attack.Combo的标签；在ActivationOwnedTag中添加Character.Attack.Combo_n的标签,n为连击的片段数。</p>
+<p>在最下方的AbilityTriggers中添加一个Trigger，并将其设置为Character.Attack.Combo_n来作为连击的触发。</p>
+<h2 id="制作分发逻辑"><a href="#制作分发逻辑" class="headerlink" title="制作分发逻辑"></a>制作分发逻辑</h2><p>使用GAS来制作连击的思路与使用MontageSection的思路相同，都是在一个窗口中添加一个能否连击的变量，当在这个窗口中按下攻击键时播放下一个动画片段，不同的是在GAS中我们将能否连击作为GE来使用。</p>
+<p>所以创建一个GameplayEffect，在GE中的类默认设置里将DurationPolicy设置为HasDuration，表明这是一个持续的GE。<br>在GrantedTags中的CombinedTags和Added均设置为GameplayEffect.cancombo。</p>
+<p>接下来制作连击窗口：<br>窗口开始逻辑：<br>Begin-&gt;GetComponentbyClass找到ASC-&gt;ApplyGameplayEffectToSelf(cancombo)<br>窗口结束逻辑：<br>End-&gt;GetComponentbyClass找到ASC-&gt;RemoveActiveGameplayEffectbySorceEffect(cancombo)</p>
+<p>制作分发逻辑：<br>提供一个GameplayTagContainer的数组并命名为ComboTags，此用以存储连击片段的触发Tags，但是这里并不需要提供具体的Tags，具体的Tags填写交由其子类来完成。</p>
+<p>首先先判断actor是否持有cancombo的GE，通过GetAbilitySystemComponentFromActorInfo找到ASC，再由HasMatchingGameplayTag来查找是否匹配，如果不匹配则播放第一段连击动画；否则播放combo动画，这一部分与MontageSection的连击方法是类似的。</p>
+<p><img src="/Pic/Ue/ComboLogic.jpg" alt="combo逻辑"></p>
+<p><img src="/Pic/Ue/StartLogic.jpg" alt="开始逻辑"></p>
+<p>由于直接在蓝图中定义ComboIndex无法自增，导致combo只能播放前两段，所以将ComboIndex定义为GA的C++基类中的一个类外静态全局变量，并在类内提供了修改的方法：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> int32 ComboIndex=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GA_Base</span>:<span class="keyword">public</span> UGameplayAbility</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="comment">// 获取当前ComboIndex的函数</span></span><br><span class="line">    <span class="built_in">UFUNCTION</span>(BlueprintPure)</span><br><span class="line">    <span class="function">FORCEINLINE int32 <span class="title">GetComboIndex</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ComboIndex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 对Array的长度取余防止越界</span></span><br><span class="line">	<span class="built_in">UFUNCTION</span>(BlueprintCallable)</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">IncrementComboIndex</span><span class="params">(int32 Length)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        ++ComboIndex;</span><br><span class="line">        ComboIndex%=Length;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重置ComboIndex为1（逻辑上的归零，实际应为1，因为第0段单独进行处理)</span></span><br><span class="line">	<span class="built_in">UFUNCTION</span>(BlueprintCallable)</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">ZeroizeComboIndex</span><span class="params">()</span> </span>&#123; ComboIndex=<span class="number">1</span>; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其中还包含一个attacking的GE，当不在攻击窗口的时候如果点击攻击按键同样会触发攻击，所以在开始第一次攻击后增加一个attacking的GE防止重复触发。<br>相应的，在攻击窗口结束时要将这个GE去除掉。<br>此时攻击窗口应包含的内容如下：<br>开始：增加cancombo的GE<br>结束时：移除cancombo的GE，移除attacking的GE</p>
+<p>触发Tag的设置：<br>触发与GA的触发方式一致，在类默认设置中进行添加即可，完成后对该类进行派生，在派生类中设置触发Tags以及Array中的GA触发Tag。</p>
+<h1 id="技能触发"><a href="#技能触发" class="headerlink" title="技能触发"></a>技能触发</h1><p>在角色蓝图中将所有的技能都加入技能数组中，并在Map中添加分发GA的触发Tag。</p>
+<p>使用EnhancedInput，在按键绑定的函数中进行激活：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Combo</span><span class="params">(<span class="type">const</span> FInputActionValue&amp; InputValue)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!AbilitySystemComponent)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    AbilitySystemComponent-&gt;<span class="built_in">TryActivateAbilityByTag</span>(AbilityMap[YourEnum]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>YourEnum为自定义的一系列用于触发攻击的枚举，对于不同的Combo可以用不同的枚举来触发。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>CSDN：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xcinkey/category_11430365.html">https://blog.csdn.net/xcinkey/category_11430365.html</a><br>文章中包含了对GAS的一些简单介绍以及制作连击的方法<br>Github：<a target="_blank" rel="noopener" href="https://github.com/BillEliot/GASDocumentation_Chinese">https://github.com/BillEliot/GASDocumentation_Chinese</a><br>这是由大佬翻译的GAS的一个民间文档，其中有更详细的介绍和使用</p>
 
     
 
@@ -1558,7 +1591,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">排序</a>
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1570,23 +1607,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
+                <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1595,6 +1624,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">增强输入</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1610,6 +1643,10 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">堆</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
@@ -1618,19 +1655,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">堆</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">散列表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
             
             <div class="clearfix"></div>
