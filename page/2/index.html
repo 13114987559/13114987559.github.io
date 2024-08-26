@@ -245,7 +245,7 @@
 <p>使用Muti-Directional Sequence，是一个多角度动画集合，可以根据不同的角度播放不同的动画，使用时选择SetDirectionality节点来选择不同角度的动画。</p>
 <p>让角色翻转，可以使用SetScaleX或SetScaleY来设置：<br>GetSpineSkeletonAnimationComponent()-&gt;SetScaleX(ScaleValue)</p>
 <p>使用骨骼插槽，Spine动画是骨骼动画，同样可以使用骨骼插槽来实现一些功能。在导入的骨骼资源中可以看到Bones、Slots、Skins、Animations四个选项，在创建完成角色后，可以给Bones上添加一些碰撞框等。<br>例如在root上增加一个box，在蓝图的BeginPlay里选择box-&gt;AttachComponentToComponent，Parent选择SpineRender组件，Socket在骨骼资产中选择，这里选择root，如果添加成功，我们可以打印一句AttachOK，失败的话打印AttackFilded，并把box的HiddenInGame设置为false。这就在开始游戏后就可以看到屏幕上打印AttachOK并且能在角色脚底看到box的跟随角色移动。<br>这可以用来完成一些角色的攻击判定，利用动画通知来决定何时开启和关闭检测，这与一般的攻击响应是类似的。</p>
-<p>让Spine动画称为原地动画。如果导入的Spine动画带有位移，但是并不想使用自带的位移动画，可以去Bone的源码中改变WorldX&#x2F;Y。<br>对于UE，在安装完成插件后，可以在Plugins&#x2F;SpinePlugin&#x2F;Source&#x2F;SpinePlugin&#x2F;Public&#x2F;Spine-cpp&#x2F;src&#x2F;spine&#x2F;Bone.cpp中找到：<br>void Bone::updateWorldTransform(float x, float y, float rotation, float scaleX, float scaleY, float shearX, float shearY)，在if(!parent)中将_worldX与_worldY注释掉<br>Unity也是类似逻辑，找到该函数后将worldX与worldY注射掉。</p>
+<p>让Spine动画称为原地动画。如果导入的Spine动画带有位移，但是并不想使用自带的位移动画，可以去Bone的源码中改变WorldX&#x2F;Y。<br>对于UE，在安装完成插件后，可以在Plugins&#x2F;SpinePlugin&#x2F;Source&#x2F;SpinePlugin&#x2F;Public&#x2F;Spine-cpp&#x2F;src&#x2F;spine&#x2F;Bone.cpp中找到：<br>void Bone::updateWorldTransform(float x, float y, float rotation, float scaleX, float scaleY, float shearX, float shearY)，在if(!parent)中将_worldX与_worldY注释掉<br>Unity也是类似逻辑，找到该函数后将worldX与worldY注释掉。</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>PaperZD的官方文档：<a target="_blank" rel="noopener" href="https://www.criticalfailure-studio.com/paperzd-documentation/">https://www.criticalfailure-studio.com/paperzd-documentation/</a></p>
 
     
@@ -1387,10 +1387,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spine</a>
               </li>
              
@@ -1399,11 +1395,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">排序</a>
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1411,11 +1407,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+                <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">增强输入</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1435,15 +1435,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">堆</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">算法</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">堆</a>
               </li>
              
               <li class="article-tag-list-item">
