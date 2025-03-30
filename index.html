@@ -191,6 +191,172 @@
             
 
   
+    <article id="post-essay/增强输入与GAS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/03/29/essay/%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E4%B8%8EGAS/" target="_blank">增强输入与GAS</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/03/29/essay/%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E4%B8%8EGAS/" class="archive-article-date">
+        <time datetime="2025-03-29T15:58:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-03-29</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前文介绍了GAS与增强输入的基本使用，本文将介绍如何将输入与GA进行绑定来完成解耦和扩展。</p>
+<h1 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h1><h2 id="绑定方法"><a href="#绑定方法" class="headerlink" title="绑定方法"></a>绑定方法</h2><p>技能与输入的绑定方法，查看BindAction的函数声明，可以看到在后面有一次额外的参数包，在绑定时可以将Tag做为参数在绑定时传入：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">BindAction</span>(IA, TriggerEvent, UserObject, BindFunc, Tag);</span><br></pre></td></tr></table></figure>
+
+<p>在触发影响的IA时就可以获取到对应的Tag:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BindFunc</span><span class="params">(FGameplayTag Tag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在初始化时可以通过将Tag和GA进行绑定，在触发输入时通过Tag来查找对应的GA。</p>
+<h2 id="技能的初始化"><a href="#技能的初始化" class="headerlink" title="技能的初始化"></a>技能的初始化</h2><p>初始化时需要将GA和Tag进行绑定，所以考虑将对应关系放入一张数据表中，在玩家进行初始化时读入这张表完成绑定。</p>
+<p>其基本的数据结构应包含一个GA和一个TagContainer，一个技能可能会有几种触发方式，所以提供Container来存储多个Tag。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">USTRUCT</span>(BlueprintType)</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">FAbilityAction</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用Ability的CDO进行初始化</span></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Ability&quot;</span>)</span><br><span class="line">    TSubclassOf&lt;FGameplayAbility&gt; Ability;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Ability&quot;</span>)</span><br><span class="line">    FGameplayTagContainer Tags;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>同时提供基本的表结构：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PROJECTE_API</span> UAbilityAsset : <span class="keyword">public</span> UDataAsset</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UAbilityAsset</span>(<span class="type">const</span> FObjectInitilizer&amp; Initializer):<span class="built_in">Super</span>(Initializer)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Ability&quot;</span>)</span><br><span class="line">    TArray&lt;FAbilityAction&gt; Abilities;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="输入的初始化"><a href="#输入的初始化" class="headerlink" title="输入的初始化"></a>输入的初始化</h2><p>同样使用数据表来存储输入关系，基本应该包含一个Tag和一个IA，其中Tag用于查找对应的GA。</p>
+<p>所以输入的基本数据结构为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">USTRUCT</span>(BlueprintType)</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">FInputAction</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    FGameplayTag Tag;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    TObjectPtr&lt;UInputAction&gt; Action;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>输入的表结构，其中提供查找方法和一个映射上下文：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PROJECTE_API</span> UInputAsset : <span class="keyword">public</span> UDataAsset</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UInputAsset</span>(<span class="type">const</span> FObjectInitilizer&amp; Initializer):<span class="built_in">Super</span>(Initializer)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">const</span> UInputAction* <span class="title">FindInputActionByTag</span><span class="params">(FGameplayTag Tag)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        UInputAction* InputAction = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">if</span>(Tag.<span class="built_in">IsValid</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">const</span> FInputAction&amp; IA: Actions)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(IA.Action.<span class="built_in">Get</span>() &amp;&amp; IA.Tag == Tag)</span><br><span class="line">                &#123;</span><br><span class="line">                    InputAction = IA.Action;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> InputAction;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    TArray&lt;FInputAction&gt; Actions;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EdtiAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    TObjectPtr&lt;UInputMappingContext&gt; InputMappingContext;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="实现输入与GA的绑定"><a href="#实现输入与GA的绑定" class="headerlink" title="实现输入与GA的绑定"></a>实现输入与GA的绑定</h1><p>准备好两张表后就可以准备完成初始化与绑定了！</p>
+<h2 id="GA的初始化"><a href="#GA的初始化" class="headerlink" title="GA的初始化"></a>GA的初始化</h2><p>在GameplayAbility的实例GameplayAbilitySpec中包含一个DynamicAbilityTag的TagContainer，使用其来查找对应的GA。</p>
+<p>绑定函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">InitializeAbility</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 假设已经读取到了UAbilityAsset---&gt;AbilityAsset</span></span><br><span class="line">    <span class="keyword">for</span>(FAbilityAction&amp; GameplayAbilityAction: AbilityAsset-&gt;Abilities)</span><br><span class="line">    &#123;</span><br><span class="line">        FGameplayAbilitySpec GameplayAbilitySpec = <span class="built_in">FGameplayAbilitySpec</span>(GameplayAbilityAction.Ability);</span><br><span class="line">        GameplayAbilitySpec.DynamicAbilityTags = GameplayAbilityAction.Tags;</span><br><span class="line">        <span class="built_in">GiveAbility</span>(GameplayAbilitySpec);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="输入的初始化-1"><a href="#输入的初始化-1" class="headerlink" title="输入的初始化"></a>输入的初始化</h2><p>在绑定中，将输入分为两种，一种为GA输入；另一种为本地输入，包括玩家的基本移动等，所以在绑定时要对其进行区分，所以输入表中需要对结构进行改进，增加一个用于区分是否为技能的bool值；此外技能同样有长按与单次触发的类型，所以再增加一个bool值进行区分。</p>
+<p>改进后的结构应为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">USTRUCT</span>(BlueprintType)</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">FInputAction</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    FGameplayTag Tag;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    TObjectPtr&lt;UInputAction&gt; Action;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    <span class="type">bool</span> bAbilityInput;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    <span class="type">bool</span> bTriggerEvent;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>为了确保绑定可以通用，考虑将其作为增强输入组件的模板成员函数。对于本地输入的初始化只要从输入表中拿到对应的IA完成绑定即可；对于技能输入则需要增加一个扩展参数包。</p>
+<p>所以玩家的本地输入绑定函数应为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> UserClass, <span class="keyword">typename</span> FuncType&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BindNativeAction</span><span class="params">(<span class="type">const</span> UInputAsset* InputAsset, <span class="type">const</span> FGameplayTag&amp; InputTag, ETriggerEvent TriggerEvent, UserClass* UserObject, FuncType InputFunc)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">check</span>(InputAsset);</span><br><span class="line">    <span class="keyword">if</span>(<span class="type">const</span> UInputAction* IA = InputAsset-&gt;<span class="built_in">FindInputActionByTag</span>(InputTag))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">BindAction</span>(IA, TriggerEvent, UserObject, InputFunc);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>绑定技能的输入为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> UserClass, <span class="keyword">typename</span> Press, <span class="keyword">typename</span> Release&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BindAbilityAction</span><span class="params">(<span class="type">const</span> UInputAsset* InputAsset, UserClass* UserObject, Press PressFunc, Relase ReleaseFunc, TArray&lt;uint32&gt;&amp; BindHandles)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">check</span>(InputAsset);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">const</span> FInputAction&amp; IA: InputAsset-&gt;Actions)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(IA.Action.<span class="built_in">Get</span>() &amp;&amp; IA.bAbilityInput)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(PressFunc)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(IA.bTriggerEvent)</span><br><span class="line">                &#123;</span><br><span class="line">                    BindHandles.<span class="built_in">Add</span>(<span class="built_in">BindAction</span>(IA.Action, ETriggerEvent::Triggered, PressFunc, PressFunc, IA.Tag).<span class="built_in">GetHandle</span>());</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    BindHandles.<span class="built_in">Add</span>(<span class="built_in">BindAction</span>(IA.Action, ETriggerEvent::Started, PressFunc, ReleaseFunc, IA.Tag).<span class="built_in">GetHandle</span>());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span>(ReleaseFunc)</span><br><span class="line">            &#123;</span><br><span class="line">                BindHandles.<span class="built_in">Add</span>(<span class="built_in">BindAction</span>(IA.Action, ETriggerEvent::Completed, ReleaseFUnc, IA.Tag).<span class="built_in">GetHandle</span>());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="触发IA与GA"><a href="#触发IA与GA" class="headerlink" title="触发IA与GA"></a>触发IA与GA</h2><p>对于玩家的本地输入，可以直接调用BindNativeAction进行绑定，有多少绑定多少，对于GA的绑定则只需要一次。</p>
+<p>当IA触发以后则需要根据对应的Tag去寻找对应的GA，提供两个函数用来处理技能输入的按下与抬起：</p>
+<h3 id="在GAS中的处理"><a href="#在GAS中的处理" class="headerlink" title="在GAS中的处理"></a>在GAS中的处理</h3><p>首先在ASC中提供两个函数用来处理技能输入的按下与抬起：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProcessAbilityPressInput</span><span class="params">(FGameplayTag InputTag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(FGameplayAbilitySpec&amp; AbilitySpec:<span class="built_in">GetActivatableAbilities</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(AbilitySpec.DynamicAbilityTags.<span class="built_in">HasTag</span>(InputTag))</span><br><span class="line">        &#123;</span><br><span class="line">            AbilitySpec.Ability-&gt;<span class="built_in">ActivateAbility</span>(AbilitySpec);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProcessAbilityReleaseInput</span><span class="params">(FGameplayTag InputTag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (FGameplayAbilitySpec&amp; AbilitySpec : <span class="built_in">GetActivatableAbilities</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (AbilitySpec.DynamicAbilityTags.<span class="built_in">HasTag</span>(InputTag))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">AbilitySpecInputRelease</span>(AbilitySpec);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在输入组件中的处理"><a href="#在输入组件中的处理" class="headerlink" title="在输入组件中的处理"></a>在输入组件中的处理</h3><p>随后可以在玩家的输入组件中调用这两个函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">OnAbilityPressd</span><span class="params">(FGameplayTag InputTag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 认为已经提供了相应的获取ASC的方法</span></span><br><span class="line">    <span class="keyword">if</span>(UProjectAbilitySystemComponent* ASC = <span class="built_in">GetAbilitySystemComponent</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        ASC-&gt;<span class="built_in">ProcessAbilityPressInput</span>(InputTag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">OnAbilityReleased</span><span class="params">(FGameplayTag InputTag)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(UProjectAbilitySystemComponent* ASC = <span class="built_in">GetAbilitySystemComponent</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        ASC-&gt;<span class="built_in">ProcessAbilityReleaseInput</span>(InputTag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="最终绑定"><a href="#最终绑定" class="headerlink" title="最终绑定"></a>最终绑定</h3><p>最终在增强输入中提供初始化函数SetPlayerInput:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">SetPlayerInput</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ACharacter* OwnerCharacter = <span class="built_in">Cast</span>&lt;ACharacter&gt;(<span class="built_in">GetOwner</span>());</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">IsValid</span>(OwnerCharacter))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (APlayerController* LocalPC = <span class="built_in">Cast</span>&lt;APlayerController&gt;(OwnerCharacter-&gt;Controller))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (UEnhancedInputLocalPlayerSubsystem* LPSubsystem = ULocalPlayer::<span class="built_in">GetSubsystem</span>&lt;UEnhancedInputLocalPlayerSubsystem&gt;(LocalPC-&gt;<span class="built_in">GetLocalPlayer</span>()))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (InputAsset-&gt;InputMappingContext.<span class="built_in">Get</span>())</span><br><span class="line">            &#123;</span><br><span class="line">                LPSubsystem-&gt;<span class="built_in">ClearAllMappings</span>();</span><br><span class="line">                LPSubsystem-&gt;<span class="built_in">AddMappingContext</span>(InputAsset-&gt;InputMappingContext,<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//BindNativeAction完成本地输入绑定</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">BindAbilityAction</span>(InputAsset, <span class="keyword">this</span>, &amp;ThisClass::OnAbilityPressd, &amp;ThisClass::OnAbilityReleased, AbilityInputHandles);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最终完成了IA与GA的绑定</p>
+<h1 id="管理GameplayTag"><a href="#管理GameplayTag" class="headerlink" title="管理GameplayTag"></a>管理GameplayTag</h1><p>参考lyra工程使用namespace作为Tag管理，同样我们也提供一个名为GameplayTags的namespace：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> GameplayTags</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 在头文件中这样声明</span></span><br><span class="line">	<span class="function">PROJECTET_API <span class="title">UE_DECLARE_GAMEPLAY_TAG_EXTERN</span><span class="params">(CharacterInputTag_Move)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在cpp文件中这样定义，可以编辑器中外部使用</span></span><br><span class="line">	<span class="built_in">UE_DEFINE_GAMEPLAY_TAG_COMMENT</span>(CharacterInputTag_Move, <span class="string">&quot;CharacterInput.Move&quot;</span>, <span class="string">&quot;Character Movement Input Tag&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用ini管理资产文件"><a href="#使用ini管理资产文件" class="headerlink" title="使用ini管理资产文件"></a>使用ini管理资产文件</h1><p>以上是直接将资产挂载在玩家身上，并不方便管理，所以可以考虑使用全局配置项来进行管理。</p>
+<p>用UDeveloperSettings作为父类创建名为ProjectAssetSettings的子类，注意需要在uproject文件中新加一条”DeveloperSettings”的配置。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UCLASS</span>(config = Game, defaultconfig, meta = (DisplayName = <span class="string">&quot;Game Asset Config&quot;</span>))</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PROJECTET_API</span> UProjectAssetSettings : <span class="keyword">public</span> UDeveloperSettings</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> FName <span class="title">GetCategoryName</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> FName&#123; <span class="built_in">TEXT</span>(<span class="string">&quot;Game Asset Config&quot;</span>) &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> FName <span class="title">GetContainerName</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> FName&#123; <span class="built_in">TEXT</span>(<span class="string">&quot;Project&quot;</span>) &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用于获取读取配置的方法，一般在游戏运行时不修改游戏配置，所以返回const</span></span><br><span class="line">	<span class="built_in">UFUNCTION</span>(BlueprintPure)</span><br><span class="line">	<span class="function"><span class="type">static</span> <span class="type">const</span> UProjectAssetSettings* <span class="title">GetProjectAssetSettings</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="type">const</span> UProjectAssetSettings* Settings = <span class="built_in">GetDefault</span>&lt;UProjectAssetSettings&gt;();</span><br><span class="line">        <span class="keyword">return</span> Settings;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果想要修改的话可以使用GetMutableDefault&lt;UProjectAssetSettings&gt;()来返回一个可修改的配置文件</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将输入资产与技能资产迁至这里，这里一般不会使用硬引用，ini文件加载时机很早，使用硬引用会导致读入的类为空</span></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Input&quot;</span>)</span><br><span class="line">    TSoftObjectPtr&lt;UInputAsset&gt; InputAsset;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly, Category = <span class="string">&quot;Ability&quot;</span>)</span><br><span class="line">    TSoftObjectPtr&lt;UAbilitAsset&gt; AbilityAsset;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>通过以上步骤，我们将输入与技能进行了绑定，并且通过namespace管理Tag和ini文件管理了输入与技能的资产。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">增强输入</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">GAS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/03/29/essay/%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E4%B8%8EGAS/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-essay/常用的排序算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1325,130 +1491,6 @@
 
 
   
-    <article id="post-essay/初步使用GAS" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2024/03/17/essay/%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8GAS/" target="_blank">初步使用GAS制作连击动画</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2024/03/17/essay/%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8GAS/" class="archive-article-date">
-        <time datetime="2024-03-17T07:31:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-03-17</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h1><p>使用UE5.2和Vs2022.</p>
-<p>GAS全名为Gameplay Ability System，是UE官方提供的一套技能系统，用于将角色的属性技能等于角色进行解耦方便扩展和修改，使用GAS要求为C++项目。</p>
-<p>新建一个C++的空项目，在编辑器中搜索Ability System启动插件，在Build.cs中添加”GameplayTasks”，”GameplayAbilities”和”GameplayTags”三个模块。</p>
-<p>重新启动项目，就可以使用GAS了。</p>
-<h1 id="GAS的一些基础知识"><a href="#GAS的一些基础知识" class="headerlink" title="GAS的一些基础知识"></a>GAS的一些基础知识</h1><p>GAS的一个核心组件是AbilitySystemComponent（ASC），绝大多数关于技能的操作都要依赖于它。</p>
-<p>使用各种技能需要GameplayAbility（GA），它是一个技能基类，可以用于派生处各种技能。</p>
-<p>关于技能的描述也触发，UE使用的是GameplayTag标签系统来完成，由GameplayTagContainer来存储，在连击的制作的同样使用不同的Tag来完成激活。</p>
-<p>GameplayEffect（GE）主要用于描述技能效果，如各种各样的Buff效果，需要应用的伤害。</p>
-<p>AttributeSet用于存放角色的属性，用于计算技能伤害、消耗等。</p>
-<p>此外GAS还包括碰撞检测、音效、特效等等，这些通过GameplayCue来实现。</p>
-<h1 id="制作第一个技能"><a href="#制作第一个技能" class="headerlink" title="制作第一个技能"></a>制作第一个技能</h1><p>首先在C++中添加技能组件并提供添加技能的配置项：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AMainCharacter</span>:<span class="keyword">public</span> ACharacter,<span class="keyword">public</span> IAbilitySystemInterface</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">AMainCharacter</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        AbilitySystemComponent = <span class="built_in">CreateDefaultSubobject</span>&lt;UAbilitySystemComponent&gt;(<span class="built_in">TEXT</span>(<span class="string">&quot;AbilitySystemComponent&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 主要用于服务端使用，因为这是单机项目，所以并不需要</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">PossessedBy</span><span class="params">(AController* NewController)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        Super::<span class="built_in">PossessedBy</span>(NewController);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!NewController) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">SetOwner</span>(NewController);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">class</span> UAbilitySystemComponent* <span class="title">GetAbilitySystemComponent</span><span class="params">()</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> AbilitySystemComponent;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(EditAnywhere,BlueprintReadWrite)</span><br><span class="line">	<span class="keyword">class</span> <span class="title class_">UAbilitySystemComponent</span>* AbilitySystemComponent;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere,Category=<span class="string">&quot;Abilitiies&quot;</span>)</span><br><span class="line">    TArray&lt;TSubclassOf&lt;<span class="keyword">class</span> <span class="title class_">GameplayAbility</span>&gt;&gt; Abilities;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在BeginPlay中调用</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">InitAbility</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!AbilitySystemComponent)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        AbilitySystemComponent-&gt;<span class="built_in">InitAbilityActorInfo</span>(<span class="keyword">this</span>,<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(int32 i=<span class="number">0</span>;i&lt;Abilities.<span class="built_in">Num</span>();i++)</span><br><span class="line">        &#123;</span><br><span class="line">            AbilitySystemComponent-&gt;<span class="built_in">GiveAbility</span>(<span class="built_in">FGameplayAbilitySpec</span>(Abilities[i]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>回到UE中，制作一个GA，继承GameplayAbility来实现一个播放蒙太奇的技能：<br>直接在ActivateAbility后选择播放蒙太奇并填入相应动画即可。</p>
-<p>技能触发选择使用GameplayTag，其中主要用到的是AbilityTag、ActivationOwnedTag。前者是属于该技能的标签；而后者用于激活该技能，当技能持有该标签时可以由TriggerEvent进行激活。</p>
-<p>在回到主角的动画在Abilities中添加该技能，可以在蓝图中配置一个输出调用技能组件的ActivateAbilityByTag函数来触发技能，<br>或者在输入中配置该技能的触发。</p>
-<h1 id="制作连击"><a href="#制作连击" class="headerlink" title="制作连击"></a>制作连击</h1><h2 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h2><p>制作连击的核心逻辑是首先判断当前角色是否处于攻击状态，如果没有，则触发第一段攻击，否则判断是否处于能够连击状态，如果是则可以进入下一段，否则就继续等待。</p>
-<p>使用伪代码表示为：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Attack</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!bAttacking)</span><br><span class="line">    &#123;</span><br><span class="line">        ComboCount = <span class="number">0</span>;</span><br><span class="line">        bAttacking = <span class="literal">true</span>;</span><br><span class="line">        <span class="built_in">PlayAttackMontage</span>(ComboCount);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(bCanCombo)</span><br><span class="line">        &#123;</span><br><span class="line">            ComboCount++;</span><br><span class="line">            <span class="keyword">if</span>(ComboCount&gt;=MaxCount)</span><br><span class="line">            &#123;</span><br><span class="line">                ComboCount = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">PlayAttackMontage</span>(ComboCount);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>bCanCombo和bAttacking使用GameplayTag来作为可以攻击状态的Buff，并且它们的状态由动画通知来更改。</p>
-<h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><h3 id="制作一个可供判断连击的GA"><a href="#制作一个可供判断连击的GA" class="headerlink" title="制作一个可供判断连击的GA"></a>制作一个可供判断连击的GA</h3><p>创建一个继承自GameplayAbility的GA，并做出如下设置：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用数据表存储攻击动画数据</span></span><br><span class="line"><span class="built_in">USTRUCT</span>(BlueprintType)</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">FComboData</span>:<span class="keyword">public</span> FTableRowBase</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">FComboData</span>():AttackMontage&#123;<span class="literal">nullptr</span>&#125;,PlayRate&#123;<span class="number">1.0f</span>&#125;&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 需要播放的蒙太奇</span></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere)</span><br><span class="line">    UAnimMontage* AttackMontage;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 播放速度</span></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere)</span><br><span class="line">    <span class="type">float</span> PlayRate;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UGA_Combo</span>:<span class="keyword">public</span> UGameplayAbility</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// GA的触发逻辑</span></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">ActivateAbility</span><span class="params">(<span class="type">const</span> FGameplayAbilitySpecHandle Handle, <span class="type">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="type">const</span> FGameplayAbilityActivationInfo ActivationInfo, <span class="type">const</span> FGameplayEventData* TriggerEventData)</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">GetComboData</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere,Category=<span class="string">&quot;Abilities&quot;</span>)</span><br><span class="line">    UGameplayTag CanCombo;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere,Category=<span class="string">&quot;Abilities&quot;</span>)</span><br><span class="line">    UGameplayTag Attacking;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>()</span><br><span class="line">    TArray&lt;FComboData&gt; ComboData;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere)</span><br><span class="line">    UDataTable* ComboDataTable;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 作为连击段数标识</span></span><br><span class="line">    <span class="type">static</span> int32 ComboCount;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>在cpp中给出实现：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">int32 UGA_Combo::ComboCount = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">GetComboData</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!ComboDataTable)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    FString WorldContextString;</span><br><span class="line">    TArray&lt;FComboData*&gt; Ans;</span><br><span class="line">    ComboDataTable-&gt;<span class="built_in">GetAllRows</span>&lt;FComboData&gt;(WorldContextString,Ans);</span><br><span class="line">    <span class="keyword">for</span>(FComboData* Combo:Ans)</span><br><span class="line">    &#123;</span><br><span class="line">        ComboData.<span class="built_in">Add</span>(*Combo);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ComboData.<span class="built_in">Num</span>()&gt;<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">UGA_Combo::ActivateAbility</span><span class="params">(<span class="type">const</span> FGameplayAbilitySpecHandle Handle, <span class="type">const</span> FGameplayAbilityActorInfo* ActorInfo, <span class="type">const</span> FGameplayAbilityActivationInfo ActivationInfo, <span class="type">const</span> FGameplayEventData* TriggerEventData)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Super::<span class="built_in">ActivateAbility</span>(Handle,ActorInfo,ActivationInfo,TriggerEventData);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(ComboData.<span class="built_in">IsEmpty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="built_in">GetComboData</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    IAbilitySystemInterface* AbilitySystemInterface = <span class="built_in">Cast</span>&lt;IAbilitySystemInterface&gt;(<span class="built_in">GetAvatarActorFromActorInfo</span>());</span><br><span class="line">    <span class="keyword">if</span>(!AbilitySystemInterface)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    UAbilitySystemComponent* AbilityComponent = AbilitySystemInterface-&gt;<span class="built_in">GetAbilitySystemComponent</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!AbilityComponent)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(!AbilityComponent-&gt;<span class="built_in">HasMatchingGameplayTag</span>(Attacking))</span><br><span class="line">    &#123;</span><br><span class="line">        ComboCount = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">PlayMontage</span>(ComboData[ComboCount].AttackMontage,ComboData[ComboCount].PlayRate);</span><br><span class="line">        <span class="comment">// 在这里添加应用GE的逻辑</span></span><br><span class="line">        <span class="comment">// 并在动画通知中移除这些GE</span></span><br><span class="line">        <span class="comment">// AbilityComponent-&gt;ApplyGameplayEffectToSelf(CanCombo);</span></span><br><span class="line">        <span class="comment">// AbilityComponent-&gt;ApplyGameplayEffectToSelf(Attacking);</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(AbilityComponent-&gt;<span class="built_in">HasMatchingGameplayTag</span>(CanCombo))</span><br><span class="line">        &#123;</span><br><span class="line">            ComboCount++;</span><br><span class="line">            <span class="keyword">if</span>(ComboCount&gt;=ComboData.<span class="built_in">Num</span>())</span><br><span class="line">            &#123;</span><br><span class="line">                ComboCount = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">PlayMontage</span>(ComboData[ComboCount].AttackMontage,ComboData[ComboCount].PlayRate);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>最后在输入时触发这个GA即可</p>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>CSDN：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xcinkey/category_11430365.html">https://blog.csdn.net/xcinkey/category_11430365.html</a><br>文章中包含了对GAS的一些简单介绍以及制作连击的方法<br>Github：<a target="_blank" rel="noopener" href="https://github.com/BillEliot/GASDocumentation_Chinese">https://github.com/BillEliot/GASDocumentation_Chinese</a><br>这是由大佬翻译的GAS的一个民间文档，其中有更详细的介绍和使用</p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2024/03/17/essay/%E5%88%9D%E6%AD%A5%E4%BD%BF%E7%94%A8GAS/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
@@ -1463,7 +1505,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2023-2024 <a href="https://13114987559.github.io/" target="_blank">KongXinQing</a>
+    		&copy; 2023-2025 <a href="https://13114987559.github.io/" target="_blank">KongXinQing</a>
     	</div>
       	<div class="footer-right">
 			
@@ -1647,6 +1689,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">GAS</a>
               </li>
             
             <div class="clearfix"></div>
