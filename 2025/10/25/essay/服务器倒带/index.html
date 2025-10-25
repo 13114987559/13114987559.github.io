@@ -6,16 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://13114987559.github.io">
-  <title>Archives | KongXinQing~</title>
+  <title>服务器倒带 | KongXinQing~</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="KongXinQing~">
-<meta property="og:url" content="https://13114987559.github.io/archives/page/4/index.html">
+  <meta name="description" content="服务器倒带(Server Rewind)主要用于解决多人在线游戏中，由于网络延迟导致的客户端与服务器表现不一致问题。该技术特别适用于第一人称射击(FPS)和动作类游戏，能够在不牺牲响应性的前提下保证游戏的公平性。 服务器倒带算法的实现思路在服务器上保存玩家一段时间内的历史状态信息（位置、旋转等），当收到客户端的命中请求时，根据客户端上报的时间戳将目标玩家的状态回滚到对应时刻，重新进行碰撞检测以验证">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务器倒带">
+<meta property="og:url" content="https://13114987559.github.io/2025/10/25/essay/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%80%92%E5%B8%A6/index.html">
 <meta property="og:site_name" content="KongXinQing~">
+<meta property="og:description" content="服务器倒带(Server Rewind)主要用于解决多人在线游戏中，由于网络延迟导致的客户端与服务器表现不一致问题。该技术特别适用于第一人称射击(FPS)和动作类游戏，能够在不牺牲响应性的前提下保证游戏的公平性。 服务器倒带算法的实现思路在服务器上保存玩家一段时间内的历史状态信息（位置、旋转等），当收到客户端的命中请求时，根据客户端上报的时间戳将目标玩家的状态回滚到对应时刻，重新进行碰撞检测以验证">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-25T09:26:35.000Z">
+<meta property="article:modified_time" content="2025-10-25T14:59:44.284Z">
 <meta property="article:author" content="KongXinQing">
+<meta property="article:tag" content="Cpp">
+<meta property="article:tag" content="网络">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="KongXinQing~" type="application/atom+xml">
@@ -184,41 +190,130 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-essay/服务器倒带" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2023" class="archive-year">2023</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/" class="archive-article-date">
-        <time datetime="2023-09-23T09:55:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/" target="_blank">虚幻Niagara使用</a>
   
+    <h1 class="article-title" itemprop="name">
+      服务器倒带
     </h1>
   
 
 
-        <div class="article-info info-on-right">
+  
+  
+<a href="/2025/10/25/essay/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%80%92%E5%B8%A6/" class="archive-article-date">
+        <time datetime="2025-10-25T09:26:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-10-25</time>
+</a>
+
+  
+  
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">2.5k字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">10分</span>
+    </span>
+  </span>
+</div>
+
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>服务器倒带(Server Rewind)主要用于解决多人在线游戏中，由于网络延迟导致的客户端与服务器表现不一致问题。该技术特别适用于第一人称射击(FPS)和动作类游戏，能够在不牺牲响应性的前提下保证游戏的公平性。</p>
+<h1 id="服务器倒带算法的实现思路"><a href="#服务器倒带算法的实现思路" class="headerlink" title="服务器倒带算法的实现思路"></a>服务器倒带算法的实现思路</h1><p>在服务器上保存玩家一段时间内的历史状态信息（位置、旋转等），当收到客户端的命中请求时，根据客户端上报的时间戳将目标玩家的状态回滚到对应时刻，重新进行碰撞检测以验证命中有效性。</p>
+<p>所以我们需要如下结构体：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">FHistoryCache</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">float</span> Time; <span class="comment">// 运行时间</span></span><br><span class="line">    FVector Loction; <span class="comment">// 位置</span></span><br><span class="line">    FRotator Rotation; <span class="comment">// 旋转</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">Create</span><span class="params">(...)</span></span>; <span class="comment">// 创建方法</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="保存的时间"><a href="#保存的时间" class="headerlink" title="保存的时间"></a>保存的时间</h1><p>在这个结构体中我们保存了游戏的运行时间，UE给我们提供了游戏自开始一共运行了多少时间，我们可以很容易的获取并将其保存到缓存中，但需要注意的是：这个时间会因为客户端服务端的差异而存在不同，所以我们需要对时间进行校准。</p>
+<h2 id="时间校准的方法"><a href="#时间校准的方法" class="headerlink" title="时间校准的方法"></a>时间校准的方法</h2><p>我们可以向服务器请求一次当前服务器的运行时间并将客户端时间一并上报，当服务器收到客户端的请求后便将服务器运行时间于客户端上报的时间一并下发给客户端，这样便可以计算出服务器的运行时间。</p>
+<p>具体过程：</p>
+<ol>
+<li>在需要校准时间时将客户端的时间上报给服务器</li>
+<li>服务器收到客户端上报的时间后将服务器的时间于客户端的时间一并发送给客户端</li>
+<li>客户端收到后可以根据上报时的客户端时间计算出RTT，这里假设客户端服务端进行一次通信所花费的时间相同，即服务端收到客户端上报的时间于客户端收到服务器下发的数据所花费的时间相同，就可以计算出客户端在收到服务器下发数据时的运行时间</li>
+</ol>
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><p>我们将实现放在玩家的控制器中，继承APlayerController类。</p>
+<h3 id="ASGPlayerController的头文件"><a href="#ASGPlayerController的头文件" class="headerlink" title="ASGPlayerController的头文件"></a>ASGPlayerController的头文件</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ASGPlayerController</span> : <span class="keyword">public</span> APlayerController</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">ASGPlayerController</span>();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">BeginPlay</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Tick</span><span class="params">(<span class="type">float</span> DeltaSeconds)</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 客户端上报服务器 */</span></span><br><span class="line">    <span class="built_in">UFUNCTION</span>(Server, Reliable)</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Server_ReqServerTime</span><span class="params">(<span class="type">float</span> ClientTime)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 服务器响应客户端 */</span></span><br><span class="line">    <span class="built_in">UFUNCTION</span>(Client, Reliable)</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Client_RspServerTime</span><span class="params">(<span class="type">float</span> ServerTime, <span class="type">float</span> ClientTime)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">UFUNCTION</span>(BlueprintPure)</span><br><span class="line">    <span class="function"><span class="type">float</span> <span class="title">GetServerTime</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="comment">/** 客户端服务端运行时间的差值 */</span></span><br><span class="line">    <span class="type">float</span> DeltaTimeInCS = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 检查时间 */</span></span><br><span class="line">    <span class="type">float</span> CheckTime = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** RTT */</span></span><br><span class="line">    <span class="type">float</span> RTT = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 检查间隔 */</span></span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere)</span><br><span class="line">    <span class="type">float</span> CheckInterval = <span class="number">4.0f</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ASGPlayerController的实现"><a href="#ASGPlayerController的实现" class="headerlink" title="ASGPlayerController的实现"></a>ASGPlayerController的实现</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">ASGPlayerController::<span class="built_in">ASGPlayerController</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 在Tick中决定校准运行时间的时机</span></span><br><span class="line">    PrimaryActorTick.bCanEverTick = <span class="literal">true</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">ASGPlayerController::<span class="built_in">BeginPlay</span>()</span><br><span class="line">&#123;</span><br><span class="line">    Super::<span class="built_in">BeginPlay</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 客户端玩家进入游戏时校准一次时间</span></span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">HasAuthority</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">Server_ReqServerTime</span>(<span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetTimeSeconds</span>());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ASGPlayerController::<span class="built_in">Tick</span>(<span class="type">float</span> DeltaSeconds)</span><br><span class="line">&#123;</span><br><span class="line">    Super::<span class="built_in">Tick</span>(DeltaSeconds);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 只在客户端校准</span></span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">HasAuthority</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(CheckTime &gt; CheckInterval)</span><br><span class="line">        &#123;</span><br><span class="line">            CheckTime = <span class="number">0.0f</span>;</span><br><span class="line">            <span class="built_in">Server_ReqServerTime</span>(<span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetTimeSeconds</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        CheckTime += DeltaSeconds;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ASGPlayerController::<span class="built_in">Server_ReqServerTime_Implementation</span>(<span class="type">float</span> ClientTime)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 服务器收到后将服务器运行时间于客户端上报的时间一并下发给客户端</span></span><br><span class="line">    <span class="built_in">Client_RspServerTime</span>(<span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetTimeSeconds</span>(), ClientTime);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ASGPlayerController::<span class="built_in">Client_RspServerTime_Implementation</span>(<span class="type">float</span> ServerTime, <span class="type">float</span> ClientTime)</span><br><span class="line">&#123;</span><br><span class="line">    RTT = <span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetTimeSeconds</span>() - ClientTime;</span><br><span class="line">    <span class="comment">// 当前时刻服务器的实际运行时间</span></span><br><span class="line">    ServerTime += RTT * <span class="number">0.5</span>;</span><br><span class="line">    <span class="comment">// 客户端与服务器运行时间的差值</span></span><br><span class="line">    DeltaTimeInCS = <span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetTimeSeconds</span>() - ServerTime;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">ASGPlayerController::GetServerTime</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 如果是服务器直接返回世界时间</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">HasAuthority</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetTimeSeconds</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 否则返回客户端时间减去差值</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetTimeSeconds</span>() - DeltaTimeInCS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="位置与旋转"><a href="#位置与旋转" class="headerlink" title="位置与旋转"></a>位置与旋转</h1><p>为了便于实现，我们只在玩家身上挂载一个UBoxComponent, 将这个BoxComponent用作玩家回滚后的击中判定：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ASGCharacter</span> : <span class="keyword">public</span> ACharacter</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">UPROPERTY</span>(EditAnywhere)</span><br><span class="line">    TObjectPtr&lt;UBoxComponent&gt; BoxComponent;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="倒带过程"><a href="#倒带过程" class="headerlink" title="倒带过程"></a>倒带过程</h1><p>我们使用一个组件来承担倒带的主要逻辑，主要实现功能为：</p>
+<ol>
+<li>记录一段时间内玩家的历史位置信息</li>
+<li>根据上报的信息回滚玩家位置并确认击中</li>
+<li>使用循环数组保存信息以减少开销</li>
+<li>需要提供可视化调试</li>
+</ol>
+<h2 id="USGLagComponent的头文件"><a href="#USGLagComponent的头文件" class="headerlink" title="USGLagComponent的头文件"></a>USGLagComponent的头文件</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 历史缓存的结构体，存储每帧玩家的位置以及时间信息 */</span></span><br><span class="line"><span class="built_in">USTRUCT</span>(BlueprintType)</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">FSGHistoryFrameCache</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">GENERATED_BODY</span>()</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">/** 缓存的时间 */</span></span><br><span class="line">	<span class="type">float</span> Time;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** 位置信息 */</span></span><br><span class="line">	FVector BoxLocation;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** 旋转信息 */</span></span><br><span class="line">	FRotator BoxRotation;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/** 创建方法 */</span></span><br><span class="line">	<span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">CreateHistoryFrame</span><span class="params">(ASGCharacter* Character, FSGHistoryFrameCache&amp; CurrentFrame)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">IsValid</span>(Character))</span><br><span class="line">		&#123;</span><br><span class="line">			CurrentFrame.Time = Character-&gt;<span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetTimeSeconds</span>();</span><br><span class="line">			CurrentFrame.BoxLocation = Character-&gt;<span class="built_in">GetHitBoxComponent</span>()-&gt;<span class="built_in">GetComponentLocation</span>();</span><br><span class="line">			CurrentFrame.Rotation = Character-&gt;<span class="built_in">GetHitBoxComponent</span>()-&gt;<span class="built_in">GetComponentRotation</span>();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">USGLagComponent</span> : <span class="keyword">public</span> UActorComponent</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:	</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">USGLagComponent</span>();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">BeginPlay</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">TickComponent</span><span class="params">(<span class="type">float</span> DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)</span> <span class="keyword">override</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 检查是否被击中 */</span></span><br><span class="line">	<span class="built_in">UFUNCTION</span>(BlueprintCallable)</span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">CheckHit</span><span class="params">(FVector&amp; StartLocation, FVector&amp; EndLocation, <span class="type">float</span> HittedTime)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="comment">/** 尝试保存每帧的回滚信息 */</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">TrySaveFrame</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 根据目标时间查找历史帧并进行线性插值</span></span><br><span class="line"><span class="comment">    * @param TargetTime 目标时间（服务器时间）</span></span><br><span class="line"><span class="comment">    * @param bFind 输出参数，是否找到合适帧</span></span><br><span class="line"><span class="comment">    * @param FrameCache 输出参数，插值后的帧数据</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">FindFrame_Liner</span><span class="params">(<span class="type">float</span> TargetTime, <span class="type">bool</span>&amp; bFind, FSGHistoryFrameCache&amp; FrameCache)</span></span>;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/** 玩家 */</span></span><br><span class="line">	TWeakObjectPtr&lt;ASGCharacter&gt; OwnerCharacter;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** 历史帧缓存列表 */</span></span><br><span class="line">	TArray&lt;FSGHistoryFrameCache&gt; HistoryFrameCache;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/** 保存的有效帧数 */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadOnly)</span><br><span class="line">	int32 ValidTickNum = <span class="number">64</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** 用于记录保存的帧号，为了与数组下标对应，从-1开始记录 */</span></span><br><span class="line">	int32 CurrentTickNum = <span class="number">-1</span>;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/** 是否开启调试 */</span></span><br><span class="line">	<span class="built_in">UPROPERTY</span>(EditAnywhere, BlueprintReadWrite)</span><br><span class="line">	<span class="type">bool</span> bDebug = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="USGLagComponent的实现"><a href="#USGLagComponent的实现" class="headerlink" title="USGLagComponent的实现"></a>USGLagComponent的实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br></pre></td><td class="code"><pre><span class="line">USGLagComponent::<span class="built_in">USGLagComponent</span>()</span><br><span class="line">&#123;</span><br><span class="line">	PrimaryComponentTick.bCanEverTick = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">USGLagComponent::<span class="built_in">BeginPlay</span>()</span><br><span class="line">&#123;</span><br><span class="line">	Super::<span class="built_in">BeginPlay</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">USGLagComponent::<span class="built_in">TickComponent</span>(<span class="type">float</span> DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)</span><br><span class="line">&#123;</span><br><span class="line">    Super::<span class="built_in">TickComponent</span>(DeltaTime, TickType, ThisTickFunction);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 尝试保存每帧的回滚信息</span></span><br><span class="line">	<span class="built_in">TrySaveFrame</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">USGLagComponent::CheckHit</span><span class="params">(FVector&amp; StartLocation, FVector&amp; EndLocation, <span class="type">float</span> HittedTime)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 前置检查</span></span><br><span class="line">	<span class="keyword">if</span> (!OwnerCharacter.<span class="built_in">IsValid</span>() || !<span class="built_in">GetWorld</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    UBoxComponent* HittedBox = OwnerCharacter-&gt;<span class="built_in">GetHitBoxComponent</span>();</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">IsValid</span>(HittedBox))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">	<span class="type">bool</span> bFind = <span class="literal">false</span>;</span><br><span class="line">	FSGHistoryFrameCache FrameCache;</span><br><span class="line">	<span class="built_in">FindFrame_Liner</span>(HittedTime, bFind, FrameCache);</span><br><span class="line">	<span class="keyword">if</span> (bFind == <span class="literal">false</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 获取原先的位置并记录</span></span><br><span class="line"></span><br><span class="line">	FVector OriginLocation = HittedBox-&gt;<span class="built_in">GetComponentLocation</span>();</span><br><span class="line">	FRotator OriginRotation = HittedBox-&gt;<span class="built_in">GetComponentRotation</span>();</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 将碰撞体移动到被击中的位置</span></span><br><span class="line">	HittedBox-&gt;<span class="built_in">SetWorldLocation</span>(FrameCache.BoxLocation);</span><br><span class="line">	HittedBox-&gt;<span class="built_in">SetWorldRotation</span>(FrameCache.BoxRotation);</span><br><span class="line">	HittedBox-&gt;<span class="built_in">SetCollisionEnabled</span>(ECollisionEnabled::QueryOnly);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 专门用来进行回滚检测的碰撞预设</span></span><br><span class="line">	FHitResult HitResult;</span><br><span class="line">	<span class="type">bool</span> bHit = <span class="built_in">GetWorld</span>()-&gt;<span class="built_in">LineTraceSingleByChannel</span>(HitResult, StartLocation, EndLocation, ECC_GameTraceChannel1);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 关闭碰撞并且恢复原先的位置</span></span><br><span class="line">	HittedBox-&gt;<span class="built_in">SetCollisionEnabled</span>(ECollisionEnabled::NoCollision);</span><br><span class="line">	HittedBox-&gt;<span class="built_in">SetWorldLocation</span>(OriginLocation);</span><br><span class="line">	HittedBox-&gt;<span class="built_in">SetWorldRotation</span>(OriginRotation);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在调试模式下绘制检测过程</span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> WITH_EDITOR</span></span><br><span class="line">    <span class="keyword">if</span> (bDebug == <span class="literal">true</span> &amp;&amp; !OwnerCharacter-&gt;<span class="built_in">HasAuthority</span>())</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="comment">// 绘制射线</span></span><br><span class="line">    <span class="built_in">DrawDebugLine</span>(<span class="built_in">GetWorld</span>(), StartLocation, EndLocation, </span><br><span class="line">                    bHit ? FColor::Green : FColor::Green, <span class="literal">false</span>, <span class="number">5.0f</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绘制碰撞体在回滚时刻的位置</span></span><br><span class="line">    <span class="built_in">DrawDebugBox</span>(<span class="built_in">GetWorld</span>(), FrameCache.BoxLocation,</span><br><span class="line">                    HitBox-&gt;<span class="built_in">GetScaledBoxExtent</span>(),</span><br><span class="line">                    <span class="built_in">FQuat</span>(FrameCache.BoxRotation), </span><br><span class="line">                    bHit ? FColor::Green : FColor::Red, <span class="literal">false</span>, <span class="number">5.0f</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> bHit;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">USGLagComponent::TrySaveFrame</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!OwnerCharacter.<span class="built_in">IsValid</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        OwnerCharacter = <span class="built_in">Cast</span>&lt;ASGCharacter&gt;(<span class="built_in">GetOwner</span>());</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	int32 CurrentFrameSize = HistoryFrameCache.<span class="built_in">Num</span>();</span><br><span class="line">    <span class="comment">// 计算要保存的帧索引</span></span><br><span class="line">	int32 SavedFrameIndex = (CurrentTickNum + <span class="number">1</span>) % ValidTickNum;</span><br><span class="line">	<span class="comment">// 如果当前数量小于最大数量则直接添加</span></span><br><span class="line">	<span class="keyword">if</span> (CurrentFrameSize &lt; ValidTickNum)</span><br><span class="line">	&#123;</span><br><span class="line">		FSGHistoryFrameCache CurrentFrameCache;</span><br><span class="line">		FSGHistoryFrameCache::<span class="built_in">CreateHistoryFrame</span>(OwnerCharacter.<span class="built_in">Get</span>(), CurrentFrameCache);</span><br><span class="line">		HistoryFrameCache.<span class="built_in">Add</span>(CurrentFrameCache);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 否则循环更新</span></span><br><span class="line">		FSGHistoryFrameCache::<span class="built_in">CreateHistoryFrame</span>(OwnerCharacter.<span class="built_in">Get</span>(), HistoryFrameCache[SavedFrameIndex]);</span><br><span class="line">	&#125;</span><br><span class="line">	CurrentTickNum = SavedFrameIndex;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调试功能</span></span><br><span class="line"><span class="meta">#<span class="keyword">if</span> WITH_EDITOR</span></span><br><span class="line">    <span class="keyword">if</span>(bDebug == <span class="literal">true</span> &amp;&amp; !OwnerCharacter-&gt;<span class="built_in">HasAuthority</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 将调试Box绘制出来</span></span><br><span class="line">        <span class="built_in">DrawDebugBox</span>(<span class="built_in">GetWorld</span>(), HistoryFrameCache[CurrentTickNum].BoxLocation,</span><br><span class="line">		             OwnerCharacter-&gt;<span class="built_in">GetHitBoxComponent</span>()-&gt;<span class="built_in">GetScaledBoxExtent</span>(),</span><br><span class="line">		             <span class="built_in">FQuat</span>(HistoryFrameCache[CurrentTickNum].BoxRotation), FColor::Red, <span class="literal">false</span>, ValidTickNum * <span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetDeltaSeconds</span>());</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">USGLagComponent::FindFrame_Liner</span><span class="params">(<span class="type">float</span> TargetTime, <span class="type">bool</span>&amp; bFind, FSGHistoryFrameCache&amp; FrameCache)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">bFind = <span class="literal">false</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 获取有效帧的数量和范围</span></span><br><span class="line">	int32 TotalValidFrames = HistoryFrameCache.<span class="built_in">Num</span>();</span><br><span class="line">	int32 StartIndex = <span class="number">0</span>;</span><br><span class="line">	int32 EndIndex = TotalValidFrames - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 如果已满，调整起始和结束索引</span></span><br><span class="line">	<span class="keyword">if</span> (TotalValidFrames &gt;= ValidTickNum)</span><br><span class="line">	&#123;</span><br><span class="line">		StartIndex = (CurrentTickNum + <span class="number">1</span>) % ValidTickNum;</span><br><span class="line">		EndIndex = CurrentTickNum;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 检查目标时间是否在有效范围内</span></span><br><span class="line">	<span class="type">float</span> FirstTime = HistoryFrameCache[StartIndex].Time;</span><br><span class="line">	<span class="type">float</span> LastTime = HistoryFrameCache[EndIndex].Time;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (TargetTime &lt; FirstTime || LastTime &lt; TargetTime)</span><br><span class="line">	&#123;</span><br><span class="line">		bFind = <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查找目标时间所在的时间段</span></span><br><span class="line">	int32 PreIndex = <span class="number">-1</span>;</span><br><span class="line">	int32 NextIndex = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 遍历查找合适的时间段</span></span><br><span class="line">	<span class="keyword">for</span> (int32 i = <span class="number">0</span>; i &lt; TotalValidFrames; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		int32 CurrentIndex = (StartIndex + i) % ValidTickNum;</span><br><span class="line">		<span class="type">float</span> CurrentTime = HistoryFrameCache[CurrentIndex].Time;</span><br><span class="line">        </span><br><span class="line">		<span class="keyword">if</span> (CurrentTime &lt;= TargetTime)</span><br><span class="line">		&#123;</span><br><span class="line">			PreIndex = CurrentIndex;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		&#123;</span><br><span class="line">			NextIndex = CurrentIndex;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 如果Pre没更新过，则说明是第一帧</span></span><br><span class="line">	<span class="keyword">if</span> (PreIndex == <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		FrameCache = HistoryFrameCache[StartIndex];</span><br><span class="line">		bFind = <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 如果Next没更新过，则说明是最后一帧</span></span><br><span class="line">	<span class="keyword">if</span> (NextIndex == <span class="number">-1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		FrameCache = HistoryFrameCache[EndIndex];</span><br><span class="line">		bFind = <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="type">float</span> PreTime = HistoryFrameCache[PreIndex].Time;</span><br><span class="line">	<span class="type">float</span> NextTime = HistoryFrameCache[NextIndex].Time;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (FMath::<span class="built_in">IsNearlyEqual</span>(PreTime, NextTime))</span><br><span class="line">	&#123;</span><br><span class="line">        bFind = <span class="literal">false</span>;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 长度大于2，进行插值</span></span><br><span class="line">	FVector PreLocation = HistoryFrameCache[PreIndex].BoxLocation;</span><br><span class="line">	FVector NextLocation = HistoryFrameCache[NextIndex].BoxLocation;</span><br><span class="line">	FRotator PreRotation = HistoryFrameCache[PreIndex].BoxRotation;</span><br><span class="line">	FRotator NextRotation = HistoryFrameCache[NextIndex].BoxRotation;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 进行线性插值</span></span><br><span class="line">	<span class="type">float</span> Distance = NextTime - PreTime;</span><br><span class="line">	<span class="type">float</span> InterpSpeed = (TargetTime - PreTime) / Distance;</span><br><span class="line">	FrameCache.BoxLocation = FMath::<span class="built_in">VInterpTo</span>(PreLocation, NextLocation, <span class="number">1.0f</span>, InterpSpeed);</span><br><span class="line">	FrameCache.BoxRotation = FMath::<span class="built_in">RInterpTo</span>(PreRotation, NextRotation, <span class="number">1.0f</span>, InterpSpeed);</span><br><span class="line">	bFind = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><p>以下mermaid展示了整个服务器倒带的工作流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[客户端开始射击] --&gt; B[本地碰撞检测]</span><br><span class="line">    B --&gt; C[检测到命中]</span><br><span class="line">    C --&gt; D[上报服务器&lt;br&gt;包含命中时间]</span><br><span class="line">    </span><br><span class="line">    E[服务器接收命中请求] --&gt; F[获取目标玩家LagComponent]</span><br><span class="line">    F --&gt; G[调用CheckHit函数]</span><br><span class="line">    G --&gt; H[FindFrame_Liner查找历史帧]</span><br><span class="line">    H --&gt; I&#123;是否找到合适帧?&#125;</span><br><span class="line">    I --&gt;|是| J[回滚碰撞体位置]</span><br><span class="line">    I --&gt;|否| K[返回命中失败]</span><br><span class="line">    J --&gt; L[执行碰撞检测]</span><br><span class="line">    L --&gt; M[恢复碰撞体位置]</span><br><span class="line">    M --&gt; N[返回检测结果]</span><br><span class="line">    </span><br><span class="line">    O[服务器Tick更新] --&gt; P[TrySaveFrame保存帧]</span><br><span class="line">    P --&gt; Q&#123;缓存是否已满?&#125;</span><br><span class="line">    Q --&gt;|否| R[添加新帧]</span><br><span class="line">    Q --&gt;|是| S[循环覆盖旧帧]</span><br><span class="line">    R --&gt; T[更新CurrentTickNum]</span><br><span class="line">    S --&gt; T</span><br><span class="line">    </span><br><span class="line">    U[时间校准流程] --&gt; V[客户端请求校准]</span><br><span class="line">    V --&gt; W[服务器响应时间]</span><br><span class="line">    W --&gt; X[客户端计算DeltaTimeInCS]</span><br><span class="line">    </span><br><span class="line">    subgraph 数据存储</span><br><span class="line">        Y[HistoryFrameCache&lt;br&gt;历史帧缓存]</span><br><span class="line">        Z[CurrentTickNum&lt;br&gt;当前帧索引]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    H --&gt; Y</span><br><span class="line">    P --&gt; Y</span><br><span class="line">    T --&gt; Z</span><br></pre></td></tr></table></figure>
+
+<p>mermaid网站链接：<a target="_blank" rel="noopener" href="https://mermaid-live.nodejs.cn/edit#pako:eNptlOtOGkEUx1-FzGc0IEKVNDYV661oVahWB9OsMApRdsm629SiidrWO2iLt1ZrxXprrYiNiimiL8PM4lt0mFm7mDgfNjtzfufMOf85M1HglwIIOMGALESCJneHTzTR8RTi1A6ZyWhHJ_hqHB_M4_QHPJ3tNZWV1ZhqIdn8jTfT2k6afN4iP8bJ-Xwv96tlgAvyRTyTxp9y-ctj3epi1jqYv5wjc3tkM4bnkvjL4eM-uQYvfMRLR5wmaxe3a2e6D_8-g_9pEt8jyxecLJxkyOkkz6oeFuIZvLiqbaTI9rQW_4lTF25hwCWFI5KIREWPV8_gBlhIv9eWD11B5B9sDCl4OkdW0jrSwJBGWB8SA_WyEEav3SERyeT7Hpm9xvEpvPgHXx7ocCODm6Jk_QQv7RcBWvTSzO34JGWejHGoqQiNUmTU1AzxxhbJfuXi5XOJfC6m5VK9pSANNGp6Dgs3y5TlleLd08LZnk41sz3dkMweFJILDxyDmwEtkEzs4N3Yw1u1MKZV34W7a9kE2dq8p_wLQ3lvyD9INs7Iapor3ga98ohHeIOYSPmbb_h43RCmjTHtUe0qQde5PDjzh2STd6q0G8V2QJLJ4rltGtuI0G6o5oH4-pcWPynsT2kbq2TtwKA62D5eyDNzqbJMD7uYaqsa1hEPR0rLegl5l5HtJJ6eIucT2uE8r6rTaH3eXhzRQ3UypssQBSdi-O_yvZbtYsyrkjippJZaq0NDiuANhVGT6PLc03hY7ePXj_YgiaWKMk4eclNxdMPG0LAiySNMZ5fgDyJ2Ze46kSvcazj0wPsyMDqXwLOxIn22g69WdBqJgdJEeDN3lx6gPvGySQ8wgzCSw0IoQJ-MaNHkA0oQhZEPOOlvAPUL6pDiAz5xjKKCqkieEdEPnIqsIjOQJXUgCJz9wtAwnamRgKCgupBAaw_fIRFB7JGk0ilwRsFb4CxzVNrK7RXWKpvtUaW1oqraDEaA02qrLrdbHBWOaovVYqmwVTnGzOAdC2Att9urLRaHjQ671Wqz28z0kSsmridDa0eyS1JFBTjtY_8AjNc7_w">https://mermaid-live.nodejs.cn/edit#pako:eNptlOtOGkEUx1-FzGc0IEKVNDYV661oVahWB9OsMApRdsm629SiidrWO2iLt1ZrxXprrYiNiimiL8PM4lt0mFm7mDgfNjtzfufMOf85M1HglwIIOMGALESCJneHTzTR8RTi1A6ZyWhHJ_hqHB_M4_QHPJ3tNZWV1ZhqIdn8jTfT2k6afN4iP8bJ-Xwv96tlgAvyRTyTxp9y-ctj3epi1jqYv5wjc3tkM4bnkvjL4eM-uQYvfMRLR5wmaxe3a2e6D_8-g_9pEt8jyxecLJxkyOkkz6oeFuIZvLiqbaTI9rQW_4lTF25hwCWFI5KIREWPV8_gBlhIv9eWD11B5B9sDCl4OkdW0jrSwJBGWB8SA_WyEEav3SERyeT7Hpm9xvEpvPgHXx7ocCODm6Jk_QQv7RcBWvTSzO34JGWejHGoqQiNUmTU1AzxxhbJfuXi5XOJfC6m5VK9pSANNGp6Dgs3y5TlleLd08LZnk41sz3dkMweFJILDxyDmwEtkEzs4N3Yw1u1MKZV34W7a9kE2dq8p_wLQ3lvyD9INs7Iapor3ga98ohHeIOYSPmbb_h43RCmjTHtUe0qQde5PDjzh2STd6q0G8V2QJLJ4rltGtuI0G6o5oH4-pcWPynsT2kbq2TtwKA62D5eyDNzqbJMD7uYaqsa1hEPR0rLegl5l5HtJJ6eIucT2uE8r6rTaH3eXhzRQ3UypssQBSdi-O_yvZbtYsyrkjippJZaq0NDiuANhVGT6PLc03hY7ePXj_YgiaWKMk4eclNxdMPG0LAiySNMZ5fgDyJ2Ze46kSvcazj0wPsyMDqXwLOxIn22g69WdBqJgdJEeDN3lx6gPvGySQ8wgzCSw0IoQJ-MaNHkA0oQhZEPOOlvAPUL6pDiAz5xjKKCqkieEdEPnIqsIjOQJXUgCJz9wtAwnamRgKCgupBAaw_fIRFB7JGk0ilwRsFb4CxzVNrK7RXWKpvtUaW1oqraDEaA02qrLrdbHBWOaovVYqmwVTnGzOAdC2Att9urLRaHjQ671Wqz28z0kSsmridDa0eyS1JFBTjtY_8AjNc7_w</a></p>
+<h2 id="调试与优化"><a href="#调试与优化" class="headerlink" title="调试与优化"></a>调试与优化</h2><p>如果要模拟高延迟的情况，可以选择在DefaultEngine.ini中添加:</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[PacketSimulationSettings]</span></span><br><span class="line"><span class="attr">PktLag</span> = <span class="number">500</span>  </span><br></pre></td></tr></table></figure>
+<p>可修改PktLag这个值来改变测试的延迟</p>
+<p>依然可优化的方案：</p>
+<ol>
+<li>如果保存的历史帧非常长的话使用遍历会影响性能，可以使用二分查找来优化</li>
+<li>在进行回滚检测时，可以使用更细致的检测方案</li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/690661788">https://zhuanlan.zhihu.com/p/690661788</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1929071131677143054">https://zhuanlan.zhihu.com/p/1929071131677143054</a></p>
+
+    
+
+    
+
+    
+    <div class="declare"> 
+      <ul class="post-copyright">
+        <li>
+          <strong>本文作者：</strong>
+          KongXinQing
+        </li>
+        <li>
+          <strong>本文链接：</strong>
+          <a href="https://13114987559.github.io/2025/10/25/essay/服务器倒带/" title="服务器倒带" target="_blank">https://13114987559.github.io/2025/10/25/essay/服务器倒带/</a>
+        </li>
+        
+        <li>
+          <strong>版权声明： </strong>
           
+          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
+        </li>
+        
+      </ul>
+    </div>
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -228,17 +323,13 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Niagara</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">网络</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+    
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -251,575 +342,118 @@
 	</div>
 
 
+    
+
+    
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://13114987559.github.io/2025/10/25/essay/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%80%92%E5%B8%A6/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+
+    
+    <div class="clearfix"></div>
+  </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" class="archive-article-date">
-        <time datetime="2023-09-23T09:53:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
-</a>
 
+
+<nav id="article-nav">
+  
+  
+    <a href="/2025/08/18/essay/%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9F_%E4%B8%8A/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">消息系统(上)</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BB%E5%8F%8D%E5%B0%84%E6%9C%BA%E5%88%B6/" target="_blank">虚幻反射机制浅析</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">反射</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%80%92%E5%B8%A6%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">服务器倒带算法的实现思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E7%9A%84%E6%97%B6%E9%97%B4"><span class="toc-number">2.</span> <span class="toc-text">保存的时间</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E6%A0%A1%E5%87%86%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.</span> <span class="toc-text">时间校准的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">具体实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ASGPlayerController%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-number">2.2.1.</span> <span class="toc-text">ASGPlayerController的头文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ASGPlayerController%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.2.</span> <span class="toc-text">ASGPlayerController的实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%8D%E7%BD%AE%E4%B8%8E%E6%97%8B%E8%BD%AC"><span class="toc-number">3.</span> <span class="toc-text">位置与旋转</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%80%92%E5%B8%A6%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">倒带过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#USGLagComponent%E7%9A%84%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="toc-number">4.1.</span> <span class="toc-text">USGLagComponent的头文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#USGLagComponent%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">4.2.</span> <span class="toc-text">USGLagComponent的实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">5.1.</span> <span class="toc-text">工作流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E8%AF%95%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="toc-number">5.2.</span> <span class="toc-text">调试与优化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">6.</span> <span class="toc-text">参考</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/" class="archive-article-date">
-        <time datetime="2023-09-23T07:02:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/23/essay/Cpp%E5%8F%8D%E5%B0%84/" target="_blank">C++反射</a>
-  
-    </h1>
-  
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">反射</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:18:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E5%BD%92%E5%B9%B6%E4%B8%8E%E7%BB%9F%E8%AE%A1%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：归并与统计排序</a>
-  
-    </h1>
-  
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:18:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E9%80%89%E6%8B%A9%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：选择排序</a>
-  
-    </h1>
-  
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:17:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E4%BA%A4%E6%8D%A2%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：交换排序</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:17:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：插入排序</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" class="archive-article-date">
-        <time datetime="2023-09-20T09:16:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-20</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/20/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F/" target="_blank">数据结构与算法：拓扑排序</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">排序</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">图</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">算法</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/" class="archive-article-date">
-        <time datetime="2023-09-19T12:50:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-19</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/19/essay/%E8%99%9A%E5%B9%BB%E8%92%99%E5%A4%AA%E5%A5%87%E4%B8%8E%E6%B7%B7%E5%90%88%E5%8A%A8%E7%94%BB/" target="_blank">虚幻：蒙太奇与混合动画</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2023/09/11/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%95%A3%E5%88%97%E8%A1%A8/" class="archive-article-date">
-        <time datetime="2023-09-11T10:38:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-11</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2023/09/11/note/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95-%E6%95%A3%E5%88%97%E8%A1%A8/" target="_blank">数据结构与算法：散列表</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数据结构</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">散列表</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/page/3/">&amp;laquo; Prev</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/archives/page/5/">5</a><a class="extend next" rel="next" href="/archives/page/5/">Next &amp;raquo;</a>
-    </nav>
-  
 
 
           </div>
@@ -848,8 +482,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,

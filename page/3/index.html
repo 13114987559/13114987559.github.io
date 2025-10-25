@@ -191,6 +191,107 @@
             
 
   
+    <article id="post-note/设计模式6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/" target="_blank">设计模式（六）</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/" class="archive-article-date">
+        <time datetime="2023-10-16T08:41:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-16</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>状态变化模式</p>
+<h1 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h1><p>定义：允许一个对象在其内部状态改变时改变它的行为，从而使对象看起来似乎修改了它的行为。</p>
+<p>将所有行为都放入一个State的子类对象中，在状态切换时，切换相应的对象，同时维护State的接口。</p>
+    
+    <a class="article-more-a" href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-essay/虚幻容器使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1153,124 +1254,6 @@
 
 
   
-    <article id="post-essay/虚幻Niagara使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/" target="_blank">虚幻Niagara使用</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/" class="archive-article-date">
-        <time datetime="2023-09-23T09:55:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-23</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="启用Niagara"><a href="#启用Niagara" class="headerlink" title="启用Niagara"></a>启用Niagara</h1><p>在新版虚幻引擎中，Niagara已经集成到引擎中，无需额外安装。</p>
-<p>在Edit-Plugins-FX中可以找到Niagara，勾选后重启编辑器即可。</p>
-<p>安装完成后在内容浏览器中右键可以在FX中找到包含Niagara的内容。</p>
-<p>这里只是在C++和蓝团中如何使用Niagara，并不自己创建Niagara，关于如何创建可以参考官方文档。</p>
-<h1 id="使用Niagara"><a href="#使用Niagara" class="headerlink" title="使用Niagara"></a>使用Niagara</h1><h2 id="在C-中使用Niagara"><a href="#在C-中使用Niagara" class="headerlink" title="在C++中使用Niagara"></a>在C++中使用Niagara</h2><p>要使用Niagara，首先要将Niagara的模块添加进入工程中：<br>打开工程，在build.cs中添加：”Niagara”，使该模块添加如工程中。</p>
-<p>需要在C++中创建一个NiagaraSystem,并添加到需要使用的物体上。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加头文件</span></span><br><span class="line"><span class="comment">//如果报错就添加完整路径或包含上一级文件</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraFunctionLibrary.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraSystem.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;NiagaraComponent.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">UPROPERTY</span>(EditDefaultsOnly, Category = <span class="string">&quot;Niagara&quot;</span>)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UNiagaraSystem</span>* NiagaraSystem;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在类中添加使用函数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">FireNiagara</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
-
-<p>对使用函数作出实现：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProjectName::FireNiagara</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    <span class="keyword">if</span>(NiagaraSystem)&#123;     </span><br><span class="line">        NiagaraComponet=UNiagaraFunctionLibrary::<span class="built_in">SpawnSystemAttached</span>(FireNiagara,RootComponent,NAME_None,FVector::ZeroVector,FRotator::ZeroRotator,FVector::OneVector,EAttachLocation::Type::KeepRelativeOffset,<span class="literal">true</span>,ENCPoolMethod::None);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    函数声明：参数名称为其含义，可以看到函数返回一个NiagaraComponent，所以可以在头文件中声明一个NiagaraComponent变量，在使用使直接将函数返回值赋值给该变量。（感觉不用也可以，还没试过doge）</span></span><br><span class="line"><span class="comment">    UNiagaraComponent* UNiagaraFunctionLibrary::SpawnSystemAttached(UNiagaraSystem* SystemTemplate,USceneComponent* AttachToComponent,</span></span><br><span class="line"><span class="comment">    FName AttachPointName,FVector Location,FRotator Rotation,FVector Scale,EAttachLocation::Type LocationType,bool bAutoDestroy,</span></span><br><span class="line"><span class="comment">    ENCPoolMethod PoolingMethod,bool bAutoActivate,bool bPreCullCheck)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//或者另一种实现</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ProjectName::FireNiagara</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(NiagaraSystem)&#123;</span><br><span class="line">        NiagaraComponet=UNiagaraFunctionLibrary::<span class="built_in">SpawnSystemAtLocation</span>(<span class="built_in">Getworld</span>(),FireNiagara,<span class="built_in">GetActorLocation</span>());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    函数声明：含义与上面得方法类似</span></span><br><span class="line"><span class="comment">    UNiagaraComponent* SpawnSystemAtLocation(const UObject* WorldContextObject, UNiagaraSystem* SystemTemplate, FVector SpawnLocation, </span></span><br><span class="line"><span class="comment">    FRotator SpawnRotation, FVector Scale, bool bAutoDestroy, bool bAutoActivate, ENCPoolMethod PoolingMethod, bool bPreCullCheck)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="在蓝图中使用Niagara"><a href="#在蓝图中使用Niagara" class="headerlink" title="在蓝图中使用Niagara"></a>在蓝图中使用Niagara</h2><p>在蓝图中使用就很简单了，直接搜索Spawn System Attach 或者 Spawn System at Location,参数于C++中相同，直接按照需求填入即可。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>只是使用现成的System并没有什么难度，但自己实现一个Niagara比普通粒子效果要复杂得多。</p>
-<p>更多细节以及API可以查看官方文档：<br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/zh-CN/RenderingAndGraphics/Niagara/">https://docs.unrealengine.com/4.27/zh-CN/RenderingAndGraphics/Niagara/</a><br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraFunctionLibrary/">https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraFunctionLibrary/</a><br><a target="_blank" rel="noopener" href="https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraComponent/">https://docs.unrealengine.com/4.27/en-US/API/Plugins/Niagara/UNiagaraComponent/</a></p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">UE</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Niagara</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/09/23/essay/%E8%99%9A%E5%B9%BBNiagara%E4%BD%BF%E7%94%A8/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &amp;raquo;</a>
@@ -1425,6 +1408,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">排序</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">网络</a>
               </li>
              
               <li class="article-tag-list-item">

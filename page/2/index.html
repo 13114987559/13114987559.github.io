@@ -191,6 +191,113 @@
             
 
   
+    <article id="post-note/C++多线程入门：小型案例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2024/03/29/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%B0%8F%E5%9E%8B%E6%A1%88%E4%BE%8B/" target="_blank">C++多线程入门：小型案例</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2024/03/29/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%B0%8F%E5%9E%8B%E6%A1%88%E4%BE%8B/" class="archive-article-date">
+        <time datetime="2024-03-29T02:03:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-03-29</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="模拟线程通信"><a href="#模拟线程通信" class="headerlink" title="模拟线程通信"></a>模拟线程通信</h1><p>使用队列模拟两个线程间的通信，根据之前所学，提供一个线程基类，同时提供一个Msg派生类。<br>为了方便编写，将声明与定义写在一起。</p>
+<h1 id="线程基类"><a href="#线程基类" class="headerlink" title="线程基类"></a>线程基类</h1><p>命名为BaseThread.hpp：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BaseThread</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">BaseThread</span>():<span class="built_in">bExit</span>(<span class="literal">false</span>)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">ThreadStart</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        bExit = <span class="literal">false</span>;</span><br><span class="line">	    th = std::<span class="built_in">thread</span>(&amp;BaseThread::Main,<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">ThreadStop</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        bExit=<span class="literal">true</span>;</span><br><span class="line">        <span class="built_in">Wait</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 等待线程退出-阻塞式</span></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Wait</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (th.<span class="built_in">joinable</span>()) &#123;</span><br><span class="line">            th.<span class="built_in">join</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">GetIsExit</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> bExit; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">virtual</span> ~<span class="built_in">BaseThread</span>()</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="comment">// 逻辑入口</span></span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Main</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="type">bool</span> bExit;</span><br><span class="line">	std::thread th;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="提供Msg派生类"><a href="#提供Msg派生类" class="headerlink" title="提供Msg派生类"></a>提供Msg派生类</h1><p>同样声明为MsgServer.hpp：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;BaseThread.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MsgServer</span> : <span class="keyword">public</span> BaseThread</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">MsgServer</span>():<span class="built_in">MaxQueneLength</span>(<span class="number">20</span>),<span class="built_in">CurrentLength</span>(<span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 给当前线程发送消息,在主线程中访问</span></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">SendMsg</span><span class="params">(std::string Msg)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">        <span class="function">unique_lock&lt;mutex&gt; <span class="title">Lock</span><span class="params">(Mtx)</span></span>;</span><br><span class="line">        <span class="comment">// 也可以使用一个缓冲区来来临时存放数据</span></span><br><span class="line">        <span class="keyword">if</span> (CurrentLength &gt;= MaxQueueLength) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        MsgQueue.<span class="built_in">push</span>(Msg);</span><br><span class="line">        CurrentLength++;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">Main</span><span class="params">()</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Start&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">while</span> (!<span class="built_in">GetIsExit</span>()) &#123;</span><br><span class="line">            <span class="comment">// 处理最大延时</span></span><br><span class="line">            this_thread::<span class="built_in">sleep_for</span>(<span class="number">100</span>ms);</span><br><span class="line">            <span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(Mtx)</span></span>;</span><br><span class="line">            <span class="keyword">if</span> (MsgQueue.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span> (!MsgQueue.<span class="built_in">empty</span>())&#123;</span><br><span class="line">                cout &lt;&lt; <span class="string">&quot;RecvMsg = &quot;</span> &lt;&lt; MsgQueue.<span class="built_in">front</span>() &lt;&lt; endl;</span><br><span class="line">                MsgQueue.<span class="built_in">pop</span>();</span><br><span class="line">                CurrentLength--;</span><br><span class="line">            &#125;</span><br><span class="line">	    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置消息队列</span></span><br><span class="line">	std::queue&lt;std::string&gt; MsgQueue;</span><br><span class="line"></span><br><span class="line">	std::mutex Mtx;</span><br><span class="line"></span><br><span class="line">	<span class="type">size_t</span> MaxQueueLength;</span><br><span class="line">	<span class="type">size_t</span> CurrentLength;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="进行测试"><a href="#进行测试" class="headerlink" title="进行测试"></a>进行测试</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;MsgServer.hpp&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	MsgServer msgServer;</span><br><span class="line">	msgServer.<span class="built_in">ThreadStart</span>();</span><br><span class="line">	<span class="comment">/*for (int i = 0; i &lt; 15; i++) &#123;</span></span><br><span class="line"><span class="comment">		std::stringstream ss;</span></span><br><span class="line"><span class="comment">		ss &lt;&lt; &quot;MsgId = &quot; &lt;&lt; i;</span></span><br><span class="line"><span class="comment">		msgServer.SendMsg(ss.str());</span></span><br><span class="line"><span class="comment">		this_thread::sleep_for(100ms);</span></span><br><span class="line"><span class="comment">	&#125;*/</span></span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		string s;</span><br><span class="line">		cin &gt;&gt; s;</span><br><span class="line">		<span class="keyword">if</span> (s == <span class="string">&quot;exit&quot;</span>) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		msgServer.<span class="built_in">SendMsg</span>(s);</span><br><span class="line">	&#125;</span><br><span class="line">	msgServer.<span class="built_in">ThreadStop</span>();</span><br><span class="line">	<span class="built_in">system</span>(<span class="string">&quot;pause&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2024/03/29/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%B0%8F%E5%9E%8B%E6%A1%88%E4%BE%8B/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-note/C++多线程入门：多线程通信与同步" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1192,107 +1299,6 @@
 
 
   
-    <article id="post-note/设计模式6" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/" target="_blank">设计模式（六）</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/" class="archive-article-date">
-        <time datetime="2023-10-16T08:41:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-10-16</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>状态变化模式</p>
-<h1 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h1><p>定义：允许一个对象在其内部状态改变时改变它的行为，从而使对象看起来似乎修改了它的行为。</p>
-<p>将所有行为都放入一个State的子类对象中，在状态切换时，切换相应的对象，同时维护State的接口。</p>
-    
-    <a class="article-more-a" href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">设计模式</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2023/10/16/note/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F6/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
@@ -1447,6 +1453,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">排序</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">网络</a>
               </li>
              
               <li class="article-tag-list-item">
