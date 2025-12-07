@@ -191,6 +191,402 @@
             
 
   
+    <article id="post-朝向扭曲" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/11/30/%E6%9C%9D%E5%90%91%E6%89%AD%E6%9B%B2/" target="_blank">朝向扭曲</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/11/30/%E6%9C%9D%E5%90%91%E6%89%AD%E6%9B%B2/" class="archive-article-date">
+        <time datetime="2025-11-30T15:20:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-11-30</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/11/30/%E6%9C%9D%E5%90%91%E6%89%AD%E6%9B%B2/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-essay/距离匹配" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/11/30/essay/%E8%B7%9D%E7%A6%BB%E5%8C%B9%E9%85%8D/" target="_blank">距离匹配</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/11/30/essay/%E8%B7%9D%E7%A6%BB%E5%8C%B9%E9%85%8D/" class="archive-article-date">
+        <time datetime="2025-11-30T15:19:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-11-30</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="距离匹配"><a href="#距离匹配" class="headerlink" title="距离匹配"></a>距离匹配</h1><p>在使用距离匹配时需要先在插件中开启AnimationLocomotionLibrary和AnimationWarping这两个插件</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>游戏中动画驱动有两种方式，分别为<em>位移驱动</em>和<em>动画驱动</em>。位移驱动中玩家控制角色胶囊体的运动，动画自己播放，这种方式会导致角色动画的步幅与移动速度不匹配；动画驱动是由动画的根运动来驱动角色位移，这种方式可以很好的解决角色运动中的滑步现象。</p>
+<h2 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h2><p>假如我们有一个起步动画，我们将角色的位移提取为距离曲线，同时每一帧获取曲线上的值，这个值就是角色的位移距离（距离起点的距离），将该值应用到角色的位移中就可以实现步幅匹配。</p>
+<h1 id="提取距离曲线"><a href="#提取距离曲线" class="headerlink" title="提取距离曲线"></a>提取距离曲线</h1><p><img src="/../../Pic/Ue/DistanceCurve.jpg" alt="DistanceCurve"></p>
+<p>提取距离曲线主要使用DistanceCurveModifier类，这个类主要包含的内容如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">EDistanceCurve_Axis</span> : uint8</span><br><span class="line">&#123;</span><br><span class="line">    X,</span><br><span class="line">    Y,</span><br><span class="line">    Z,</span><br><span class="line">    XY,</span><br><span class="line">    XZ,</span><br><span class="line">    YZ,</span><br><span class="line">    XYZ,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">UDistanceCurveModifier</span> : <span class="keyword">public</span> UAnimModifier</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    int32 SampleRate = <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line">    FName CurveName = <span class="string">&quot;Distance&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> StopSpeedThreshold = <span class="number">5.0f</span>;</span><br><span class="line"></span><br><span class="line">    EDistanceCurve_Axis Axis = EDistanceCurve_Axis::XY;</span><br><span class="line"></span><br><span class="line">    <span class="type">bool</span> bStopAtEnd = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">OnApply_Implementation</span><span class="params">(UAnimSequence* Animation)</span> <span class="keyword">override</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们来逐个解析各个参数的含义：</p>
+<ul>
+<li>SampleRate：采样频率，即每秒采样多少次，默认为30次，采样频率越高，曲线值与实际位置的误差越小</li>
+<li>CurveName：采样的曲线名称，默认为Distance，供外部获取曲线值</li>
+<li>StopSpeedThreshold：速度阈值，用于计算动画序列的最小速度</li>
+<li>Axis：采样轴，即采样哪几个轴的位移，默认为XY，即采样X和Y轴的位移（水平位移）</li>
+<li>bStopAtEnd：是否选择在动画结束的时间作为速度的最低时间</li>
+<li>OnApply_Implementation：实际进行采样的函数，实现具体的采样逻辑</li>
+</ul>
+<p>实现代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">UDistanceCurveModifier::OnApply_Implementation</span><span class="params">(UAnimSequence* Animation)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 1</span></span><br><span class="line">	<span class="keyword">if</span> (Animation == <span class="literal">nullptr</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">UE_LOG</span>(LogAnimation, Error, <span class="built_in">TEXT</span>(<span class="string">&quot;DistanceCurveModifier failed. Reason: Invalid Animation&quot;</span>));</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (!Animation-&gt;<span class="built_in">HasRootMotion</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">UE_LOG</span>(LogAnimation, Error, <span class="built_in">TEXT</span>(<span class="string">&quot;DistanceCurveModifier failed. Reason: Root motion is disabled on the animation (%s)&quot;</span>), *<span class="built_in">GetNameSafe</span>(Animation));</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2</span></span><br><span class="line">	<span class="type">const</span> <span class="type">bool</span> bMetaDataCurve = <span class="literal">false</span>;</span><br><span class="line">	UAnimationBlueprintLibrary::<span class="built_in">AddCurve</span>(Animation, CurveName, ERawCurveTrackTypes::RCT_Float, bMetaDataCurve);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3</span></span><br><span class="line">	<span class="type">const</span> <span class="type">float</span> AnimLength = Animation-&gt;<span class="built_in">GetPlayLength</span>();</span><br><span class="line">	<span class="type">float</span> SampleInterval;</span><br><span class="line">	int32 NumSteps;</span><br><span class="line">	<span class="type">float</span> TimeOfMinSpeed;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(bStopAtEnd)</span><br><span class="line">	&#123; </span><br><span class="line">		TimeOfMinSpeed = AnimLength;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// Perform a high resolution search to find the sample point with minimum speed.</span></span><br><span class="line">		</span><br><span class="line">		TimeOfMinSpeed = <span class="number">0.f</span>;</span><br><span class="line">		<span class="type">float</span> MinSpeedSq = FMath::<span class="built_in">Square</span>(StopSpeedThreshold);</span><br><span class="line"></span><br><span class="line">		SampleInterval = <span class="number">1.f</span> / <span class="number">120.f</span>;</span><br><span class="line">		NumSteps = AnimLength / SampleInterval;</span><br><span class="line">		<span class="keyword">for</span> (int32 Step = <span class="number">0</span>; Step &lt; NumSteps; ++Step)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="type">const</span> <span class="type">float</span> Time = Step * SampleInterval;</span><br><span class="line"></span><br><span class="line">			<span class="type">const</span> <span class="type">bool</span> bAllowLooping = <span class="literal">false</span>;</span><br><span class="line">			<span class="type">const</span> FVector RootMotionTranslation = Animation-&gt;<span class="built_in">ExtractRootMotion</span>(Time, SampleInterval, bAllowLooping);</span><br><span class="line">			<span class="type">const</span> <span class="type">float</span> RootMotionSpeedSq = <span class="built_in">CalculateMagnitudeSq</span>(RootMotionTranslation, Axis) / SampleInterval;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> (RootMotionSpeedSq &lt; MinSpeedSq)</span><br><span class="line">			&#123;</span><br><span class="line">				MinSpeedSq = RootMotionSpeedSq;</span><br><span class="line">				TimeOfMinSpeed = Time;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4</span></span><br><span class="line">	SampleInterval = <span class="number">1.f</span> / SampleRate;</span><br><span class="line">	NumSteps = FMath::<span class="built_in">CeilToInt</span>(AnimLength / SampleInterval);</span><br><span class="line">	<span class="type">float</span> Time = <span class="number">0.0f</span>;</span><br><span class="line">	<span class="keyword">for</span> (int32 Step = <span class="number">0</span>; Step &lt;= NumSteps &amp;&amp; Time &lt; AnimLength; ++Step)</span><br><span class="line">	&#123;</span><br><span class="line">		Time = FMath::<span class="built_in">Min</span>(Step * SampleInterval, AnimLength);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Assume that during any time before the stop/pivot point, the animation is approaching that point.</span></span><br><span class="line">		<span class="comment">// <span class="doctag">TODO:</span> This works for clips that are broken into starts/stops/pivots, but needs to be rethought for more complex clips.</span></span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> ValueSign = (Time &lt; TimeOfMinSpeed) ? <span class="number">-1.0f</span> : <span class="number">1.0f</span>;</span><br><span class="line"></span><br><span class="line">		<span class="type">const</span> FVector RootMotionTranslation = Animation-&gt;<span class="built_in">ExtractRootMotionFromRange</span>(TimeOfMinSpeed, Time).<span class="built_in">GetTranslation</span>();</span><br><span class="line">		UAnimationBlueprintLibrary::<span class="built_in">AddFloatCurveKey</span>(Animation, CurveName, Time, ValueSign * <span class="built_in">CalculateMagnitude</span>(RootMotionTranslation, Axis));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对源码进行分析：</p>
+<ul>
+<li>这一步判断动画是否合法以及是否开启骨骼根运动</li>
+<li>添加一条非元数据曲线，并声明需要使用的变量</li>
+<li>寻找最低速度：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断是否直接使用动画结束时间作为最小速度</span></span><br><span class="line"><span class="keyword">if</span>(bStopAtEnd)</span><br><span class="line">&#123; </span><br><span class="line">    TimeOfMinSpeed = AnimLength;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    TimeOfMinSpeed = <span class="number">0.f</span>;</span><br><span class="line">    <span class="comment">// 从阈值中获取最小速度，只有比阈值速度还小才会更新</span></span><br><span class="line">    <span class="type">float</span> MinSpeedSq = FMath::<span class="built_in">Square</span>(StopSpeedThreshold);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 默认采样间隔以及采样次数</span></span><br><span class="line">    SampleInterval = <span class="number">1.f</span> / <span class="number">120.f</span>;</span><br><span class="line">    NumSteps = AnimLength / SampleInterval;</span><br><span class="line">    <span class="comment">// 实际计算最小速度</span></span><br><span class="line">    <span class="keyword">for</span> (int32 Step = <span class="number">0</span>; Step &lt; NumSteps; ++Step)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 计算每步的步进时长</span></span><br><span class="line">        <span class="type">const</span> <span class="type">float</span> Time = Step * SampleInterval;</span><br><span class="line"></span><br><span class="line">        <span class="type">const</span> <span class="type">bool</span> bAllowLooping = <span class="literal">false</span>;</span><br><span class="line">        <span class="comment">// 提取两次采样之间的根运动距离</span></span><br><span class="line">        <span class="type">const</span> FVector RootMotionTranslation = Animation-&gt;<span class="built_in">ExtractRootMotion</span>(Time, SampleInterval, bAllowLooping);</span><br><span class="line">        <span class="comment">// 根据距离和步进时长计算前进速度</span></span><br><span class="line">        <span class="type">const</span> <span class="type">float</span> RootMotionSpeedSq = <span class="built_in">CalculateMagnitudeSq</span>(RootMotionTranslation, Axis) / SampleInterval;</span><br><span class="line">        <span class="comment">// 更新最小速度以及最小速度的时间</span></span><br><span class="line">        <span class="keyword">if</span> (RootMotionSpeedSq &lt; MinSpeedSq)</span><br><span class="line">        &#123;</span><br><span class="line">            MinSpeedSq = RootMotionSpeedSq;</span><br><span class="line">            TimeOfMinSpeed = Time;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实际生成采样曲线<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 计算采样间隔，由暴露给蓝图的值决定</span></span><br><span class="line">SampleInterval = <span class="number">1.f</span> / SampleRate;</span><br><span class="line"><span class="comment">// 计算采样次数</span></span><br><span class="line">NumSteps = FMath::<span class="built_in">CeilToInt</span>(AnimLength / SampleInterval);</span><br><span class="line"><span class="type">float</span> Time = <span class="number">0.0f</span>;</span><br><span class="line"><span class="comment">// 遍历采样</span></span><br><span class="line"><span class="keyword">for</span> (int32 Step = <span class="number">0</span>; Step &lt;= NumSteps &amp;&amp; Time &lt; AnimLength; ++Step)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 防止采样超出动画时长</span></span><br><span class="line">    Time = FMath::<span class="built_in">Min</span>(Step * SampleInterval, AnimLength);</span><br><span class="line">    <span class="comment">// 用来判断是起步还是停步</span></span><br><span class="line">    <span class="comment">// 如果是起步动画，速度从0开始递增，速度最小值一定为正数且是开始的时候，所以TimeOfMinSpeed一定比Time小，得到的为1.0f</span></span><br><span class="line">    <span class="comment">// 如果是停步动画，速度逐渐递减到0，速度最小值一定为负数且在动画最后达到最小，则TimeOfMinSpeed的时间一定比Time大，得到的为-1.0f</span></span><br><span class="line">    <span class="type">const</span> <span class="type">float</span> ValueSign = (Time &lt; TimeOfMinSpeed) ? <span class="number">-1.0f</span> : <span class="number">1.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 提取从TimeOfMinSpeed到Time之间的根运动距离</span></span><br><span class="line">    <span class="type">const</span> FVector RootMotionTranslation = Animation-&gt;<span class="built_in">ExtractRootMotionFromRange</span>(TimeOfMinSpeed, Time).<span class="built_in">GetTranslation</span>();</span><br><span class="line">    <span class="comment">// 将值添加到曲线中</span></span><br><span class="line">    UAnimationBlueprintLibrary::<span class="built_in">AddFloatCurveKey</span>(Animation, CurveName, Time, ValueSign * <span class="built_in">CalculateMagnitude</span>(RootMotionTranslation, Axis));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>通过提取的距离曲线，我们可以实现起步与停步的步幅匹配</p>
+<h1 id="起步匹配"><a href="#起步匹配" class="headerlink" title="起步匹配"></a>起步匹配</h1><p><img src="/../../Pic/Ue/StartMatch.jpg" alt="StartMatch"></p>
+<p>起步动画主要依靠<em>AdvanceTimeByDistanceMatching</em>，通过序列求值器选择每一帧的动画进行播放</p>
+<h2 id="函数声明"><a href="#函数声明" class="headerlink" title="函数声明"></a>函数声明</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * Advance the sequence evaluator forward by distance traveled rather than time. A distance curve is required on the animation that</span></span><br><span class="line"><span class="comment">	 * describes the distance traveled by the root bone in the animation. See UDistanceCurveModifier.</span></span><br><span class="line"><span class="comment">	 * @param UpdateContext - The update context provided in the anim node function.</span></span><br><span class="line"><span class="comment">	 * @param SequenceEvaluator - The sequence evaluator node to operate on.</span></span><br><span class="line"><span class="comment">	 * @param DistanceTraveled - The distance traveled by the character since the last animation update.</span></span><br><span class="line"><span class="comment">	 * @param DistanceCurveName - Name of the curve we want to match </span></span><br><span class="line"><span class="comment">	 * @param PlayRateClamp - A clamp on the effective play rate of the animation after distance matching. Set to (0,0) for no clamping.</span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="built_in">UFUNCTION</span>(BlueprintCallable, Category = <span class="string">&quot;Distance Matching&quot;</span>, meta=(BlueprintThreadSafe))</span><br><span class="line">	<span class="function"><span class="type">static</span> FSequenceEvaluatorReference <span class="title">AdvanceTimeByDistanceMatching</span><span class="params">(<span class="type">const</span> FAnimUpdateContext&amp; UpdateContext, <span class="type">const</span> FSequenceEvaluatorReference&amp; SequenceEvaluator,</span></span></span><br><span class="line"><span class="params"><span class="function">		<span class="type">float</span> DistanceTraveled, FName DistanceCurveName, FVector2D PlayRateClamp = FVector2D(<span class="number">0.75f</span>, <span class="number">1.25f</span>))</span></span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>函数解释：根据动画前进的距离来设置动画的前进而非使用时间，这需要一个用于描述动画根骨骼位置的距离曲线，这个曲线我们可以从UDistanceCurveModifier中的来获取，这个在之前已经解释。</p>
+<p>主要的三个参数为：<br>SequenceEvaluator：当前动画的序列求值器<br>DistanceTraveled：本帧移动的距离<br>DistanceCurveName：距离曲线</p>
+<h2 id="函数实现"><a href="#函数实现" class="headerlink" title="函数实现"></a>函数实现</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FSequenceEvaluatorReference <span class="title">UAnimDistanceMatchingLibrary::AdvanceTimeByDistanceMatching</span><span class="params">(<span class="type">const</span> FAnimUpdateContext&amp; UpdateContext, <span class="type">const</span> FSequenceEvaluatorReference&amp; SequenceEvaluator,</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="type">float</span> DistanceTraveled, FName DistanceCurveName, FVector2D PlayRateClamp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 1 进入时绑定了一个lambda函数作为参数一并传入CallAnimNodeFunction中被调用</span></span><br><span class="line">	SequenceEvaluator.<span class="built_in">CallAnimNodeFunction</span>&lt;FAnimNode_SequenceEvaluator&gt;(</span><br><span class="line">		<span class="built_in">TEXT</span>(<span class="string">&quot;AdvanceTimeByDistanceMatching&quot;</span>),</span><br><span class="line">		[&amp;UpdateContext, DistanceTraveled, DistanceCurveName, PlayRateClamp](FAnimNode_SequenceEvaluator&amp; InSequenceEvaluator)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// 2.1 获取动画上下文</span></span><br><span class="line">			<span class="keyword">if</span> (<span class="type">const</span> FAnimationUpdateContext* AnimationUpdateContext = UpdateContext.<span class="built_in">GetContext</span>())</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">// 2.2 获取一个tick的时长</span></span><br><span class="line">				<span class="type">const</span> <span class="type">float</span> DeltaTime = AnimationUpdateContext-&gt;<span class="built_in">GetDeltaTime</span>(); </span><br><span class="line"></span><br><span class="line">				<span class="comment">// 2.3 当tick时长与步进距离均大于0时继续执行下一步逻辑</span></span><br><span class="line">				<span class="keyword">if</span> (DeltaTime &gt; <span class="number">0</span> &amp;&amp; DistanceTraveled &gt; <span class="number">0</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="comment">// 3.1 获取正在播放的动画并从动画中获取数据</span></span><br><span class="line">					<span class="keyword">if</span> (<span class="type">const</span> UAnimSequenceBase* AnimSequence = <span class="built_in">Cast</span>&lt;UAnimSequence&gt;(InSequenceEvaluator.<span class="built_in">GetSequence</span>()))</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="comment">// 3.2 获取当前时间，动画时长，是否循环播放</span></span><br><span class="line">						<span class="type">const</span> <span class="type">float</span> CurrentTime = InSequenceEvaluator.<span class="built_in">GetExplicitTime</span>();</span><br><span class="line">						<span class="type">const</span> <span class="type">float</span> CurrentAssetLength = InSequenceEvaluator.<span class="built_in">GetCurrentAssetLength</span>();</span><br><span class="line">						<span class="type">const</span> <span class="type">bool</span> bAllowLooping = InSequenceEvaluator.<span class="built_in">IsLooping</span>();</span><br><span class="line"></span><br><span class="line">						<span class="comment">// 4.1 获取在步进DistanceTraveled之后的动画时间</span></span><br><span class="line">						<span class="comment">// 这个函数的注释为：Advance from the current time to a new time in the animation that will result in the desired distance traveled by the authored root motion.</span></span><br><span class="line">						<span class="comment">// 从当前时间开始，根据根运动所经过的距离计算应到达的新的时间</span></span><br><span class="line">						<span class="type">float</span> TimeAfterDistanceTraveled = UE::Anim::DistanceMatchingUtility::<span class="built_in">GetTimeAfterDistanceTraveled</span>(AnimSequence, CurrentTime, DistanceTraveled, DistanceCurveName, bAllowLooping);</span><br><span class="line"></span><br><span class="line">						<span class="comment">// 4.2 计算播放速率</span></span><br><span class="line">						<span class="keyword">if</span> (TimeAfterDistanceTraveled &lt; CurrentTime)</span><br><span class="line">						&#123;</span><br><span class="line">							TimeAfterDistanceTraveled += CurrentAssetLength;</span><br><span class="line">						&#125;</span><br><span class="line">						<span class="type">float</span> EffectivePlayRate = (TimeAfterDistanceTraveled - CurrentTime) / DeltaTime;</span><br><span class="line"></span><br><span class="line">						<span class="comment">// 4.3 限制播放速率</span></span><br><span class="line">						<span class="keyword">if</span> (PlayRateClamp.X &gt;= <span class="number">0.0f</span> &amp;&amp; PlayRateClamp.X &lt; PlayRateClamp.Y)</span><br><span class="line">						&#123;</span><br><span class="line">							EffectivePlayRate = FMath::<span class="built_in">Clamp</span>(EffectivePlayRate, PlayRateClamp.X, PlayRateClamp.Y);</span><br><span class="line">						&#125;</span><br><span class="line"></span><br><span class="line">						<span class="comment">// 5.1 计算步进之后的动画时间</span></span><br><span class="line">						<span class="type">float</span> NewTime = CurrentTime;</span><br><span class="line">						FAnimationRuntime::<span class="built_in">AdvanceTime</span>(bAllowLooping, EffectivePlayRate * DeltaTime, NewTime, CurrentAssetLength);</span><br><span class="line"></span><br><span class="line">						<span class="comment">// 5.2 设置新的动画时间</span></span><br><span class="line">						<span class="keyword">if</span> (!InSequenceEvaluator.<span class="built_in">SetExplicitTime</span>(NewTime))</span><br><span class="line">						&#123;</span><br><span class="line">							<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Could not set explicit time on sequence evaluator, value is not dynamic. Set it as Always Dynamic.&quot;</span>));</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span></span><br><span class="line">					&#123;</span><br><span class="line">						<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Sequence evaluator does not have an anim sequence to play.&quot;</span>));</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;AdvanceTimeByDistanceMatching called with invalid context&quot;</span>));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> SequenceEvaluator;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="停步匹配"><a href="#停步匹配" class="headerlink" title="停步匹配"></a>停步匹配</h1><p><img src="/../../Pic/Ue/StopMatch.jpg" alt="StopMatch"></p>
+<p>当角色停止运动时（玩家不再有运动方向的输入），此时角色会逐渐减速，这时需要计算角色的运动距离，然后将这个距离与动画进行匹配</p>
+<p>GetPredictedStopDistance：这个函数已经提供了用于预测角色停止运动后的前进距离，在C++中为PredictGroundMovementStopLocation<br>DistanceMatchToTarget：这个函数用于将预测的距离与动画进行匹配</p>
+<h2 id="GetPredictedStopDistance"><a href="#GetPredictedStopDistance" class="headerlink" title="GetPredictedStopDistance"></a>GetPredictedStopDistance</h2><p>定义</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Predict where the character will stop based on its current movement properties and parameters from the movement component.</span></span><br><span class="line"><span class="comment">* This uses prediction logic that is heavily tied to the UCharacterMovementComponent.</span></span><br><span class="line"><span class="comment">* Each parameter corresponds to a value from the UCharacterMovementComponent with the same name.</span></span><br><span class="line"><span class="comment">* Because this is a thread safe function, it&#x27;s	recommended to populate these fields via the Property Access system.</span></span><br><span class="line"><span class="comment">* @return The predicted stop position in local space to the character. The size of this vector will be the distance to the stop location.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">UFUNCTION</span>(BlueprintPure, Category = <span class="string">&quot;Animation Character Movement&quot;</span>, meta = (BlueprintThreadSafe))</span><br><span class="line"><span class="function"><span class="type">static</span> FVector <span class="title">PredictGroundMovementStopLocation</span><span class="params">(<span class="type">const</span> FVector&amp; Velocity,</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="type">bool</span> bUseSeparateBrakingFriction, <span class="type">float</span> BrakingFriction, <span class="type">float</span> GroundFriction, <span class="type">float</span> BrakingFrictionFactor, <span class="type">float</span> BrakingDecelerationWalking)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到注释内容为：通过角色移动组件中的属性来预测当角色停止运动时角色移动的位置</p>
+<ul>
+<li>Velocity：角色的速度</li>
+<li>bUseSeparateBrakingFriction：是否使用单独的制动摩擦力</li>
+<li>BrakingFriction：制动摩擦力</li>
+<li>GroundFriction：地面摩擦力</li>
+<li>BrakingFrictionFactor：制动摩擦力因数</li>
+<li>BrakingDecelerationWalking：制动减速度</li>
+</ul>
+<p>实现</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FVector <span class="title">UAnimCharacterMovementLibrary::PredictGroundMovementStopLocation</span><span class="params">(<span class="type">const</span> FVector&amp; Velocity, </span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="type">bool</span> bUseSeparateBrakingFriction, <span class="type">float</span> BrakingFriction, <span class="type">float</span> GroundFriction, <span class="type">float</span> BrakingFrictionFactor, <span class="type">float</span> BrakingDecelerationWalking)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 预测的停止位置</span></span><br><span class="line">	FVector PredictedStopLocation = FVector::ZeroVector;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 选择实际摩檫力</span></span><br><span class="line">	<span class="type">float</span> ActualBrakingFriction = (bUseSeparateBrakingFriction ? BrakingFriction : GroundFriction);</span><br><span class="line">	<span class="comment">// 计算摩檫力</span></span><br><span class="line">	<span class="type">const</span> <span class="type">float</span> FrictionFactor = FMath::<span class="built_in">Max</span>(<span class="number">0.f</span>, BrakingFrictionFactor);</span><br><span class="line">	ActualBrakingFriction = FMath::<span class="built_in">Max</span>(<span class="number">0.f</span>, ActualBrakingFriction * FrictionFactor);</span><br><span class="line">	<span class="type">float</span> BrakingDeceleration = FMath::<span class="built_in">Max</span>(<span class="number">0.f</span>, BrakingDecelerationWalking);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 计算角色的地面速度</span></span><br><span class="line">	<span class="type">const</span> FVector Velocity2D = Velocity * <span class="built_in">FVector</span>(<span class="number">1.f</span>, <span class="number">1.f</span>, <span class="number">0.f</span>);</span><br><span class="line">	FVector VelocityDir2D;</span><br><span class="line">	<span class="type">float</span> Speed2D;</span><br><span class="line">	Velocity2D.<span class="built_in">ToDirectionAndLength</span>(VelocityDir2D, Speed2D);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 高中数学：x = v * t + 0.5 * a * t^2</span></span><br><span class="line">	<span class="comment">// 这里先计算加速度</span></span><br><span class="line">	<span class="type">const</span> <span class="type">float</span> Divisor = ActualBrakingFriction * Speed2D + BrakingDeceleration;</span><br><span class="line">	<span class="keyword">if</span> (Divisor &gt; <span class="number">0.f</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 根据v = a * t计算停止时间</span></span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> TimeToStop = Speed2D / Divisor;</span><br><span class="line">		<span class="comment">// 将时间带入公式计算位置</span></span><br><span class="line">		PredictedStopLocation = Velocity2D * TimeToStop + <span class="number">0.5f</span> * ((-ActualBrakingFriction) * Velocity2D - BrakingDeceleration * VelocityDir2D) * TimeToStop * TimeToStop;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 将计算结果返回</span></span><br><span class="line">	<span class="keyword">return</span> PredictedStopLocation;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="DistanceMatchToTarget"><a href="#DistanceMatchToTarget" class="headerlink" title="DistanceMatchToTarget"></a>DistanceMatchToTarget</h2><p>定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Set the time of the sequence evaluator to the point in the animation where the distance curve matches the DistanceToTarget input.</span></span><br><span class="line"><span class="comment">* A common use case is to achieve stops without foot sliding by, each frame, selecting the point in the animation that matches the distance the character has remaining until it stops.</span></span><br><span class="line"><span class="comment">* Note that because this technique sets the time of the animation by distance remaining, it doesn&#x27;t respect phase of any previous animation (e.g. from a jog cycle).</span></span><br><span class="line"><span class="comment">* @param SequenceEvaluator - The sequence evaluator node to operate on.</span></span><br><span class="line"><span class="comment">* @param DistanceToTarget - The distance remaining to a target (e.g. a stop or pivot point).</span></span><br><span class="line"><span class="comment">* @param DistanceCurveName - Name of the curve we want to match </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">UFUNCTION</span>(BlueprintCallable, Category = <span class="string">&quot;Distance Matching&quot;</span>, meta=(BlueprintThreadSafe))</span><br><span class="line"><span class="function"><span class="type">static</span> FSequenceEvaluatorReference <span class="title">DistanceMatchToTarget</span><span class="params">(<span class="type">const</span> FSequenceEvaluatorReference&amp; SequenceEvaluator,</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="type">float</span> DistanceToTarget, FName DistanceCurveName)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>注释为：通过距离来设置序列求值器的播放时间，通过每帧选择动画中与角色剩余距离匹配的点来实现</p>
+<ul>
+<li>SequenceEvaluator：序列求值器</li>
+<li>DistanceToTarget：目标距离，即预测的行进距离</li>
+<li>DistanceCurveName：距离曲线</li>
+</ul>
+<p>实现：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FSequenceEvaluatorReference <span class="title">UAnimDistanceMatchingLibrary::DistanceMatchToTarget</span><span class="params">(<span class="type">const</span> FSequenceEvaluatorReference&amp; SequenceEvaluator,</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="type">float</span> DistanceToTarget, FName DistanceCurveName)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 同样将一个lambda函数作为参数传递给CallAnimNodeFunction函数</span></span><br><span class="line">	SequenceEvaluator.<span class="built_in">CallAnimNodeFunction</span>&lt;FAnimNode_SequenceEvaluator&gt;(</span><br><span class="line">		<span class="built_in">TEXT</span>(<span class="string">&quot;DistanceMatchToTarget&quot;</span>),</span><br><span class="line">		[DistanceToTarget, DistanceCurveName](FAnimNode_SequenceEvaluator&amp; InSequenceEvaluator)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// 获取当前的动画序列</span></span><br><span class="line">			<span class="keyword">if</span> (<span class="type">const</span> UAnimSequenceBase* AnimSequence = <span class="built_in">Cast</span>&lt;UAnimSequence&gt;(InSequenceEvaluator.<span class="built_in">GetSequence</span>()))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">// 根据距离获取动画播放到的位置(播放时间)并将这个位置设置给当前播放的动画</span></span><br><span class="line">				<span class="type">const</span> <span class="type">float</span> NewTime = UE::Anim::DistanceMatchingUtility::<span class="built_in">GetAnimPositionFromDistance</span>(AnimSequence, -DistanceToTarget, DistanceCurveName);</span><br><span class="line">				<span class="keyword">if</span> (!InSequenceEvaluator.<span class="built_in">SetExplicitTime</span>(NewTime))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Could not set explicit time on sequence evaluator, value is not dynamic. Set it as Always Dynamic.&quot;</span>));</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Sequence evaluator does not have an anim sequence to play.&quot;</span>));</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> SequenceEvaluator;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据位置和距离曲线查找这个动画的时间节点</span></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">GetAnimPositionFromDistance</span><span class="params">(<span class="type">const</span> UAnimSequenceBase* InAnimSequence, <span class="type">const</span> <span class="type">float</span>&amp; InDistance, FName InCurveName)</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="comment">// 获取曲线数据</span></span><br><span class="line">	<span class="function">FAnimCurveBufferAccess <span class="title">BufferCurveAccess</span><span class="params">(InAnimSequence, InCurveName)</span></span>;</span><br><span class="line">	<span class="keyword">if</span> (BufferCurveAccess.<span class="built_in">IsValid</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 获取曲线的key，即在UDistanceCurveModifier中添加的位置</span></span><br><span class="line">		<span class="type">const</span> int32 NumKeys = BufferCurveAccess.<span class="built_in">GetNumSamples</span>();</span><br><span class="line">		<span class="keyword">if</span> (NumKeys &lt; <span class="number">2</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0.f</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		int32 First = <span class="number">1</span>;</span><br><span class="line">		int32 Last = NumKeys - <span class="number">1</span>;</span><br><span class="line">		int32 Count = Last - First;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 通过二分法查找符合的距离位置</span></span><br><span class="line">		<span class="keyword">while</span> (Count &gt; <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			int32 Step = Count / <span class="number">2</span>;</span><br><span class="line">			int32 Middle = First + Step;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> (InDistance &gt; BufferCurveAccess.<span class="built_in">GetValue</span>(Middle))</span><br><span class="line">			&#123;</span><br><span class="line">				First = Middle + <span class="number">1</span>;</span><br><span class="line">				Count -= Step + <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				Count = Step;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 将位置转为时间并进行差值获取符合的时间节点</span></span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> KeyAValue = BufferCurveAccess.<span class="built_in">GetValue</span>(First - <span class="number">1</span>);</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> KeyBValue = BufferCurveAccess.<span class="built_in">GetValue</span>(First);</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> Diff = KeyBValue - KeyAValue;</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> Alpha = !FMath::<span class="built_in">IsNearlyZero</span>(Diff) ? ((InDistance - KeyAValue) / Diff) : <span class="number">0.f</span>;</span><br><span class="line"></span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> KeyATime = BufferCurveAccess.<span class="built_in">GetTime</span>(First - <span class="number">1</span>);</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> KeyBTime = BufferCurveAccess.<span class="built_in">GetTime</span>(First);</span><br><span class="line">		<span class="keyword">return</span> FMath::<span class="built_in">Lerp</span>(KeyATime, KeyBTime, Alpha);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0.f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
+<li>确保动画已开启根运动</li>
+<li>距离曲线名称需与代码中一致</li>
+<li>采样率过高可能导致性能问题</li>
+</ul>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">动画</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Essay//" class="article-tag-list-link color1">Essay</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/11/30/essay/%E8%B7%9D%E7%A6%BB%E5%8C%B9%E9%85%8D/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-步幅匹配" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/11/30/%E6%AD%A5%E5%B9%85%E5%8C%B9%E9%85%8D/" target="_blank">距离匹配</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/11/30/%E6%AD%A5%E5%B9%85%E5%8C%B9%E9%85%8D/" class="archive-article-date">
+        <time datetime="2025-11-30T15:19:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-11-30</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/11/30/%E6%AD%A5%E5%B9%85%E5%8C%B9%E9%85%8D/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-常用的IK算法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2025/11/30/%E5%B8%B8%E7%94%A8%E7%9A%84IK%E7%AE%97%E6%B3%95/" target="_blank">常用的IK算法</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2025/11/30/%E5%B8%B8%E7%94%A8%E7%9A%84IK%E7%AE%97%E6%B3%95/" class="archive-article-date">
+        <time datetime="2025-11-30T15:15:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2025-11-30</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2025/11/30/%E5%B8%B8%E7%94%A8%E7%9A%84IK%E7%AE%97%E6%B3%95/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-essay/服务器倒带" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1070,551 +1466,9 @@
 
 
   
-    <article id="post-note/C++多线程入门：简单的线程池" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2024/04/07/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AE%80%E5%8D%95%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/" target="_blank">C++多线程入门：简单的线程池</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2024/04/07/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AE%80%E5%8D%95%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/" class="archive-article-date">
-        <time datetime="2024-04-07T11:37:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-07</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>很多时候我们并不会频繁的申请线程，而是采用线程池的方式，将任务加入到线程池中等待线程池中的空闲线程去处理该任务。</p>
-<h1 id="声明线程池基类"><a href="#声明线程池基类" class="headerlink" title="声明线程池基类"></a>声明线程池基类</h1><p>一个线程池应包括如下几个基本功能：</p>
-<ol>
-<li>线程池初始化</li>
-<li>启动所有线程</li>
-<li>线程池入口</li>
-</ol>
-<p>稍后为其增加添加任务的功能。</p>
-<p>对于上述3个功能，提供如下实现：<br>直接将文件声明为hpp</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BaseThreadPool</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">int</span> Num)</span>；</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">    <span class="type">void</span> <span class="title">Start</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Run</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> ThreadNum;</span><br><span class="line">    std::mutex mtx;</span><br><span class="line">    std::vector&lt;Thread*&gt; ThreadPool;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseThreadPool::Init</span><span class="params">(<span class="type">int</span> Num)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">    ThreadNum=Num;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseThreadPool::Start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(ThreadNum&lt;=<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(!ThreadPool.<span class="built_in">empty</span>())&#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;ThreadNum;i++)&#123;</span><br><span class="line">        <span class="keyword">auto</span> th = <span class="keyword">new</span> std::<span class="built_in">thread</span>(&amp;BaseThreadPool::Run,<span class="keyword">this</span>);</span><br><span class="line">        ThreadPool.<span class="built_in">push_back</span>(th);</span><br><span class="line">        th-&gt;<span class="built_in">detach</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseThreadPool::Run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Thread Run&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Thread Exit&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>至此完成了线程池的基本框架。<br>在Start函数中对线程数为0和线程池为空两种情况进行了处理，为了方便这里直接返回。</p>
-<h1 id="提供任务基类"><a href="#提供任务基类" class="headerlink" title="提供任务基类"></a>提供任务基类</h1><p>提供一个任务基类，所有需要多线程调用的任务都需要继承自该类，由于该类并不需要实例，所以将其声明为抽象类。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BaseTask</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">TaskRun</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">BaseTask</span>()</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>在需要继承的类中重写TaskRun以完成相应逻辑。</p>
-<h1 id="对线程池基类稍加改进"><a href="#对线程池基类稍加改进" class="headerlink" title="对线程池基类稍加改进"></a>对线程池基类稍加改进</h1><p>有了相应的任务类后为线程池类增加AddTask和GetTask方法：<br>使用list来存储所有任务，std::list&lt;BaseTask*&gt; TaskList<br>同时希望在增加一个任务后线程能立刻做出回应，所以再使用一个条件变量</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;BaseTask.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_vatiable&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddTask</span><span class="params">(BaseTask* Task)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">	TaskList.<span class="built_in">push_back</span>(Task);</span><br><span class="line">	Lock.<span class="built_in">unlock</span>();</span><br><span class="line">	cv.<span class="built_in">notify_one</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">BaseTask* <span class="title">GetTask</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">	<span class="keyword">if</span> (TaskList.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">		cv.<span class="built_in">wait</span>(Lock);;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 防止多次通知导致为空</span></span><br><span class="line">	<span class="keyword">if</span> (TaskList.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">auto</span> task = TaskList.<span class="built_in">front</span>();</span><br><span class="line">	TaskList.<span class="built_in">pop_front</span>();</span><br><span class="line">	<span class="keyword">return</span> task;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在完成对任务的添加和获取后需要对Run进行一些修改以便能够执行相应任务：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BaseThreadPool::Run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Thread Run&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="keyword">auto</span> Task=<span class="built_in">GetTask</span>();</span><br><span class="line">		<span class="keyword">if</span> (!Task) &#123;</span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">try</span></span><br><span class="line">		&#123;</span><br><span class="line">			Task-&gt;<span class="built_in">TaskRun</span>();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">catch</span> (...)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// 处理异常，防止一个线程运行错误导致整个线程退出</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;Thread Exit&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="简单测试"><a href="#简单测试" class="headerlink" title="简单测试"></a>简单测试</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;BaseThreadPool.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestTask</span>:<span class="keyword">public</span> BaseTask</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">TaskRun</span><span class="params">()</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		std::cout &lt;&lt; name &lt;&lt; <span class="string">&quot; Task Run&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	std::string name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	BaseThreadPool pool;</span><br><span class="line">	pool.<span class="built_in">Init</span>(<span class="number">4</span>);</span><br><span class="line">	pool.<span class="built_in">Start</span>();</span><br><span class="line"></span><br><span class="line">	TestTask t;</span><br><span class="line">	t.name=<span class="string">&quot;Name01&quot;</span>;</span><br><span class="line">	pool.<span class="built_in">AddTask</span>(&amp;t);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">getchar</span>();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="更进一步完善线程池的功能"><a href="#更进一步完善线程池的功能" class="headerlink" title="更进一步完善线程池的功能"></a>更进一步完善线程池的功能</h1><p>线程池不会一直运行下去，有时候需要结束并清空线程池，这时就需要未线程池增加一个退出功能。<br>未线程池增加bool变量bExit和设置bExit的函数。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Exit</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	bExit=<span class="literal">true</span>;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Exit&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">	cv.<span class="built_in">notify_all</span>();</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span>&amp; th:ThreadPool)&#123;</span><br><span class="line">		<span class="keyword">if</span>(th.<span class="built_in">joinable</span>())&#123;</span><br><span class="line">			th-&gt;<span class="built_in">join</span>();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">Lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">auto</span>&amp; th : ThreadPool) &#123;</span><br><span class="line">		<span class="keyword">delete</span> th;</span><br><span class="line">		th=<span class="literal">nullptr</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> bExit;</span><br></pre></td></tr></table></figure>
-
-<p>先设置bExit为true并通知所有线程退出，让线程去处理相应逻辑。<br>遍历所有线程池中的线程处理待办的任务<br>随后清空线程池</p>
-<p>主要退出逻辑完成后还需要完善其它逻辑</p>
-<p>首先当设置线程池退出后就不应该再有新的任务增加进来，所以我们对AddTask做出处理：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddTask</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 加锁逻辑</span></span><br><span class="line">	<span class="keyword">if</span>(bExit)&#123;</span><br><span class="line">		<span class="comment">// 额外处理，比如直接抛弃任务</span></span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>修改GetTask和Run</p>
-<p>GetTask修改与AddTask类似：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">GetTask</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 这里是wait逻辑，Exit后进行了一次通知</span></span><br><span class="line">	<span class="keyword">if</span>(TaskList.<span class="built_in">empty</span>())&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 这里有一个相同的逻辑，可以公用一个</span></span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>之前Run是一个死循环，这里将循环条件改为bExit即可</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">	<span class="keyword">while</span>(bExit)&#123;</span><br><span class="line">		<span class="comment">//...</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="获取正在运行的线程数量"><a href="#获取正在运行的线程数量" class="headerlink" title="获取正在运行的线程数量"></a>获取正在运行的线程数量</h1><p>使用原子变量来存储正在运行的线程数量，原子变量本身就是线程安全的，所以可以直接改变值。<br>在使用时需要使用atomic头文件。<br>提供一个int类型原子变量和一个Get函数获取正在运行线程数：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;atomic&gt;</span></span></span><br><span class="line"></span><br><span class="line">std::atomic&lt;<span class="type">int</span>&gt; RunningTaskNum&#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">GetRunningTaskNum</span><span class="params">()</span> </span>&#123; RunningTaskNum; &#125;</span><br></pre></td></tr></table></figure>
-
-<p>在线程Run函数中，在线程执行前令RunningTaskNum自增（前置自增），并在任务结束后自减。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>通过提供任务基类和线程池基类实现了一个简单的线程池，后面我们会使用智能指针等技术对已有的线程池进行优化。</p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2024/04/07/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%AE%80%E5%8D%95%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/C++多线程入门：并行计算" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2024/04/06/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/" target="_blank">C++多线程入门：并行计算</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2024/04/06/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/" class="archive-article-date">
-        <time datetime="2024-04-06T13:11:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-06</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>假如现在有一很长的字符串需要进行base16编码，如果使用单线程所耗费时间会很多，所以为了解决耗时的问题采用并行计算的方式来编码。</p>
-<h1 id="base16编码"><a href="#base16编码" class="headerlink" title="base16编码"></a>base16编码</h1><p>将一个字节8位拆分成两个4位，四位表示最大值位0x0f，将拆分到的字节映射到0-f中。<br>基本原理：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">char</span> base16[]=<span class="string">&quot;0123456789abcdef&quot;</span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Base16Encode</span><span class="params">(<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>* indata,<span class="type">unsigned</span> <span class="type">char</span>* outdata,<span class="type">int</span> size)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;size;i++)&#123;</span><br><span class="line">        <span class="type">char</span> a=base16[<span class="type">char</span>[i]&gt;&gt;<span class="number">4</span>];</span><br><span class="line">        <span class="type">char</span> b=base16[<span class="type">char</span>[i]&amp;<span class="number">0x0f</span>];</span><br><span class="line">        outdata[<span class="number">2</span>*i]=a;</span><br><span class="line">        outdata[<span class="number">2</span>*i+<span class="number">1</span>]=b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="使用C-17提供的并行计算方法"><a href="#使用C-17提供的并行计算方法" class="headerlink" title="使用C++17提供的并行计算方法"></a>使用C++17提供的并行计算方法</h1><p>C++17提供了for_each的方式来进行并行遍历，使用时需要包含execution头文件。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;execution&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;chrono&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ForEachBase16Encode</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt; <span class="title">indata</span><span class="params">(<span class="number">1024</span>*<span class="number">1024</span>*<span class="number">10</span>)</span></span>;</span><br><span class="line">    <span class="type">int</span> n=indata.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">        indata[i]=i%<span class="number">256</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function">vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt; <span class="title">outdate</span><span class="params">(n)</span></span>;</span><br><span class="line">    <span class="keyword">auto</span> starttime=system_clock::<span class="built_in">now</span>();</span><br><span class="line">    for_each(std::execution::par,indata.<span class="built_in">begin</span>(),indata.<span class="built_in">end</span>(),[&amp;](<span class="type">unsigned</span> <span class="type">char</span>&amp; ch)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">char</span> a=base16[ch&gt;&gt;<span class="number">4</span>];</span><br><span class="line">        <span class="type">char</span> b=base16[ch&amp;<span class="number">0x0f</span>];</span><br><span class="line">        <span class="type">int</span> adr=&amp;ch-indata.<span class="built_in">begin</span>();</span><br><span class="line">        outdate[adr*<span class="number">2</span>]=a;</span><br><span class="line">        outdate[adr*<span class="number">2</span>+<span class="number">1</span>]=b;</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">auto</span> endtime=system_clock::<span class="built_in">now</span>();</span><br><span class="line">    millseconds durationtime=<span class="built_in">duration_cast</span>&lt;millseconds&gt;(endtime-starttime);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;cost time = &quot;</span>&lt;&lt; durationtime;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上述是使用foreach并行计算的简单案例，记录前后时间的差值作为运行时间。<br>给for_each的第一个参数设置位std::execution::par即可使用for_each来做并行计算，后面部分与一般for_each遍历无异。<br>中间使用lambda函数（也可以用仿函数）来处理编码，虽然可以并行计算提高效率，但由于函数调用依然会带来性能开销（可能会有多大百万次的调用，如果数据量够大的话）。</p>
-<h1 id="直接使用多线分块计算"><a href="#直接使用多线分块计算" class="headerlink" title="直接使用多线分块计算"></a>直接使用多线分块计算</h1><p>直接使用Base16Encode作为子线程进行并行计算，并提供ThreadBase16Encode作为线程入口：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadBase16Encode</span><span class="params">(<span class="type">const</span> vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;&amp; indata,vector&lt;<span class="type">unsigned</span> <span class="type">char</span>&gt;&amp; outdata)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> size=indata.<span class="built_in">size</span>();</span><br><span class="line">    <span class="type">int</span> threadnum=std::thread::<span class="built_in">hardware_concurrency</span>();</span><br><span class="line">    <span class="type">int</span> percount=size/threadnum;</span><br><span class="line">    <span class="keyword">if</span>(size&lt;=threadnum)&#123;</span><br><span class="line">        threadnum=<span class="number">1</span>;</span><br><span class="line">        percount=size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span>* iadr=(<span class="type">unsigned</span> <span class="type">char</span>*)indata.<span class="built_in">data</span>();</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span>* oadr=(<span class="type">unsigned</span> <span class="type">char</span>*)outdata.<span class="built_in">data</span>();</span><br><span class="line"></span><br><span class="line">    <span class="function">vector&lt;thread&gt; <span class="title">vth</span><span class="params">(threadnum)</span></span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;threadnum;i++)&#123;</span><br><span class="line">        <span class="type">int</span> adroffset=i*percount;</span><br><span class="line">        <span class="type">int</span> tempcount=percount;</span><br><span class="line">        <span class="keyword">if</span>(threadnum&gt;<span class="number">1</span> &amp;&amp; i==threadnum<span class="number">-1</span>)&#123;</span><br><span class="line">            tempcount=percount+size%percount;</span><br><span class="line">        &#125;</span><br><span class="line">        vth[i]=<span class="built_in">thread</span>(Base16Encode,iadr+adroffset,tempcount,oadr+((<span class="type">long</span> <span class="type">long</span>)adroffset*<span class="number">2</span>));</span><br><span class="line">        vth[i].<span class="built_in">detach</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">getchar</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>threadnum获取计算机最大核心数，也即可使用的最大线程数<br>percount获取数据块的大小并用于计算地址的偏移量<br>随后对特殊情况进行处理，如果数据量小于线程数，则开一个线程进行计算<br>通过data()获取到indata和oudata的首地址作为参数传入子线程<br>随后声明线程数组开始进行分块计算：</p>
-<ol>
-<li>获取每个线程分到数据块的地址偏移量</li>
-<li>获取每块数据大小并对最后一块数据进行处理 &lt;—可能会有分完块后的额外数据</li>
-<li>传入参数并执行线程</li>
-</ol>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>使用了两种方法进行并行计算：C++17的foreach和C++11的多线程，两者各有优点：</p>
-<ol>
-<li>使用foreach可能会更方便一些，但会由于函数调用带来一些额外的性能开销，并且一些编译器可能不支持C++17</li>
-<li>使用C++11的多线程计算会稍有麻烦，但好在只需要调用几次函数，在性能上会有不错的提升，尤其是数据量非常大的时候</li>
-</ol>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2024/04/06/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/C++多线程入门：线程异步" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2024/04/06/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%BA%BF%E7%A8%8B%E5%BC%82%E6%AD%A5/" target="_blank">C++多线程入门：线程异步</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2024/04/06/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%BA%BF%E7%A8%8B%E5%BC%82%E6%AD%A5/" class="archive-article-date">
-        <time datetime="2024-04-06T07:42:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-06</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="使用异步"><a href="#使用异步" class="headerlink" title="使用异步"></a>使用异步</h1><p>异步中提供了一个名为promise的模板类，用于传输异步变量。<br>使用时需要包含future头文件。</p>
-<p>promise包含以下特性：</p>
-<ol>
-<li>通过模板的方式存储变量值，并通过创建对象的future来获取结果。</li>
-<li>promise使用set_value来设置变量的值，且只能使用一次。</li>
-<li>future使用get方法以阻塞的方式获取promise设置的值。</li>
-</ol>
-<p>通过一个异步设置字符串的案例来熟悉：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;future&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadFuture</span><span class="params">(promise&lt;string&gt;&amp; p)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="number">2000</span>ms);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;BeginSetValue&quot;</span> &lt;&lt; endl;</span><br><span class="line">    p.<span class="built_in">set_value</span>(<span class="string">&quot;SetPromiseValue&quot;</span>);</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="number">2000</span>ms);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;EndSetValue&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 异步传输变量存储</span></span><br><span class="line">    promise&lt;string&gt; p;</span><br><span class="line">    <span class="comment">// 用来获取值</span></span><br><span class="line">    <span class="keyword">auto</span> f = p.<span class="built_in">get_future</span>();</span><br><span class="line">    <span class="function">thread <span class="title">th</span><span class="params">(ThreadFuture,ref(p))</span></span>;</span><br><span class="line">    th.<span class="built_in">detach</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Get = &quot;</span> &lt;&lt; f.<span class="built_in">get</span>();</span><br><span class="line">    <span class="built_in">getchar</span>();   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>观察上述案例的执行结果：<br>首先出现”Get &#x3D; “然后程序被阻塞等待异步运行结果；随后是”BeginSetValue”；接着打印SetPromiseValue，在p被赋值后立刻打印出来；最后才是”EndSetValue”。</p>
-<h1 id="将函数的运行与结果分离"><a href="#将函数的运行与结果分离" class="headerlink" title="将函数的运行与结果分离"></a>将函数的运行与结果分离</h1><p>对于一些情况，我们希望函数的运行与返回值是分离的，这时就需要使用函数打包调用。<br>函数打包主要使用packaged_task来实现。</p>
-<p>提供以下案例：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">FuncPackage</span><span class="params">(<span class="type">int</span> index)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Pack index = &quot;</span> &lt;&lt; index &lt;&lt; endl;</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="number">1000</span>ms);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Pack Func&quot;</span>;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">package_task&lt;<span class="title">string</span><span class="params">(<span class="type">int</span>)</span>&gt; <span class="title">task</span><span class="params">(FuncPackage)</span></span>;</span><br><span class="line">    <span class="keyword">auto</span> ans=task.<span class="built_in">get_future</span>();</span><br><span class="line">    <span class="function">thread <span class="title">th</span><span class="params">(move(task),<span class="number">100</span>)</span></span>;</span><br><span class="line">    th.<span class="built_in">detach</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;BeginTask&quot;</span> &lt;&lt; endl;</span><br><span class="line">    ans.<span class="built_in">wait_for</span>(<span class="number">2000</span>ms);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Get Ans = &quot;</span> &lt;&lt; ans.<span class="built_in">get</span>() &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">getchar</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>package_task中模板类型为返回值和括号中的参数类型<br>观察上述执行结果：<br>先是打印”Pack index &#x3D; 100”；而后是”BeginTask”；等待之后打印”Get Ans &#x3D; Pack Func”。</p>
-<p>但上述代码解决了基本需求，但也确实存在一些问题：比如打包的函数执行因为某些原因花费了许多时间，但get方法却一直等待结果可能会导致死锁等问题，所以需要对延时情况做一些处理：<br>我们不直接wait_for，而是改用循环多次查询运行结果来处理延时以供参考</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 处理延时情况，防止一直阻塞</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(ans.<span class="built_in">wait_for</span>(<span class="number">150</span>ms)!=future_status::ready)&#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(ans.<span class="built_in">wait_for</span>(<span class="number">150</span>ms)==future_status::timeout)&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;timeout&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Get Ans = &quot;</span> &lt;&lt; ans.<span class="built_in">get</span>() &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="使用async实现异步"><a href="#使用async实现异步" class="headerlink" title="使用async实现异步"></a>使用async实现异步</h1><p>Aysnc异步提供了两种方法：创建子线程与不创建子线程。</p>
-<h2 id="不创建子线程异步"><a href="#不创建子线程异步" class="headerlink" title="不创建子线程异步"></a>不创建子线程异步</h2><p>不创建子线程需要创建时提供launch::deferred来实现：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadNoCreate</span><span class="params">(<span class="type">int</span> index)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Begin Async &quot;</span> &lt;&lt; this_thread::<span class="built_in">get_id</span>() &lt;&lt; endl;</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="number">2000</span>ms);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Return Async&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Thread id = &quot;</span> &lt;&lt; this_thread::<span class="built_in">get_id</span>() &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">auto</span> Async = <span class="built_in">async</span>(launch::deferred,TestAsync,<span class="number">10</span>);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Begin get : &quot;</span> &lt;&lt; Async.<span class="built_in">get</span>() &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;end&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">getchar</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>使用index只是为了提供有参数情况参考，不具有意义。<br>通过打印两个线程id发现实际是在同一个线程中执行的。</p>
-<h2 id="创建子线程"><a href="#创建子线程" class="headerlink" title="创建子线程"></a>创建子线程</h2><p>创建子线程时async提供的默认方法，只需要把launch::deferred省去即可：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Thread id = &quot;</span> &lt;&lt; this_thread::<span class="built_in">get_id</span>() &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">auto</span> Async_create = <span class="built_in">async</span>(TestAsync,<span class="number">11</span>);</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="number">2000</span>ms);</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Begin get : &quot;</span> &lt;&lt; Async_create.<span class="built_in">get</span>() &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;end&quot;</span> &lt;&lt; endl;</span><br><span class="line">    <span class="built_in">getchar</span>();    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>除了线程id不同外，两者最终执行效果没什么差别。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>主要介绍了三种实现异步的方式：</p>
-<ol>
-<li>通过promise与future来实现。</li>
-<li>通过打包函数实现。</li>
-<li>使用aysnc实现，其中aysnc提供了创建子线程与不创建子线程两种方式。</li>
-</ol>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2024/04/06/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E7%BA%BF%E7%A8%8B%E5%BC%82%E6%AD%A5/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note/C++多线程入门：使用条件变量" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2024/04/01/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/" target="_blank">C++多线程入门：使用条件变量</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2024/04/01/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/" class="archive-article-date">
-        <time datetime="2024-04-01T13:54:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-04-01</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <h1 id="使用条件变量"><a href="#使用条件变量" class="headerlink" title="使用条件变量"></a>使用条件变量</h1><p>在实际应用中使用生产者-消费者模型。<br>例如有一个消息队列，我们有一个消息产生线程，作为生产者；有多个读取线程，作为消费者。</p>
-<p>对于之前的小型案例中模拟了这一过程；在读取线程中直接使用锁来和sleep来等待消息队列中产生消息，自然会由于sleep产生延时，为了减少延时改用条件变量。</p>
-<p>生产线程使用条件，通常使用以下步骤：</p>
-<ul>
-<li>准备信号变量：std::condition_variable cv</li>
-<li>获得锁，通常为unique_lock</li>
-<li>对消息队列进行修改</li>
-<li>释放锁并通知读取线程，通知可以使用one或者all来通知一个或多个线程</li>
-</ul>
-<p>对于读取线程，通常也有如下几个步骤：</p>
-<ul>
-<li>获得共享锁</li>
-<li>等待信号变量，等待使用wait函数，通常有默认形式和lambda表达式两种</li>
-<li>处理消息</li>
-</ul>
-<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>现在提供一个写入线程和多个读取线程，使用条件变量来实现此功能</p>
-<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>先声明锁、条件变量以及一个消息队列和若干头文件</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;list&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line">list&lt;string&gt; msg;</span><br><span class="line">mutex mtx;</span><br><span class="line">condition_variable cv;</span><br></pre></td></tr></table></figure>
-
-<h2 id="写入线程"><a href="#写入线程" class="headerlink" title="写入线程"></a>写入线程</h2><p>直接上代码：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadWrite</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">50</span>;i++)&#123;</span><br><span class="line">        stringstream ss;</span><br><span class="line">        ss &lt;&lt; <span class="string">&quot;msg : &quot;</span> &lt;&lt; i+<span class="number">1</span>;</span><br><span class="line">        <span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">        msg.<span class="built_in">push_back</span>(ss.<span class="built_in">str</span>());</span><br><span class="line">        lock.<span class="built_in">unlock</span>();</span><br><span class="line">        cv.<span class="built_in">notify_all</span>();</span><br><span class="line">        <span class="comment">//cv.notify_one(); // 通知其中一个读入线程</span></span><br><span class="line">        this_thread::<span class="built_in">sleep_for</span>(<span class="number">100</span>ms);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>cv.notify_one()用于通知一个读取线程<br>cv.notify_all()用于通知所有读取线程</p>
-<h2 id="读取线程"><a href="#读取线程" class="headerlink" title="读取线程"></a>读取线程</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">ThreadRead</span><span class="params">(<span class="type">int</span> ThreadId)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx)</span></span>;</span><br><span class="line">        cv.<span class="built_in">wait</span>(lock); </span><br><span class="line">        <span class="comment">// 等待阻塞信号</span></span><br><span class="line">        <span class="comment">// 获取信号后，lock锁定</span></span><br><span class="line">        <span class="comment">// 使用lambda 只要表达式返回的true，wait就不会阻塞</span></span><br><span class="line">        <span class="comment">// cv.wait(lock,[ThreadId]()&#123;return !msg.empty();&#125;);</span></span><br><span class="line">        <span class="keyword">while</span>(!msg.<span class="built_in">empty</span>())&#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;id = &quot;</span> &lt;&lt; ThreadId &lt;&lt; <span class="string">&quot; read msg : &quot;</span> &lt;&lt; msg.<span class="built_in">front</span>() &lt;&lt; endl;</span><br><span class="line">            msg.<span class="built_in">pop_front</span>();</span><br><span class="line">            this_thread::<span class="built_in">sleep_for</span>(<span class="number">200</span>ms);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">thread <span class="title">wth</span><span class="params">(ThreadWrite)</span></span>;</span><br><span class="line">    wth.<span class="built_in">detach</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">3</span>;i++)&#123;</span><br><span class="line">        <span class="function">thread <span class="title">th</span><span class="params">(ThreadRead,i+<span class="number">1</span>)</span></span>;</span><br><span class="line">        th.<span class="built_in">detach</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">getchar</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">test</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="修改之前案例"><a href="#修改之前案例" class="headerlink" title="修改之前案例"></a>修改之前案例</h1><p>之前的小型案例中并未使用条件变量，所以将该案例稍加修改，使用条件变量来处理消息</p>
-<h2 id="新增额外变量"><a href="#新增额外变量" class="headerlink" title="新增额外变量"></a>新增额外变量</h2><p>使用条件变量首先要包含condition_variable头文件</p>
-<p>在MsgServer的头文件中增加条件变量</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::condition_variable cv;</span><br></pre></td></tr></table></figure>
-
-<h2 id="修改写入线程"><a href="#修改写入线程" class="headerlink" title="修改写入线程"></a>修改写入线程</h2><p>在写入完数据后，将锁释放并通知线程</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MsgServer::SendMsg</span><span class="params">(std::string Msg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">	<span class="function">unique_lock&lt;mutex&gt; <span class="title">Lock</span><span class="params">(Mtx)</span></span>;</span><br><span class="line">	<span class="keyword">if</span> (CurrentLength &gt;= MaxQueueLength) &#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	MsgQueue.<span class="built_in">push</span>(Msg);</span><br><span class="line">	CurrentLength++;</span><br><span class="line">	Lock.<span class="built_in">unlock</span>();</span><br><span class="line">	cv.<span class="built_in">notify_one</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="修改读取线程"><a href="#修改读取线程" class="headerlink" title="修改读取线程"></a>修改读取线程</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 处理最大延时</span></span><br><span class="line"><span class="comment">//this_thread::sleep_for(100ms);</span></span><br><span class="line"><span class="comment">//改用信号变量处理延时问题，产生消息后会立刻相应</span></span><br><span class="line"><span class="comment">//但是做线程退出时要做一些额外处理 当消息发送完成后发现没有退出，会在wait阻塞</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"><span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(Mtx)</span></span>;</span><br><span class="line">cv.<span class="built_in">wait</span>(lock);  </span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
-
-<p>以上是一般形式，但当写入线程写入万所有消息后读取线程会一直阻塞不会退出运行，所以要对退出条件做出一些修改：<br>首先要重写ThreadStop函数，在stop时发送一条通知；在wait时使用lambda表达式获取退出条件：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">ThreadStop</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">SetExit</span>();</span><br><span class="line">    cv.<span class="built_in">notify_all</span>();</span><br><span class="line">    <span class="built_in">Wait</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">cv.<span class="built_in">wait</span>(lock,[<span class="keyword">this</span>]()&#123;<span class="keyword">return</span> !MsgQueue.<span class="built_in">empty</span>() || <span class="built_in">GetIsExit</span>();&#125;);</span><br><span class="line"><span class="comment">//...</span></span><br></pre></td></tr></table></figure>
-
-<p>SetExit是额外增加的函数，用于设置bExit为true。<br>之后再做测试便发现写入线程写入完消息后便会自动退出。</p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>主要介绍了条件变量的使用方法和应用场景。<br>相比与之前的使用锁的方式，使用条件变量减少了处理消息时的延迟，但相应的也应注意线程的退出条件修改，否则会造成线程一直阻塞。</p>
-
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">多线程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/TechNotes//" class="article-tag-list-link color5">TechNotes</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2024/04/01/note/C++%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%A5%E9%97%A8%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%E5%8F%98%E9%87%8F/">展开全文 >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1818,6 +1672,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
             
             <div class="clearfix"></div>
