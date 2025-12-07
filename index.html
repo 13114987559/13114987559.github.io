@@ -472,7 +472,7 @@
     <h1 id="步幅匹配"><a href="#步幅匹配" class="headerlink" title="步幅匹配"></a>步幅匹配</h1><p>主要用于角色的循环移动动画，当角色完成起步后回进入循环移动动画，但角色的移动速度与动画的速度不匹配时依然会出现滑步的情况，所以我们通常会拿到角色的移动速度与动画的移动速度做比值来调整动画的播放速度从而使动画的移动与角色的速度相匹配。</p>
 <p>除了动态调整循环动画的播放速度外，还需要调整角色的脚步步幅，一般来讲，当人的奔跑速度增加时，出了步频会增加外，步幅同样也会增加，所以为了防止角色的高速或低速情况下出现脚步鬼畜的情况，还需要对角色进行footik来调整步幅。</p>
 <p>综上步幅匹配主要包括两部分：<em>速度匹配</em>和<em>脚步ik</em></p>
-<h1 id="速度匹配"><a href="#速度匹配" class="headerlink" title="速度匹配"></a>速度匹配</h1><p><img src="/../../source/Pic/Ue/SpeedMatch.jpg" alt="SpeedMatch"></p>
+<h1 id="速度匹配"><a href="#速度匹配" class="headerlink" title="速度匹配"></a>速度匹配</h1><p><img src="/../Pic/Ue/SpeedMatch.jpg" alt="SpeedMatch"></p>
 <p>主要通过SetPlayrateToMatchSpeed来实现</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Set the play rate of the sequence player so that the speed of the animation matches in-game movement speed.</span></span><br><span class="line"><span class="comment">* While distance matching is commonly used for transition animations, cycle animations (walk, jog, etc) typically just adjust their play rate to match</span></span><br><span class="line"><span class="comment">* the in-game movement speed.</span></span><br><span class="line"><span class="comment">* This function assumes that the animation has a constant speed.</span></span><br><span class="line"><span class="comment">* @param SequencePlayer - The sequence player node to operate on.</span></span><br><span class="line"><span class="comment">* @param SpeedToMatch - The in-game movement speed to match. This is usually the current speed of the movement component.</span></span><br><span class="line"><span class="comment">* @param PlayRateClamp - A clamp on how much the animation&#x27;s play rate can change to match the in-game movement speed. Set to (0,0) for no clamping.</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">UFUNCTION</span>(BlueprintCallable, Category = <span class="string">&quot;Distance Matching&quot;</span>, meta=(BlueprintThreadSafe))</span><br><span class="line"><span class="function"><span class="type">static</span> FSequencePlayerReference <span class="title">SetPlayrateToMatchSpeed</span><span class="params">(<span class="type">const</span> FSequencePlayerReference&amp; SequencePlayer, </span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">float</span> SpeedToMatch, FVector2D PlayRateClamp = FVector2D(<span class="number">0.75f</span>, <span class="number">1.25f</span>))</span></span>;</span><br></pre></td></tr></table></figure>
 
@@ -485,7 +485,7 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FSequencePlayerReference <span class="title">UAnimDistanceMatchingLibrary::SetPlayrateToMatchSpeed</span><span class="params">(<span class="type">const</span> FSequencePlayerReference&amp; SequencePlayer, <span class="type">float</span> SpeedToMatch, FVector2D PlayRateClamp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 绑定了一个lambda函数作为参数一并传入CallAnimNodeFunction中被调用</span></span><br><span class="line">	SequencePlayer.<span class="built_in">CallAnimNodeFunction</span>&lt;FAnimNode_SequencePlayer&gt;(</span><br><span class="line">		<span class="built_in">TEXT</span>(<span class="string">&quot;SetPlayrateToMatchSpeed&quot;</span>),</span><br><span class="line">		[SpeedToMatch, PlayRateClamp](FAnimNode_SequencePlayer&amp; InSequencePlayer)</span><br><span class="line">		&#123;</span><br><span class="line">            <span class="comment">// 获取当前播放的动画序列</span></span><br><span class="line">			<span class="keyword">if</span> (<span class="type">const</span> UAnimSequence* AnimSequence = <span class="built_in">Cast</span>&lt;UAnimSequence&gt;(InSequencePlayer.<span class="built_in">GetSequence</span>()))</span><br><span class="line">			&#123;</span><br><span class="line">                <span class="comment">// 获取序列的长度，如果长度大于0则进行调整</span></span><br><span class="line">				<span class="type">const</span> <span class="type">float</span> AnimLength = AnimSequence-&gt;<span class="built_in">GetPlayLength</span>();</span><br><span class="line">				<span class="keyword">if</span> (!FMath::<span class="built_in">IsNearlyZero</span>(AnimLength))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="comment">// Calculate the speed as: (distance traveled by the animation) / (length of the animation)</span></span><br><span class="line">                    <span class="comment">// 获取动画从开始到结束的根运动距离并计算平面的移动距离</span></span><br><span class="line">					<span class="type">const</span> FVector RootMotionTranslation = AnimSequence-&gt;<span class="built_in">ExtractRootMotionFromRange</span>(<span class="number">0.0f</span>, AnimLength).<span class="built_in">GetTranslation</span>();</span><br><span class="line">					<span class="type">const</span> <span class="type">float</span> RootMotionDistance = RootMotionTranslation.<span class="built_in">Size2D</span>();</span><br><span class="line">                    <span class="comment">// 当角色的移动距离大于0时则进行调整</span></span><br><span class="line">					<span class="keyword">if</span> (!FMath::<span class="built_in">IsNearlyZero</span>(RootMotionDistance))</span><br><span class="line">					&#123;</span><br><span class="line">                        <span class="comment">// 获取动画速度</span></span><br><span class="line">						<span class="type">const</span> <span class="type">float</span> AnimationSpeed = RootMotionDistance / AnimLength;</span><br><span class="line">                        <span class="comment">// 获取速度当前的移动速度与动画的速度的比值</span></span><br><span class="line">						<span class="type">float</span> DesiredPlayRate = SpeedToMatch / AnimationSpeed;</span><br><span class="line">						<span class="keyword">if</span> (PlayRateClamp.X &gt;= <span class="number">0.0f</span> &amp;&amp; PlayRateClamp.X &lt; PlayRateClamp.Y)</span><br><span class="line">						&#123;</span><br><span class="line">							DesiredPlayRate = FMath::<span class="built_in">Clamp</span>(DesiredPlayRate, PlayRateClamp.X, PlayRateClamp.Y);</span><br><span class="line">						&#125;</span><br><span class="line"></span><br><span class="line">						<span class="comment">// 根据比值来动态调整动画的播放速度</span></span><br><span class="line">						<span class="keyword">if</span> (!InSequencePlayer.<span class="built_in">SetPlayRate</span>(DesiredPlayRate))</span><br><span class="line">						&#123;</span><br><span class="line">							<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Could not set play rate on sequence player, value is not dynamic. Set it as Always Dynamic.&quot;</span>));</span><br><span class="line">						&#125;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="keyword">else</span></span><br><span class="line">					&#123;</span><br><span class="line">						<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Unable to adjust playrate for animation with no root motion delta (%s).&quot;</span>), *<span class="built_in">GetNameSafe</span>(AnimSequence));</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">				&#123;</span><br><span class="line">					<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Unable to adjust playrate for zero length animation (%s).&quot;</span>), *<span class="built_in">GetNameSafe</span>(AnimSequence));</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Sequence player does not have an anim sequence to play.&quot;</span>));</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> SequencePlayer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="脚步IK"><a href="#脚步IK" class="headerlink" title="脚步IK"></a>脚步IK</h1><p>主要是通过跨步扭曲(StrideWarping)来实现。</p>
-<p><img src="/../../source/Pic/Ue/StrideWarping.jpg" alt="StrideWarping"></p>
+<p><img src="/../Pic/Ue/StrideWarping.jpg" alt="StrideWarping"></p>
 <p>在细节面板中展示了需要调整的选项，主要为添加需要进行匹配的脚步骨骼，StrideWarping节点本身需要传入开始混入的alpha值(skeleton control的强度)以及角色地面的移动速度（MatchSpeed）。</p>
 <p>该节点定义在UAnimGraphNode_StrideWarping中，其中最主要的内容为声明的一个FAnimNode_StrideWarping类型的成员变量Node，在这个Node中定义了大多在细节面板中使用到的属性，同时还包括一些节点使用的初始化和更新方法。</p>
 <p>其中更新的方法为：EvaluateSkeletalControl_AnyThread，这是更新的主要方法，也是进行跨步扭曲的核心方法，接下来将对这个方法进行解析。</p>
@@ -1647,15 +1647,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息系统</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1667,15 +1667,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">排序</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1683,15 +1679,19 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Niagara</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color3">虚幻</a>
               </li>
              
               <li class="article-tag-list-item">
