@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://13114987559.github.io/Pic/Ue/StartMatch.jpg">
 <meta property="og:image" content="https://13114987559.github.io/Pic/Ue/StopMatch.jpg">
 <meta property="article:published_time" content="2025-11-30T15:19:46.000Z">
-<meta property="article:modified_time" content="2025-12-07T15:38:22.653Z">
+<meta property="article:modified_time" content="2025-12-11T15:24:05.060Z">
 <meta property="article:author" content="KongXinQing">
 <meta property="article:tag" content="Cpp">
 <meta property="article:tag" content="动画">
@@ -222,7 +222,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">3k字</span>
+      <span class="post-count">3.3k字</span>
     </span>
   </span>
 
@@ -231,7 +231,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">14分</span>
+      <span class="post-count">15分</span>
     </span>
   </span>
 </div>
@@ -310,6 +310,8 @@
 </ul>
 <p>实现：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FSequenceEvaluatorReference <span class="title">UAnimDistanceMatchingLibrary::DistanceMatchToTarget</span><span class="params">(<span class="type">const</span> FSequenceEvaluatorReference&amp; SequenceEvaluator,</span></span></span><br><span class="line"><span class="params"><span class="function">	<span class="type">float</span> DistanceToTarget, FName DistanceCurveName)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">// 同样将一个lambda函数作为参数传递给CallAnimNodeFunction函数</span></span><br><span class="line">	SequenceEvaluator.<span class="built_in">CallAnimNodeFunction</span>&lt;FAnimNode_SequenceEvaluator&gt;(</span><br><span class="line">		<span class="built_in">TEXT</span>(<span class="string">&quot;DistanceMatchToTarget&quot;</span>),</span><br><span class="line">		[DistanceToTarget, DistanceCurveName](FAnimNode_SequenceEvaluator&amp; InSequenceEvaluator)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// 获取当前的动画序列</span></span><br><span class="line">			<span class="keyword">if</span> (<span class="type">const</span> UAnimSequenceBase* AnimSequence = <span class="built_in">Cast</span>&lt;UAnimSequence&gt;(InSequenceEvaluator.<span class="built_in">GetSequence</span>()))</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="comment">// 根据距离获取动画播放到的位置(播放时间)并将这个位置设置给当前播放的动画</span></span><br><span class="line">				<span class="type">const</span> <span class="type">float</span> NewTime = UE::Anim::DistanceMatchingUtility::<span class="built_in">GetAnimPositionFromDistance</span>(AnimSequence, -DistanceToTarget, DistanceCurveName);</span><br><span class="line">				<span class="keyword">if</span> (!InSequenceEvaluator.<span class="built_in">SetExplicitTime</span>(NewTime))</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Could not set explicit time on sequence evaluator, value is not dynamic. Set it as Always Dynamic.&quot;</span>));</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">UE_LOG</span>(LogAnimDistanceMatchingLibrary, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Sequence evaluator does not have an anim sequence to play.&quot;</span>));</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> SequenceEvaluator;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 根据位置和距离曲线查找这个动画的时间节点</span></span><br><span class="line"><span class="function"><span class="type">float</span> <span class="title">GetAnimPositionFromDistance</span><span class="params">(<span class="type">const</span> UAnimSequenceBase* InAnimSequence, <span class="type">const</span> <span class="type">float</span>&amp; InDistance, FName InCurveName)</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="comment">// 获取曲线数据</span></span><br><span class="line">	<span class="function">FAnimCurveBufferAccess <span class="title">BufferCurveAccess</span><span class="params">(InAnimSequence, InCurveName)</span></span>;</span><br><span class="line">	<span class="keyword">if</span> (BufferCurveAccess.<span class="built_in">IsValid</span>())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 获取曲线的key，即在UDistanceCurveModifier中添加的位置</span></span><br><span class="line">		<span class="type">const</span> int32 NumKeys = BufferCurveAccess.<span class="built_in">GetNumSamples</span>();</span><br><span class="line">		<span class="keyword">if</span> (NumKeys &lt; <span class="number">2</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0.f</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		int32 First = <span class="number">1</span>;</span><br><span class="line">		int32 Last = NumKeys - <span class="number">1</span>;</span><br><span class="line">		int32 Count = Last - First;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 通过二分法查找符合的距离位置</span></span><br><span class="line">		<span class="keyword">while</span> (Count &gt; <span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			int32 Step = Count / <span class="number">2</span>;</span><br><span class="line">			int32 Middle = First + Step;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> (InDistance &gt; BufferCurveAccess.<span class="built_in">GetValue</span>(Middle))</span><br><span class="line">			&#123;</span><br><span class="line">				First = Middle + <span class="number">1</span>;</span><br><span class="line">				Count -= Step + <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				Count = Step;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 将位置转为时间并进行差值获取符合的时间节点</span></span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> KeyAValue = BufferCurveAccess.<span class="built_in">GetValue</span>(First - <span class="number">1</span>);</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> KeyBValue = BufferCurveAccess.<span class="built_in">GetValue</span>(First);</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> Diff = KeyBValue - KeyAValue;</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> Alpha = !FMath::<span class="built_in">IsNearlyZero</span>(Diff) ? ((InDistance - KeyAValue) / Diff) : <span class="number">0.f</span>;</span><br><span class="line"></span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> KeyATime = BufferCurveAccess.<span class="built_in">GetTime</span>(First - <span class="number">1</span>);</span><br><span class="line">		<span class="type">const</span> <span class="type">float</span> KeyBTime = BufferCurveAccess.<span class="built_in">GetTime</span>(First);</span><br><span class="line">		<span class="keyword">return</span> FMath::<span class="built_in">Lerp</span>(KeyATime, KeyBTime, Alpha);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0.f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[开始距离匹配] --&gt; B&#123;匹配场景选择&#125;</span><br><span class="line">    </span><br><span class="line">    B --&gt; C[起步匹配]</span><br><span class="line">    B --&gt; D[停步匹配]</span><br><span class="line">    </span><br><span class="line">    %% 起步匹配分支</span><br><span class="line">    subgraph C [起步匹配流程]</span><br><span class="line">        direction LR</span><br><span class="line">        C1[起步动画] --&gt; C2[提取根运动距离曲线]</span><br><span class="line">        C2 --&gt; C3[采样生成Distance曲线&lt;br/&gt;采样率:30Hz]</span><br><span class="line">        C3 --&gt; C4[根据本帧移动距离&lt;br/&gt;查找对应动画时间]</span><br><span class="line">        C4 --&gt; C5[设置动画播放时间&lt;br/&gt;播放速率限制:0.75-1.25]</span><br><span class="line">        C5 --&gt; C6[起步匹配完成]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    %% 停步匹配分支</span><br><span class="line">    subgraph D [停步匹配流程]</span><br><span class="line">        direction LR</span><br><span class="line">        D1[停步动画] --&gt; D2[预测停止位置&lt;br/&gt;基于速度/摩擦力/减速度]</span><br><span class="line">        D2 --&gt; D3[计算剩余距离]</span><br><span class="line">        D3 --&gt; D4[反向查找距离曲线&lt;br/&gt;对应时间点]</span><br><span class="line">        D4 --&gt; D5[设置停步动画时间]</span><br><span class="line">        D5 --&gt; D6[停步匹配完成]</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    C6 --&gt; E[应用匹配动画]</span><br><span class="line">    D6 --&gt; E</span><br><span class="line">    </span><br><span class="line">    E --&gt; F[消除滑步]</span><br></pre></td></tr></table></figure>
 
 <h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ul>
 <li>使用UE版本为5.5.4</li>
@@ -439,7 +441,7 @@
 
 <nav id="article-nav">
   
-    <a href="/2025/11/30/%E6%9C%9D%E5%90%91%E6%89%AD%E6%9B%B2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2025/11/30/essay/%E6%9C%9D%E5%90%91%E6%89%AD%E6%9B%B2/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
@@ -449,7 +451,7 @@
     </a>
   
   
-    <a href="/2025/11/30/%E6%AD%A5%E5%B9%85%E5%8C%B9%E9%85%8D/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2025/11/30/essay/%E6%AD%A5%E5%B9%85%E5%8C%B9%E9%85%8D/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">步幅匹配</div>
       <i class="icon-circle-right"></i>
     </a>
@@ -477,7 +479,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B7%9D%E7%A6%BB%E5%8C%B9%E9%85%8D"><span class="toc-number">1.</span> <span class="toc-text">距离匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">基本原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E8%B7%9D%E7%A6%BB%E6%9B%B2%E7%BA%BF"><span class="toc-number">2.</span> <span class="toc-text">提取距离曲线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%B7%E6%AD%A5%E5%8C%B9%E9%85%8D"><span class="toc-number">3.</span> <span class="toc-text">起步匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8E"><span class="toc-number">3.1.</span> <span class="toc-text">函数声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.2.</span> <span class="toc-text">函数实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%81%9C%E6%AD%A5%E5%8C%B9%E9%85%8D"><span class="toc-number">4.</span> <span class="toc-text">停步匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GetPredictedStopDistance"><span class="toc-number">4.1.</span> <span class="toc-text">GetPredictedStopDistance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DistanceMatchToTarget"><span class="toc-number">4.2.</span> <span class="toc-text">DistanceMatchToTarget</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">5.</span> <span class="toc-text">注意事项</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B7%9D%E7%A6%BB%E5%8C%B9%E9%85%8D"><span class="toc-number">1.</span> <span class="toc-text">距离匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">基本原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E8%B7%9D%E7%A6%BB%E6%9B%B2%E7%BA%BF"><span class="toc-number">2.</span> <span class="toc-text">提取距离曲线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%B7%E6%AD%A5%E5%8C%B9%E9%85%8D"><span class="toc-number">3.</span> <span class="toc-text">起步匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%A3%B0%E6%98%8E"><span class="toc-number">3.1.</span> <span class="toc-text">函数声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.2.</span> <span class="toc-text">函数实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%81%9C%E6%AD%A5%E5%8C%B9%E9%85%8D"><span class="toc-number">4.</span> <span class="toc-text">停步匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#GetPredictedStopDistance"><span class="toc-number">4.1.</span> <span class="toc-text">GetPredictedStopDistance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DistanceMatchToTarget"><span class="toc-number">4.2.</span> <span class="toc-text">DistanceMatchToTarget</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">5.</span> <span class="toc-text">流程图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">6.</span> <span class="toc-text">注意事项</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -613,19 +615,11 @@
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">动画</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">反射</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">UE</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Cpp</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -633,7 +627,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">反射</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Spine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -649,10 +651,6 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">拆包</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">网络</a>
               </li>
              
@@ -661,11 +659,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
+                <a href="javascript:void(0)" class="js-tag color3">动画</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
+                <a href="javascript:void(0)" class="js-tag color5">垃圾回收</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -673,11 +671,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">树</a>
+                <a href="javascript:void(0)" class="js-tag color4">多线程</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -685,7 +679,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">图</a>
+                <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -693,15 +687,23 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">树</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">散列表</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color4">线性表</a>
               </li>
             
             <div class="clearfix"></div>
