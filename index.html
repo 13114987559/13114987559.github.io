@@ -360,6 +360,19 @@
 <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 所以给Game增加一个每个玩家同步到的帧号</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Game:StartGame</span><span class="params">()</span></span></span><br><span class="line">    <span class="comment">-- 之前的逻辑</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">-- 代表玩家未同步的帧号</span></span><br><span class="line">    <span class="built_in">self</span>.SyncFrame = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">-- 之后的逻辑</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Game:SendUnsyncFrameOpts</span><span class="params">(UserId:number)</span></span></span><br><span class="line">    <span class="keyword">local</span> SyncOpts = &#123;&#125;</span><br><span class="line">    <span class="keyword">local</span> SyncFrame = <span class="built_in">self</span>.GameState.SyncFrame[UserId] <span class="keyword">or</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i = SyncFrame + <span class="number">1</span>, <span class="built_in">self</span>.CurrentFrameId, <span class="number">1</span> <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">table</span>.<span class="built_in">insert</span>(SyncOpts, <span class="built_in">self</span>.GameState.PlayerFrameOpts[i])</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">local</span> MessageBody = &#123;</span><br><span class="line">        FrameId = <span class="built_in">self</span>.GameState.FrameId,</span><br><span class="line">        Opts = SyncOpts,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    UDPSocketManager:Server_Send(UserId, MessageBody)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 
 <p>以上是服务端的基本逻辑，接下来是客户端需要完成的操作</p>
+<h2 id="客户端上的操作"><a href="#客户端上的操作" class="headerlink" title="客户端上的操作"></a>客户端上的操作</h2><p>客户端上的逻辑概括为绑定收到服务器发来的帧数据UDP数据包回调，对UDP包进行解析。</p>
+<ul>
+<li>客户端对收到的逻辑帧数据进行解析，同时每个客户端自己内部维护一个SyncFrameId记录客户端真正同步到的帧号</li>
+<li>判断同步的帧号是否合法：如果收到的帧Id小于SyncFrameId，则丢弃该包，通过这种方式解决UDP发包中先发后到或者后发先到的问题</li>
+<li>如果收到帧操作时如果上一帧的操作不为空，则需要在处理下一帧之前同步上一帧的结果，以此来<em>保证新的帧开始时所有的客户端都是从同一状态开始模拟的</em>，例如正在播放的动画，人物的位置信息等，所以需要在收到最新帧时强制同步上一帧的结果，这也是帧同步的核心</li>
+<li>客户端进行跳帧处理，当服务器发来的帧是到100帧，但是客户端自己记录的结果只有80帧，则需要从一次性从81帧一直处理到第99帧，在跳帧时直接应用最终结果，到第100帧时走正常处理流程</li>
+<li>客户端采集自己操作的下一帧并上报给客户端，同时把收到的最新帧+1一并上报</li>
+</ul>
+<h2 id="操作回到服务端"><a href="#操作回到服务端" class="headerlink" title="操作回到服务端"></a>操作回到服务端</h2><ul>
+<li>服务器同步玩家的帧号，更新服务器认为客户端已经接收到的操作帧</li>
+<li>如果收到的玩家操作帧不等于服务器要发送的下一帧，则认为这个操作是过时的，放弃该操作</li>
+<li>保存玩家的操作并等待下一个OnLogicFrame触发不断循环下去</li>
+</ul>
 
     
 
@@ -1704,15 +1717,15 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">UE</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">消息系统</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Spine</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1728,6 +1741,10 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">动画</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">网络同步</a>
               </li>
              
@@ -1736,15 +1753,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">动画</a>
+                <a href="javascript:void(0)" class="js-tag color3">网络</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">排序</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1764,6 +1777,10 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">数据结构</a>
               </li>
              
@@ -1772,15 +1789,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">算法</a>
+                <a href="javascript:void(0)" class="js-tag color2">图</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">堆</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">图</a>
               </li>
              
               <li class="article-tag-list-item">
